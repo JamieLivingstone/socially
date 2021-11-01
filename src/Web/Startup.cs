@@ -8,6 +8,7 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Microsoft.OpenApi.Models;
+using Web.Filters;
 
 namespace Web
 {
@@ -28,7 +29,10 @@ namespace Web
 
       services.AddRouting(options => { options.LowercaseUrls = true; });
 
-      services.AddControllers()
+      services.AddControllers(options =>
+        {
+          options.Filters.Add<ApiExceptionFilterAttribute>();
+        })
         .AddFluentValidation(x => x.AutomaticValidationEnabled = false);
 
       services.AddHealthChecks().AddDbContextCheck<ApplicationDbContext>();

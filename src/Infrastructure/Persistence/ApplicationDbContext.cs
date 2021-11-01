@@ -1,10 +1,14 @@
 using System.Reflection;
+using Application.Common.Interfaces;
+using Domain.Entities;
 using Microsoft.EntityFrameworkCore;
 
 namespace Infrastructure.Persistence
 {
-  public class ApplicationDbContext : DbContext
+  public class ApplicationDbContext : DbContext, IApplicationDbContext
   {
+    public DbSet<Person> Persons { get; set; }
+
     public ApplicationDbContext(DbContextOptions<ApplicationDbContext> options) : base(options)
     {
     }
