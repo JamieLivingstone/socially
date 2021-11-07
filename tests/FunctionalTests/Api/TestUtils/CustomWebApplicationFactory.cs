@@ -1,3 +1,4 @@
+using System;
 using System.Linq;
 using System.Net.Http;
 using Infrastructure.Persistence;
@@ -5,6 +6,7 @@ using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Mvc.Testing;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.DependencyInjection;
+using Microsoft.Extensions.Logging;
 using Web;
 
 namespace FunctionalTests.Api.TestUtils
@@ -16,12 +18,32 @@ namespace FunctionalTests.Api.TestUtils
       builder
         .ConfigureServices(services =>
         {
-          var dbContextDescriptor =
-            services.SingleOrDefault(d => d.ServiceType == typeof(DbContextOptions<ApplicationDbContext>));
+          var descriptor = services.SingleOrDefault(d => d.ServiceType == typeof(DbContextOptions<ApplicationDbContext>));
 
-          if (dbContextDescriptor != null) services.Remove(dbContextDescriptor);
+          services.Remove(descriptor);
 
-          services.AddDbContext<ApplicationDbContext>(options => { options.UseInMemoryDatabase("FunctionalTests"); });
+          services.AddDbContext<ApplicationDbContext>(options =>
+          {
+            options.UseInMemoryDatabase("FunctionalTests");
+          });
+
+          var sp = services.BuildServiceProvider();
+
+          using var scope = sp.CreateScope();
+          var scopedServices = scope.ServiceProvider;
+          var dbContext = scopedServices.GetRequiredService<ApplicationDbContext>();
+          var logger = scopedServices.GetRequiredService<ILogger<CustomWebApplicationFactory>>();
+
+          dbContext.Database.EnsureDeleted();
+
+          try
+          {
+            // TODO - seed database
+          }
+          catch (Exception ex)
+          {
+            logger.LogError(ex, "An error occurred seeding the " + "database with test messages. Error: {Message}", ex.Message);
+          }
         });
     }
 

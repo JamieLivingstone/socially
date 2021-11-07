@@ -19,7 +19,7 @@ namespace IntegrationTests.Application.Accounts.Commands
     }
 
     [Test]
-    public async Task GivenAValidCommand_ReturnsAccount()
+    public async Task GivenAValidCommand_ReturnsSignedJwt()
     {
       var command = new RegisterCommand
       {

@@ -26,14 +26,24 @@ namespace IntegrationTests.Application.TestUtils
         .UseStartup<Startup>()
         .ConfigureTestServices(services =>
         {
-          var descriptor =
-            services.SingleOrDefault(d => d.ServiceType == typeof(DbContextOptions<ApplicationDbContext>));
+          var descriptor = services.SingleOrDefault(d => d.ServiceType == typeof(DbContextOptions<ApplicationDbContext>));
 
-          if (descriptor != null) services.Remove(descriptor);
+          services.Remove(descriptor);
 
-          services.AddDbContext<ApplicationDbContext>(options => { options.UseInMemoryDatabase("IntegrationTests"); });
+          services.AddDbContext<ApplicationDbContext>(options =>
+          {
+            options.UseInMemoryDatabase("IntegrationTests");
+          });
 
           services.AddScoped<IApplicationDbContext>(provider => provider.GetService<ApplicationDbContext>());
+
+          var sp = services.BuildServiceProvider();
+
+          using var scope = sp.CreateScope();
+          var scopedServices = scope.ServiceProvider;
+          var dbContext = scopedServices.GetRequiredService<ApplicationDbContext>();
+
+          dbContext.Database.EnsureDeleted();
         })
         .Build();
 

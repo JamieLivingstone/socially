@@ -6,7 +6,7 @@ using MediatR;
 
 namespace Application.Accounts.Commands.Register
 {
-  public class RegisterCommand : IRequest<RegisterVm>
+  public class RegisterCommand : IRequest<RegisterDto>
   {
     public string Name { get; init; }
 
@@ -16,7 +16,7 @@ namespace Application.Accounts.Commands.Register
 
     public string Password { get; init; }
 
-    internal class RegisterCommandHandler : IRequestHandler<RegisterCommand, RegisterVm>
+    internal class RegisterCommandHandler : IRequestHandler<RegisterCommand, RegisterDto>
     {
       private readonly IApplicationDbContext _dbContext;
       private readonly IJwtTokenGenerator _jwtTokenGenerator;
@@ -31,7 +31,7 @@ namespace Application.Accounts.Commands.Register
         _jwtTokenGenerator = jwtTokenGenerator;
       }
 
-      public async Task<RegisterVm> Handle(RegisterCommand request, CancellationToken cancellationToken)
+      public async Task<RegisterDto> Handle(RegisterCommand request, CancellationToken cancellationToken)
       {
         var salt = _passwordHasher.GenerateSalt();
 
@@ -46,12 +46,10 @@ namespace Application.Accounts.Commands.Register
 
         await _dbContext.Persons.AddAsync(person, cancellationToken);
         await _dbContext.SaveChangesAsync(cancellationToken);
-
-        var token = _jwtTokenGenerator.CreateToken(person.Id);
-
-        return new RegisterVm
+        
+        return new RegisterDto
         {
-          Token = token
+          Token = _jwtTokenGenerator.CreateToken(person.Id)
         };
       }
     }
