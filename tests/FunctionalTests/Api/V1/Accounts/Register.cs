@@ -6,26 +6,17 @@ using Application.Accounts.Commands.Register;
 using FunctionalTests.Api.TestUtils;
 using NUnit.Framework;
 
-namespace FunctionalTests.Api.V1
+namespace FunctionalTests.Api.V1.Accounts
 {
   [TestFixture]
-  public class Register
+  public class Register : TestBase
   {
-    private HttpClient _client;
-
-    [OneTimeSetUp]
-    public void SetUp()
-    {
-      var factory = new CustomWebApplicationFactory();
-      _client = factory.GetAnonymousClient();
-    }
-
     [Test]
     public async Task GivenValidationFails_ReturnsBadRequest()
     {
       var command = new RegisterCommand();
 
-      var response = await _client.PostAsJsonAsync("/api/v1/accounts/register", command);
+      var response = await AnonymousClient.PostAsJsonAsync("/api/v1/accounts/register", command);
 
       Assert.AreEqual(HttpStatusCode.BadRequest, response.StatusCode);
     }
@@ -41,7 +32,7 @@ namespace FunctionalTests.Api.V1
         Password = "Password@123"
       };
 
-      var response = await _client.PostAsJsonAsync("/api/v1/accounts/register", command);
+      var response = await AnonymousClient.PostAsJsonAsync("/api/v1/accounts/register", command);
 
       Assert.AreEqual(HttpStatusCode.Created, response.StatusCode);
     }

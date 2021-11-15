@@ -37,17 +37,31 @@ namespace IntegrationTests.Application.TestUtils
 
           services.AddScoped<IApplicationDbContext>(provider => provider.GetService<ApplicationDbContext>());
 
-          var sp = services.BuildServiceProvider();
-
-          using var scope = sp.CreateScope();
-          var scopedServices = scope.ServiceProvider;
-          var dbContext = scopedServices.GetRequiredService<ApplicationDbContext>();
-
-          dbContext.Database.EnsureDeleted();
+          services.AddScoped<ICurrentUserService, MockCurrentUserService>();
         })
         .Build();
 
       _scopeFactory = host.Services.GetService<IServiceScopeFactory>();
+    }
+
+    [SetUp]
+    public void SetUp()
+    {
+      using var scope = _scopeFactory.CreateScope();
+
+      var dbContext = scope.ServiceProvider.GetRequiredService<ApplicationDbContext>();
+
+      Seed.InitializeDbForTests(dbContext);
+    }
+
+    [TearDown]
+    public void TearDown()
+    {
+      using var scope = _scopeFactory.CreateScope();
+
+      var dbContext = scope.ServiceProvider.GetRequiredService<ApplicationDbContext>();
+
+      dbContext.Database.EnsureDeleted();
     }
 
     protected static async Task<TResponse> SendAsync<TResponse>(IRequest<TResponse> request)

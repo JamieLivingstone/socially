@@ -1,3 +1,5 @@
+using System.Collections.Generic;
+
 namespace Domain.Entities
 {
   public class Person
@@ -13,5 +15,7 @@ namespace Domain.Entities
     public byte[] Hash { get; set; }
 
     public byte[] Salt { get; set; }
+
+    public IEnumerable<Post> Posts { get; set; }
   }
 }

@@ -7,26 +7,17 @@ using Application.Accounts.Commands.Register;
 using FunctionalTests.Api.TestUtils;
 using NUnit.Framework;
 
-namespace FunctionalTests.Api.V1
+namespace FunctionalTests.Api.V1.Accounts
 {
   [TestFixture]
-  public class Login
+  public class Login : TestBase
   {
-    private HttpClient _client;
-
-    [SetUp]
-    public void SetUp()
-    {
-      var factory = new CustomWebApplicationFactory();
-      _client = factory.GetAnonymousClient();
-    }
-
     [Test]
     public async Task GivenValidationFails_ReturnsBadRequest()
     {
       var command = new LoginCommand();
 
-      var response = await _client.PostAsJsonAsync("/api/v1/accounts/login", command);
+      var response = await AnonymousClient.PostAsJsonAsync("/api/v1/accounts/login", command);
 
       Assert.AreEqual(HttpStatusCode.BadRequest, response.StatusCode);
     }
@@ -40,7 +31,7 @@ namespace FunctionalTests.Api.V1
         Password = "invalid"
       };
 
-      var response = await _client.PostAsJsonAsync("/api/v1/accounts/login", command);
+      var response = await AnonymousClient.PostAsJsonAsync("/api/v1/accounts/login", command);
 
       Assert.AreEqual(HttpStatusCode.Unauthorized, response.StatusCode);
     }
@@ -48,7 +39,7 @@ namespace FunctionalTests.Api.V1
     [Test]
     public async Task GivenValidCredentials_ReturnsOk()
     {
-      var registerResponse = await _client.PostAsJsonAsync("/api/v1/accounts/register", new RegisterCommand
+      var registerResponse = await AnonymousClient.PostAsJsonAsync("/api/v1/accounts/register", new RegisterCommand
       {
         Name = "John Doe",
         Username = "john",
@@ -64,7 +55,7 @@ namespace FunctionalTests.Api.V1
         Password = "Password@123"
       };
 
-      var loginResponse = await _client.PostAsJsonAsync("/api/v1/accounts/login", loginCommand);
+      var loginResponse = await AnonymousClient.PostAsJsonAsync("/api/v1/accounts/login", loginCommand);
 
       Assert.AreEqual(HttpStatusCode.OK, loginResponse.StatusCode);
     }

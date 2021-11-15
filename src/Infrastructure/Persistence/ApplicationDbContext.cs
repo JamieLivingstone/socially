@@ -9,6 +9,8 @@ namespace Infrastructure.Persistence
   {
     public DbSet<Person> Persons { get; set; }
 
+    public DbSet<Post> Posts { get; set; }
+
     public ApplicationDbContext(DbContextOptions<ApplicationDbContext> options) : base(options)
     {
     }

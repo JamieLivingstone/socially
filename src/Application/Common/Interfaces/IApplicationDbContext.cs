@@ -9,6 +9,8 @@ namespace Application.Common.Interfaces
   {
     public DbSet<Person> Persons { get; set; }
 
+    public DbSet<Post> Posts { get; set; }
+
     Task<int> SaveChangesAsync(CancellationToken cancellationToken);
   }
 }
