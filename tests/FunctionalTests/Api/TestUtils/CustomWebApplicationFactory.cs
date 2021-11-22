@@ -6,6 +6,7 @@ using System.Net.Http.Json;
 using System.Threading.Tasks;
 using Application.Accounts.Commands.Login;
 using Application.Accounts.Commands.Register;
+using Application.Common.Interfaces;
 using Infrastructure.Persistence;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Mvc.Testing;
@@ -18,6 +19,8 @@ namespace FunctionalTests.Api.TestUtils
 {
   public class CustomWebApplicationFactory : WebApplicationFactory<Startup>
   {
+    private string _bearerToken;
+
     protected override void ConfigureWebHost(IWebHostBuilder builder)
     {
       builder
@@ -37,6 +40,7 @@ namespace FunctionalTests.Api.TestUtils
           using var scope = sp.CreateScope();
           var scopedServices = scope.ServiceProvider;
           var dbContext = scopedServices.GetRequiredService<ApplicationDbContext>();
+          var jwtTokenGenerator = scopedServices.GetRequiredService<IJwtTokenGenerator>();
           var logger = scopedServices.GetRequiredService<ILogger<CustomWebApplicationFactory>>();
 
           dbContext.Database.EnsureDeleted();
@@ -44,6 +48,7 @@ namespace FunctionalTests.Api.TestUtils
           try
           {
             Seed.InitializeDbForTests(dbContext);
+            _bearerToken = jwtTokenGenerator.CreateToken(Seed.CurrentUserId);
           }
           catch (Exception ex)
           {
@@ -57,27 +62,11 @@ namespace FunctionalTests.Api.TestUtils
       return CreateClient();
     }
 
-    public async Task<HttpClient> GetAuthenticatedClientAsync()
+    public HttpClient GetAuthenticatedClientAsync()
     {
       var client = CreateClient();
 
-      await client.PostAsJsonAsync("/api/v1/accounts/register", new RegisterCommand
-      {
-        Name = "Test Account",
-        Username = "test",
-        Email = "test@test.com",
-        Password = "Password@123",
-      });
-
-      var response = await client.PostAsJsonAsync("/api/v1/accounts/login", new LoginCommand
-      {
-        Username = "test",
-        Password = "Password@123",
-      });
-
-      var loginResponse = await response.Content.ReadFromJsonAsync<LoginDto>();
-
-      client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", loginResponse?.Token);
+      client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", _bearerToken);
 
       return client;
     }

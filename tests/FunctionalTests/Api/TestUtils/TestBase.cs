@@ -10,11 +10,11 @@ namespace FunctionalTests.Api.TestUtils
     protected HttpClient AuthenticatedClient;
 
     [SetUp]
-    public async Task SetUp()
+    public void SetUp()
     {
       var factory = new CustomWebApplicationFactory();
       AnonymousClient = factory.GetAnonymousClient();
-      AuthenticatedClient = await factory.GetAuthenticatedClientAsync();
+      AuthenticatedClient = factory.GetAuthenticatedClientAsync();
     }
   }
 }

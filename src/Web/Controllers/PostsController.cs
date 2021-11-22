@@ -1,5 +1,6 @@
 using System.Threading.Tasks;
 using Application.Posts.Commands.CreatePost;
+using Application.Posts.Commands.DeletePost;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 
@@ -18,6 +19,16 @@ namespace Web.Controllers
       var response = await Mediator.Send(command);
 
       return CreatedAtAction(nameof(CreatePost), response);
+    }
+
+    [HttpDelete("{slug}")]
+    public async Task<IActionResult> DeletePost(string slug)
+    {
+      var command = new DeletePostCommand { Slug = slug };
+
+      var response = await Mediator.Send(command);
+
+      return Ok(response);
     }
   }
 }
