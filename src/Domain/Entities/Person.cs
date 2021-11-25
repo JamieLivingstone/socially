@@ -19,5 +19,9 @@ namespace Domain.Entities
     public IEnumerable<Post> Posts { get; set; }
 
     public IEnumerable<Like> Likes { get; set; }
+
+    public IEnumerable<Follower> Followers { get; set; }
+
+    public IEnumerable<Follower> Following { get; set; }
   }
 }

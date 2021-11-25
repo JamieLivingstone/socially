@@ -7,6 +7,8 @@ namespace Application.Common.Interfaces
 {
   public interface IApplicationDbContext
   {
+    public DbSet<Follower> Followers { get; set; }
+
     public DbSet<Like> Likes { get; set; }
 
     public DbSet<Person> Persons { get; set; }
