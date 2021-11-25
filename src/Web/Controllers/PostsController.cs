@@ -1,6 +1,7 @@
 using System.Threading.Tasks;
 using Application.Posts.Commands.CreatePost;
 using Application.Posts.Commands.DeletePost;
+using Application.Posts.Commands.LikePost;
 using Application.Posts.Commands.UpdatePost;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
@@ -50,6 +51,19 @@ namespace Web.Controllers
       var response = await Mediator.Send(command);
 
       return Ok(response);
+    }
+
+    [ProducesResponseType(StatusCodes.Status201Created)]
+    [ProducesResponseType(StatusCodes.Status400BadRequest)]
+    [ProducesResponseType(StatusCodes.Status401Unauthorized)]
+    [HttpPost("{slug}/likes")]
+    public async Task<IActionResult> LikePost(string slug)
+    {
+      var command = new LikePostCommand { Slug = slug };
+
+      var response = await Mediator.Send(command);
+
+      return Created(nameof(LikePost), response);
     }
   }
 }

@@ -7,6 +7,8 @@ namespace Infrastructure.Persistence
 {
   public class ApplicationDbContext : DbContext, IApplicationDbContext
   {
+    public DbSet<Like> Likes { get; set; }
+
     public DbSet<Person> Persons { get; set; }
 
     public DbSet<Post> Posts { get; set; }

@@ -1,4 +1,5 @@
 using System;
+using System.Collections.Generic;
 
 namespace Domain.Entities
 {
@@ -19,5 +20,7 @@ namespace Domain.Entities
     public int AuthorId { get; set; }
 
     public Person Author { get; set; }
+
+    public IEnumerable<Like> Likes { get; set; }
   }
 }

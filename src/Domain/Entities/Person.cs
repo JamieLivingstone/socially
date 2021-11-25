@@ -17,5 +17,7 @@ namespace Domain.Entities
     public byte[] Salt { get; set; }
 
     public IEnumerable<Post> Posts { get; set; }
+
+    public IEnumerable<Like> Likes { get; set; }
   }
 }
