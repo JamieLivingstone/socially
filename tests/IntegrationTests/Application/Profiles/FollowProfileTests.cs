@@ -43,7 +43,7 @@ namespace IntegrationTests.Application.Profiles
     [Test]
     public async Task GivenValidRequest_FollowsProfile()
     {
-      var target = Seed.Persons().Last();
+      var target = Seed.Persons().First(p => p.Id != Seed.CurrentUserId);
 
       await SendAsync(new FollowProfileCommand
       {

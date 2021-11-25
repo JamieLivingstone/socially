@@ -12,7 +12,7 @@ namespace FunctionalTests.Api.V1.Profiles
     [Test]
     public async Task GivenAuthenticationFails_ReturnsUnauthorized()
     {
-      var username = Seed.Persons().Last().Username;
+      var username = Seed.Persons().First(p => p.Id != Seed.CurrentUserId).Username;
 
       var response = await AnonymousClient.PostAsync($"/api/v1/profiles/{username}/followers", null);
 

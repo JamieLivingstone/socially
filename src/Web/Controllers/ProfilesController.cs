@@ -1,5 +1,6 @@
 using System.Threading.Tasks;
 using Application.Profiles.Commands.FollowProfile;
+using Application.Profiles.Commands.UnfollowProfile;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 
@@ -23,6 +24,22 @@ namespace Web.Controllers
       var response = await Mediator.Send(command);
 
       return CreatedAtAction(nameof(FollowProfile), response);
+    }
+
+    [HttpDelete("followers")]
+    [ProducesResponseType(StatusCodes.Status200OK)]
+    [ProducesResponseType(StatusCodes.Status404NotFound)]
+    [ProducesResponseType(StatusCodes.Status401Unauthorized)]
+    public async Task<IActionResult> UnfollowProfile(string username)
+    {
+      var command = new UnfollowProfileCommand
+      {
+        Username = username,
+      };
+
+      var response = await Mediator.Send(command);
+
+      return Ok(response);
     }
   }
 }
