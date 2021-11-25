@@ -1,10 +1,11 @@
 ﻿{
-  "Id": 1,
+  "Id": 3,
   "Slug": "test-post-title",
   "Title": "Test post title",
   "Body": "Test post body",
-  "CreatedAt": "2021-11-15T21:56:26.186852+00:00",
-  "UpdatedAt": "2021-11-15T21:56:26.186852+00:00",
+  "CreatedAt": "2021-11-25T21:43:36.433422+00:00",
+  "UpdatedAt": "2021-11-25T21:43:36.433422+00:00",
   "AuthorId": 1,
-  "Author": null
+  "Author": null,
+  "Likes": null
 }

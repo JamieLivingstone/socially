@@ -2,20 +2,20 @@ using System.Linq;
 using System.Threading.Tasks;
 using Application.Common.Exceptions;
 using Application.Posts.Commands.LikePost;
+using Application.Posts.Commands.UnlikePost;
 using Domain.Entities;
 using IntegrationTests.Application.TestUtils;
 using NUnit.Framework;
-using Snapshooter.NUnit;
 
 namespace IntegrationTests.Application.Posts
 {
   [TestFixture]
-  public class LikePostTests : TestBase
+  public class UnlikePostTests : TestBase
   {
     [Test]
     public void GivenPostDoesNotExist_ThrowsNotFoundException()
     {
-      var command = new LikePostCommand
+      var command = new UnlikePostCommand
       {
         Slug = "does-not-exist",
       };
@@ -26,7 +26,7 @@ namespace IntegrationTests.Application.Posts
     }
 
     [Test]
-    public async Task GivenAValidRequest_LikesPost()
+    public async Task GivenAValidRequest_UnlikesPost()
     {
       var target = Seed.Posts().First();
 
@@ -35,7 +35,14 @@ namespace IntegrationTests.Application.Posts
         Slug = target.Slug
       });
 
-      Snapshot.Match(await FindByIdAsync<Like>(Seed.CurrentUserId, target.Id));
+      Assert.NotNull(await FindByIdAsync<Like>(Seed.CurrentUserId, target.Id));
+
+      await SendAsync(new UnlikePostCommand
+      {
+        Slug = target.Slug
+      });
+
+      Assert.Null(await FindByIdAsync<Like>(Seed.CurrentUserId, target.Id));
     }
   }
 }
