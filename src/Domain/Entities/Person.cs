@@ -16,12 +16,14 @@ namespace Domain.Entities
 
     public byte[] Salt { get; set; }
 
-    public IEnumerable<Post> Posts { get; set; }
+    public IEnumerable<Comment> Comments { get; set; }
 
-    public IEnumerable<Like> Likes { get; set; }
+    public IEnumerable<Follower> Following { get; set; }
 
     public IEnumerable<Follower> Followers { get; set; }
 
-    public IEnumerable<Follower> Following { get; set; }
+    public IEnumerable<Like> Likes { get; set; }
+
+    public IEnumerable<Post> Posts { get; set; }
   }
 }

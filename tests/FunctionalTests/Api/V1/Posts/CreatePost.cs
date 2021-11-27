@@ -25,7 +25,7 @@ namespace FunctionalTests.Api.V1.Posts
     [Test]
     public async Task GivenValidationFails_ReturnsBadRequest()
     {
-      var response = await AnonymousClient.PostAsJsonAsync("/api/v1/posts", new CreatePostCommand());
+      var response = await AuthenticatedClient.PostAsJsonAsync("/api/v1/posts", new CreatePostCommand());
 
       Assert.AreEqual(HttpStatusCode.BadRequest, response.StatusCode);
     }

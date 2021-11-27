@@ -21,6 +21,8 @@ namespace Domain.Entities
 
     public Person Author { get; set; }
 
+    public IEnumerable<Comment> Comments { get; set; }
+
     public IEnumerable<Like> Likes { get; set; }
   }
 }
