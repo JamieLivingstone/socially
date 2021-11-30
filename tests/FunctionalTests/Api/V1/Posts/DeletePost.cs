@@ -22,7 +22,7 @@ namespace FunctionalTests.Api.V1.Posts
     [Test]
     public async Task GivenPostAuthorIsNotCurrentUser_ReturnsForbidden()
     {
-      var target = Seed.Posts().First(c => c.AuthorId != Seed.CurrentUserId);
+      var target = Seed.Posts().First(p => p.AuthorId != Seed.CurrentUserId);
 
       var response = await AuthenticatedClient.DeleteAsync($"/api/v1/posts/{target.Slug}");
 
@@ -32,7 +32,7 @@ namespace FunctionalTests.Api.V1.Posts
     [Test]
     public async Task GivenAValidRequest_ReturnsOk()
     {
-      var target = Seed.Posts().First(c => c.AuthorId == Seed.CurrentUserId);
+      var target = Seed.Posts().First(p => p.AuthorId == Seed.CurrentUserId);
 
       var response = await AuthenticatedClient.DeleteAsync($"/api/v1/posts/{target.Slug}");
 

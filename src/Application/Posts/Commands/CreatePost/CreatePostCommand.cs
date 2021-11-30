@@ -32,7 +32,7 @@ namespace Application.Posts.Commands.CreatePost
 
       public async Task<CreatePostDto> Handle(CreatePostCommand request, CancellationToken cancellationToken)
       {
-        var now = DateTime.Now;
+        var now = DateTime.UtcNow;
 
         var post = new Post
         {

@@ -2,7 +2,7 @@ using System.Linq;
 using System.Net;
 using System.Net.Http.Json;
 using System.Threading.Tasks;
-using Application.Comments.CreateComment;
+using Application.Comments.Commands.CreateComment;
 using FunctionalTests.Api.TestUtils;
 using NUnit.Framework;
 

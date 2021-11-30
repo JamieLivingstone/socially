@@ -1,6 +1,6 @@
 using System.Linq;
 using System.Threading.Tasks;
-using Application.Comments.CreateComment;
+using Application.Comments.Commands.CreateComment;
 using Application.Common.Exceptions;
 using Domain.Entities;
 using FluentAssertions;

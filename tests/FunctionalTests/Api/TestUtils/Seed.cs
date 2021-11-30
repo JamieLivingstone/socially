@@ -5,7 +5,7 @@ using Infrastructure.Persistence;
 
 namespace FunctionalTests.Api.TestUtils
 {
-  public class Seed
+  public static class Seed
   {
     public const int CurrentUserId = 1;
 
@@ -13,6 +13,7 @@ namespace FunctionalTests.Api.TestUtils
     {
       dbContext.Persons.AddRange(Persons());
       dbContext.Posts.AddRange(Posts());
+      dbContext.Comments.AddRange(Comments());
       dbContext.SaveChanges();
     }
 
@@ -26,6 +27,8 @@ namespace FunctionalTests.Api.TestUtils
           Name = "Liam Hale",
           Username = "liam",
           Email = "liam.hale@test.com",
+          Hash = new byte[64],
+          Salt = new byte[64]
         },
         new()
         {
@@ -33,6 +36,8 @@ namespace FunctionalTests.Api.TestUtils
           Name = "Peter Gray",
           Username = "peter",
           Email = "peter.gray@test.com",
+          Hash = new byte[64],
+          Salt = new byte[64]
         }
       };
     }
@@ -49,7 +54,7 @@ namespace FunctionalTests.Api.TestUtils
           Body = "Test Post One Body",
           CreatedAt = new DateTime(2021, 01, 01),
           UpdatedAt = new DateTime(2021, 01, 01),
-          AuthorId = CurrentUserId,
+          AuthorId = CurrentUserId
         },
         new()
         {
@@ -59,7 +64,28 @@ namespace FunctionalTests.Api.TestUtils
           Body = "Test Post Two Body",
           CreatedAt = new DateTime(2020, 05, 04),
           UpdatedAt = new DateTime(2020, 05, 04),
-          AuthorId = 2,
+          AuthorId = 2
+        }
+      };
+    }
+
+    public static IEnumerable<Comment> Comments()
+    {
+      return new List<Comment>
+      {
+        new()
+        {
+          Id = 1,
+          Message = "Mock comment one",
+          PostId = 1,
+          AuthorId = CurrentUserId
+        },
+        new()
+        {
+          Id = 2,
+          Message = "Mock comment two",
+          PostId = 1,
+          AuthorId = 2
         }
       };
     }

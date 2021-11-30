@@ -7,7 +7,7 @@ using Domain.Entities;
 using MediatR;
 using Microsoft.EntityFrameworkCore;
 
-namespace Application.Comments.CreateComment
+namespace Application.Comments.Commands.CreateComment
 {
   [Authorize]
   public class CreateCommentCommand : IRequest<CreateCommentCommandDto>

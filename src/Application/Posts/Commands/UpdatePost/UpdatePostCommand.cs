@@ -12,7 +12,7 @@ namespace Application.Posts.Commands.UpdatePost
   [Authorize]
   public class UpdatePostCommand : IRequest
   {
-    public string Slug { get; set; }
+    public string Slug { get; init; }
 
     public string Title { get; init; }
 
@@ -39,7 +39,7 @@ namespace Application.Posts.Commands.UpdatePost
           throw new NotFoundException("Post does not exist.");
         }
 
-        post.UpdatedAt = DateTime.Now;
+        post.UpdatedAt = DateTime.UtcNow;
 
         if (post.AuthorId != _currentUserService.UserId)
         {

@@ -3,9 +3,10 @@
   "Slug": "test-post-title",
   "Title": "Test post title",
   "Body": "Test post body",
-  "CreatedAt": "2021-11-25T21:43:36.433422+00:00",
-  "UpdatedAt": "2021-11-25T21:43:36.433422+00:00",
+  "CreatedAt": "2021-11-27T19:33:53.95115+00:00",
+  "UpdatedAt": "2021-11-27T19:33:53.95115+00:00",
   "AuthorId": 1,
   "Author": null,
+  "Comments": null,
   "Likes": null
 }

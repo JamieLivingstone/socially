@@ -11,9 +11,9 @@ namespace Web.Controllers
   {
     [HttpPost("followers")]
     [ProducesResponseType(StatusCodes.Status201Created)]
+    [ProducesResponseType(StatusCodes.Status401Unauthorized)]
     [ProducesResponseType(StatusCodes.Status404NotFound)]
     [ProducesResponseType(StatusCodes.Status422UnprocessableEntity)]
-    [ProducesResponseType(StatusCodes.Status401Unauthorized)]
     public async Task<IActionResult> FollowProfile(string username)
     {
       var command = new FollowProfileCommand
@@ -28,8 +28,8 @@ namespace Web.Controllers
 
     [HttpDelete("followers")]
     [ProducesResponseType(StatusCodes.Status200OK)]
-    [ProducesResponseType(StatusCodes.Status404NotFound)]
     [ProducesResponseType(StatusCodes.Status401Unauthorized)]
+    [ProducesResponseType(StatusCodes.Status404NotFound)]
     public async Task<IActionResult> UnfollowProfile(string username)
     {
       var command = new UnfollowProfileCommand
