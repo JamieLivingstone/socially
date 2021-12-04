@@ -1,7 +1,6 @@
 using System.Linq;
 using System.Net;
 using System.Net.Http;
-using System.Net.Http.Json;
 using System.Text;
 using System.Threading.Tasks;
 using Application.Posts.Commands.UpdatePost;
@@ -30,7 +29,7 @@ namespace FunctionalTests.Api.V1.Posts
     {
       var content = new StringContent(JsonConvert.SerializeObject(new UpdatePostCommand { Slug = "does-not-exist" }), Encoding.UTF8, "application/json-patch+json");
 
-      var response = await AuthenticatedClient.PatchAsync($"/api/v1/posts/does-not-exist", content);
+      var response = await AuthenticatedClient.PatchAsync("/api/v1/posts/does-not-exist", content);
 
       Assert.AreEqual(HttpStatusCode.NotFound, response.StatusCode);
     }

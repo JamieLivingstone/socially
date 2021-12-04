@@ -46,7 +46,7 @@ namespace Application.Accounts.Commands.Register
 
         await _dbContext.Persons.AddAsync(person, cancellationToken);
         await _dbContext.SaveChangesAsync(cancellationToken);
-        
+
         return new RegisterDto
         {
           Token = _jwtTokenGenerator.CreateToken(person.Id)

@@ -14,7 +14,8 @@ namespace Application.Posts.Commands.UpdatePost
       RuleFor(x => x.Body)
         .NotEmpty()
         .MaximumLength(10000)
-        .When(x => x.Body != null);;
+        .When(x => x.Body != null);
+      ;
     }
   }
 }

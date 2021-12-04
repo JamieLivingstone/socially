@@ -3,6 +3,7 @@ using System.Threading.Tasks;
 using Application.Common.Exceptions;
 using Application.Common.Interfaces;
 using Application.Common.Security;
+using Domain.Entities;
 using MediatR;
 using Microsoft.EntityFrameworkCore;
 
@@ -38,7 +39,7 @@ namespace Application.Posts.Commands.LikePost
 
         if (!liked)
         {
-          var like = new Domain.Entities.Like
+          var like = new Like
           {
             PostId = post.Id,
             ObserverId = _currentUserService.UserId,
