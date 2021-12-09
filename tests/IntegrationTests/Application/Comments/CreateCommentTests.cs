@@ -8,56 +8,58 @@ using IntegrationTests.Application.TestUtils;
 using NUnit.Framework;
 using Snapshooter.NUnit;
 
-namespace IntegrationTests.Application.Comments
+namespace IntegrationTests.Application.Comments;
+
+[TestFixture]
+public class CreateCommentTests : TestBase
 {
-  [TestFixture]
-  public class CreateCommentTests : TestBase
+  [Test]
+  public void GivenAnInvalidRequest_ThrowsValidationException()
   {
-    [Test]
-    public void GivenAnInvalidRequest_ThrowsValidationException()
+    var command = new CreateCommentCommand
     {
-      var command = new CreateCommentCommand
-      {
-        Message = "", // Required field
-        Slug = Seed.Posts().First().Slug
-      };
+      Message = "", // Required field
+      Slug = Seed.Posts().First().Slug
+    };
 
-      FluentActions.Invoking(() => SendAsync(command)).Should().ThrowAsync<ValidationException>();
+    FluentActions.Invoking(() => SendAsync(command)).Should().ThrowAsync<ValidationException>();
+  }
+
+  [Test]
+  public void GivenPostDoesNotExist_ThrowsNotFoundException()
+  {
+    var command = new CreateCommentCommand
+    {
+      Message = "Test comment",
+      Slug = "does-not-exist"
+    };
+
+    async Task Handler()
+    {
+      await SendAsync(command);
     }
 
-    [Test]
-    public void GivenPostDoesNotExist_ThrowsNotFoundException()
+    Assert.ThrowsAsync(typeof(NotFoundException), Handler);
+  }
+
+  [Test]
+  public async Task GivenAValidRequest_CreatesComment()
+  {
+    var command = new CreateCommentCommand
     {
-      var command = new CreateCommentCommand
-      {
-        Message = "Test comment",
-        Slug = "does-not-exist"
-      };
+      Message = "Test comment",
+      Slug = Seed.Posts().First().Slug
+    };
 
-      async Task Handler() => await SendAsync(command);
+    var result = await SendAsync(command);
+    var comment = await FindByIdAsync<Comment>(result.Id);
 
-      Assert.ThrowsAsync(typeof(NotFoundException), Handler);
-    }
-
-    [Test]
-    public async Task GivenAValidRequest_CreatesComment()
+    Snapshot.Match(comment, options =>
     {
-      var command = new CreateCommentCommand
-      {
-        Message = "Test comment",
-        Slug = Seed.Posts().First().Slug,
-      };
+      options.IgnoreField("Id");
+      options.IgnoreField("CreatedAt");
 
-      var result = await SendAsync(command);
-      var comment = await FindByIdAsync<Comment>(result.Id);
-
-      Snapshot.Match(comment, options =>
-      {
-        options.IgnoreField("Id");
-        options.IgnoreField("CreatedAt");
-
-        return options;
-      });
-    }
+      return options;
+    });
   }
 }

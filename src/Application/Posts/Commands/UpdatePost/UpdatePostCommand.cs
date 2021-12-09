@@ -7,59 +7,58 @@ using Application.Common.Security;
 using MediatR;
 using Microsoft.EntityFrameworkCore;
 
-namespace Application.Posts.Commands.UpdatePost
+namespace Application.Posts.Commands.UpdatePost;
+
+[Authorize]
+public class UpdatePostCommand : IRequest
 {
-  [Authorize]
-  public class UpdatePostCommand : IRequest
+  public string Slug { get; init; }
+
+  public string Title { get; init; }
+
+  public string Body { get; init; }
+
+  public class UpdatePostCommandHandler : IRequestHandler<UpdatePostCommand>
   {
-    public string Slug { get; init; }
+    private readonly IApplicationDbContext _dbContext;
+    private readonly ICurrentUserService _currentUserService;
 
-    public string Title { get; init; }
-
-    public string Body { get; init; }
-
-    public class UpdatePostCommandHandler : IRequestHandler<UpdatePostCommand>
+    public UpdatePostCommandHandler(IApplicationDbContext dbContext,
+      ICurrentUserService currentUserService)
     {
-      private readonly IApplicationDbContext _dbContext;
-      private readonly ICurrentUserService _currentUserService;
+      _dbContext = dbContext;
+      _currentUserService = currentUserService;
+    }
 
-      public UpdatePostCommandHandler(IApplicationDbContext dbContext,
-        ICurrentUserService currentUserService)
+    public async Task<Unit> Handle(UpdatePostCommand request, CancellationToken cancellationToken)
+    {
+      var post = await _dbContext.Posts.FirstOrDefaultAsync(p => p.Slug == request.Slug, cancellationToken);
+
+      if (post == null)
       {
-        _dbContext = dbContext;
-        _currentUserService = currentUserService;
+        throw new NotFoundException("Post does not exist.");
       }
 
-      public async Task<Unit> Handle(UpdatePostCommand request, CancellationToken cancellationToken)
+      post.UpdatedAt = DateTime.UtcNow;
+
+      if (post.AuthorId != _currentUserService.UserId)
       {
-        var post = await _dbContext.Posts.FirstOrDefaultAsync(p => p.Slug == request.Slug, cancellationToken);
-
-        if (post == null)
-        {
-          throw new NotFoundException("Post does not exist.");
-        }
-
-        post.UpdatedAt = DateTime.UtcNow;
-
-        if (post.AuthorId != _currentUserService.UserId)
-        {
-          throw new ForbiddenException("You do not have access to update the specified post.");
-        }
-
-        if (request.Title != null)
-        {
-          post.Title = request.Title;
-        }
-
-        if (request.Body != null)
-        {
-          post.Body = request.Body;
-        }
-
-        await _dbContext.SaveChangesAsync(cancellationToken);
-
-        return Unit.Value;
+        throw new ForbiddenException("You do not have access to update the specified post.");
       }
+
+      if (request.Title != null)
+      {
+        post.Title = request.Title;
+      }
+
+      if (request.Body != null)
+      {
+        post.Body = request.Body;
+      }
+
+      await _dbContext.SaveChangesAsync(cancellationToken);
+
+      return Unit.Value;
     }
   }
 }

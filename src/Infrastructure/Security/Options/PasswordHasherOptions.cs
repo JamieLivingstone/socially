@@ -1,7 +1,6 @@
-namespace Infrastructure.Security.Options
+namespace Infrastructure.Security.Options;
+
+public class PasswordHasherOptions
 {
-  public class PasswordHasherOptions
-  {
-    public string SigningKey { get; set; }
-  }
+  public string SigningKey { get; set; }
 }

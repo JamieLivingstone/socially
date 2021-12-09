@@ -4,54 +4,53 @@ using Application.Common.Interfaces;
 using Domain.Entities;
 using MediatR;
 
-namespace Application.Accounts.Commands.Register
+namespace Application.Accounts.Commands.Register;
+
+public class RegisterCommand : IRequest<RegisterDto>
 {
-  public class RegisterCommand : IRequest<RegisterDto>
+  public string Name { get; init; }
+
+  public string Username { get; init; }
+
+  public string Email { get; init; }
+
+  public string Password { get; init; }
+
+  internal class RegisterCommandHandler : IRequestHandler<RegisterCommand, RegisterDto>
   {
-    public string Name { get; init; }
+    private readonly IApplicationDbContext _dbContext;
+    private readonly IJwtTokenGenerator _jwtTokenGenerator;
+    private readonly IPasswordHasher _passwordHasher;
 
-    public string Username { get; init; }
-
-    public string Email { get; init; }
-
-    public string Password { get; init; }
-
-    internal class RegisterCommandHandler : IRequestHandler<RegisterCommand, RegisterDto>
+    public RegisterCommandHandler(IApplicationDbContext dbContext,
+      IPasswordHasher passwordHasher,
+      IJwtTokenGenerator jwtTokenGenerator)
     {
-      private readonly IApplicationDbContext _dbContext;
-      private readonly IJwtTokenGenerator _jwtTokenGenerator;
-      private readonly IPasswordHasher _passwordHasher;
+      _dbContext = dbContext;
+      _passwordHasher = passwordHasher;
+      _jwtTokenGenerator = jwtTokenGenerator;
+    }
 
-      public RegisterCommandHandler(IApplicationDbContext dbContext,
-        IPasswordHasher passwordHasher,
-        IJwtTokenGenerator jwtTokenGenerator)
+    public async Task<RegisterDto> Handle(RegisterCommand request, CancellationToken cancellationToken)
+    {
+      var salt = _passwordHasher.GenerateSalt();
+
+      var person = new Person
       {
-        _dbContext = dbContext;
-        _passwordHasher = passwordHasher;
-        _jwtTokenGenerator = jwtTokenGenerator;
-      }
+        Name = request.Name,
+        Username = request.Username.ToLowerInvariant(),
+        Email = request.Email.ToLowerInvariant(),
+        Salt = salt,
+        Hash = await _passwordHasher.Hash(request.Password, salt)
+      };
 
-      public async Task<RegisterDto> Handle(RegisterCommand request, CancellationToken cancellationToken)
+      await _dbContext.Persons.AddAsync(person, cancellationToken);
+      await _dbContext.SaveChangesAsync(cancellationToken);
+
+      return new RegisterDto
       {
-        var salt = _passwordHasher.GenerateSalt();
-
-        var person = new Person
-        {
-          Name = request.Name,
-          Username = request.Username.ToLowerInvariant(),
-          Email = request.Email.ToLowerInvariant(),
-          Salt = salt,
-          Hash = await _passwordHasher.Hash(request.Password, salt)
-        };
-
-        await _dbContext.Persons.AddAsync(person, cancellationToken);
-        await _dbContext.SaveChangesAsync(cancellationToken);
-
-        return new RegisterDto
-        {
-          Token = _jwtTokenGenerator.CreateToken(person.Id)
-        };
-      }
+        Token = _jwtTokenGenerator.CreateToken(person.Id)
+      };
     }
   }
 }

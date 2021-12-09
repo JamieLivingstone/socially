@@ -7,42 +7,44 @@ using Domain.Entities;
 using IntegrationTests.Application.TestUtils;
 using NUnit.Framework;
 
-namespace IntegrationTests.Application.Posts
+namespace IntegrationTests.Application.Posts;
+
+[TestFixture]
+public class UnlikePostTests : TestBase
 {
-  [TestFixture]
-  public class UnlikePostTests : TestBase
+  [Test]
+  public void GivenPostDoesNotExist_ThrowsNotFoundException()
   {
-    [Test]
-    public void GivenPostDoesNotExist_ThrowsNotFoundException()
+    var command = new UnlikePostCommand
     {
-      var command = new UnlikePostCommand
-      {
-        Slug = "does-not-exist",
-      };
+      Slug = "does-not-exist"
+    };
 
-      async Task Handler() => await SendAsync(command);
-
-      Assert.ThrowsAsync(typeof(NotFoundException), Handler);
+    async Task Handler()
+    {
+      await SendAsync(command);
     }
 
-    [Test]
-    public async Task GivenAValidRequest_UnlikesPost()
+    Assert.ThrowsAsync(typeof(NotFoundException), Handler);
+  }
+
+  [Test]
+  public async Task GivenAValidRequest_UnlikesPost()
+  {
+    var target = Seed.Posts().First();
+
+    await SendAsync(new LikePostCommand
     {
-      var target = Seed.Posts().First();
+      Slug = target.Slug
+    });
 
-      await SendAsync(new LikePostCommand
-      {
-        Slug = target.Slug
-      });
+    Assert.NotNull(await FindByIdAsync<Like>(Seed.CurrentUserId, target.Id));
 
-      Assert.NotNull(await FindByIdAsync<Like>(Seed.CurrentUserId, target.Id));
+    await SendAsync(new UnlikePostCommand
+    {
+      Slug = target.Slug
+    });
 
-      await SendAsync(new UnlikePostCommand
-      {
-        Slug = target.Slug
-      });
-
-      Assert.Null(await FindByIdAsync<Like>(Seed.CurrentUserId, target.Id));
-    }
+    Assert.Null(await FindByIdAsync<Like>(Seed.CurrentUserId, target.Id));
   }
 }

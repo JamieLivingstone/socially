@@ -4,42 +4,41 @@ using Application.Profiles.Commands.UnfollowProfile;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 
-namespace Web.Controllers
+namespace Web.Controllers;
+
+[Route("api/v1/profiles/{username}")]
+public class ProfilesController : BaseController
 {
-  [Route("api/v1/profiles/{username}")]
-  public class ProfilesController : BaseController
+  [HttpPost("followers")]
+  [ProducesResponseType(StatusCodes.Status201Created)]
+  [ProducesResponseType(StatusCodes.Status401Unauthorized)]
+  [ProducesResponseType(StatusCodes.Status404NotFound)]
+  [ProducesResponseType(StatusCodes.Status422UnprocessableEntity)]
+  public async Task<IActionResult> FollowProfile(string username)
   {
-    [HttpPost("followers")]
-    [ProducesResponseType(StatusCodes.Status201Created)]
-    [ProducesResponseType(StatusCodes.Status401Unauthorized)]
-    [ProducesResponseType(StatusCodes.Status404NotFound)]
-    [ProducesResponseType(StatusCodes.Status422UnprocessableEntity)]
-    public async Task<IActionResult> FollowProfile(string username)
+    var command = new FollowProfileCommand
     {
-      var command = new FollowProfileCommand
-      {
-        Username = username,
-      };
+      Username = username
+    };
 
-      var response = await Mediator.Send(command);
+    var response = await Mediator.Send(command);
 
-      return CreatedAtAction(nameof(FollowProfile), response);
-    }
+    return CreatedAtAction(nameof(FollowProfile), response);
+  }
 
-    [HttpDelete("followers")]
-    [ProducesResponseType(StatusCodes.Status200OK)]
-    [ProducesResponseType(StatusCodes.Status401Unauthorized)]
-    [ProducesResponseType(StatusCodes.Status404NotFound)]
-    public async Task<IActionResult> UnfollowProfile(string username)
+  [HttpDelete("followers")]
+  [ProducesResponseType(StatusCodes.Status200OK)]
+  [ProducesResponseType(StatusCodes.Status401Unauthorized)]
+  [ProducesResponseType(StatusCodes.Status404NotFound)]
+  public async Task<IActionResult> UnfollowProfile(string username)
+  {
+    var command = new UnfollowProfileCommand
     {
-      var command = new UnfollowProfileCommand
-      {
-        Username = username,
-      };
+      Username = username
+    };
 
-      var response = await Mediator.Send(command);
+    var response = await Mediator.Send(command);
 
-      return Ok(response);
-    }
+    return Ok(response);
   }
 }

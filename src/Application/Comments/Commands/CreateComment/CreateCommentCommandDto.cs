@@ -1,7 +1,6 @@
-namespace Application.Comments.Commands.CreateComment
+namespace Application.Comments.Commands.CreateComment;
+
+public class CreateCommentCommandDto
 {
-  public class CreateCommentCommandDto
-  {
-    public int Id { get; init; }
-  }
+  public int Id { get; init; }
 }

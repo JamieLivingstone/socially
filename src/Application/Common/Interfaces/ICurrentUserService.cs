@@ -1,9 +1,8 @@
-namespace Application.Common.Interfaces
-{
-  public interface ICurrentUserService
-  {
-    public int UserId { get; }
+namespace Application.Common.Interfaces;
 
-    bool IsAuthenticated { get; }
-  }
+public interface ICurrentUserService
+{
+  public int UserId { get; }
+
+  bool IsAuthenticated { get; }
 }

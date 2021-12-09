@@ -1,9 +1,8 @@
 using System;
 
-namespace Application.Common.Security
+namespace Application.Common.Security;
+
+[AttributeUsage(AttributeTargets.Class)]
+public class AuthorizeAttribute : Attribute
 {
-  [AttributeUsage(AttributeTargets.Class)]
-  public class AuthorizeAttribute : Attribute
-  {
-  }
 }

@@ -7,35 +7,37 @@ using IntegrationTests.Application.TestUtils;
 using NUnit.Framework;
 using Snapshooter.NUnit;
 
-namespace IntegrationTests.Application.Posts
+namespace IntegrationTests.Application.Posts;
+
+[TestFixture]
+public class LikePostTests : TestBase
 {
-  [TestFixture]
-  public class LikePostTests : TestBase
+  [Test]
+  public void GivenPostDoesNotExist_ThrowsNotFoundException()
   {
-    [Test]
-    public void GivenPostDoesNotExist_ThrowsNotFoundException()
+    var command = new LikePostCommand
     {
-      var command = new LikePostCommand
-      {
-        Slug = "does-not-exist",
-      };
+      Slug = "does-not-exist"
+    };
 
-      async Task Handler() => await SendAsync(command);
-
-      Assert.ThrowsAsync(typeof(NotFoundException), Handler);
+    async Task Handler()
+    {
+      await SendAsync(command);
     }
 
-    [Test]
-    public async Task GivenAValidRequest_LikesPost()
+    Assert.ThrowsAsync(typeof(NotFoundException), Handler);
+  }
+
+  [Test]
+  public async Task GivenAValidRequest_LikesPost()
+  {
+    var target = Seed.Posts().First();
+
+    await SendAsync(new LikePostCommand
     {
-      var target = Seed.Posts().First();
+      Slug = target.Slug
+    });
 
-      await SendAsync(new LikePostCommand
-      {
-        Slug = target.Slug
-      });
-
-      Snapshot.Match(await FindByIdAsync<Like>(Seed.CurrentUserId, target.Id));
-    }
+    Snapshot.Match(await FindByIdAsync<Like>(Seed.CurrentUserId, target.Id));
   }
 }

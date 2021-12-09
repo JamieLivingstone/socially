@@ -1,15 +1,14 @@
 using System;
 
-namespace Application.Common.Exceptions
-{
-  public class UnauthorizedException : Exception
-  {
-    public UnauthorizedException()
-    {
-    }
+namespace Application.Common.Exceptions;
 
-    public UnauthorizedException(string message) : base(message)
-    {
-    }
+public class UnauthorizedException : Exception
+{
+  public UnauthorizedException()
+  {
+  }
+
+  public UnauthorizedException(string message) : base(message)
+  {
   }
 }

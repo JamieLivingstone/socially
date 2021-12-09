@@ -7,50 +7,49 @@ using Domain.Entities;
 using MediatR;
 using Microsoft.EntityFrameworkCore;
 
-namespace Application.Posts.Commands.LikePost
+namespace Application.Posts.Commands.LikePost;
+
+[Authorize]
+public class LikePostCommand : IRequest
 {
-  [Authorize]
-  public class LikePostCommand : IRequest
+  public string Slug { get; init; }
+
+  public class LikePostCommandHandler : IRequestHandler<LikePostCommand>
   {
-    public string Slug { get; init; }
+    private readonly IApplicationDbContext _dbContext;
+    private readonly ICurrentUserService _currentUserService;
 
-    public class LikePostCommandHandler : IRequestHandler<LikePostCommand>
+    public LikePostCommandHandler(IApplicationDbContext dbContext,
+      ICurrentUserService currentUserService)
     {
-      private readonly IApplicationDbContext _dbContext;
-      private readonly ICurrentUserService _currentUserService;
+      _dbContext = dbContext;
+      _currentUserService = currentUserService;
+    }
 
-      public LikePostCommandHandler(IApplicationDbContext dbContext,
-        ICurrentUserService currentUserService)
+    public async Task<Unit> Handle(LikePostCommand request, CancellationToken cancellationToken)
+    {
+      var post = await _dbContext.Posts.FirstOrDefaultAsync(p => p.Slug == request.Slug, cancellationToken);
+
+      if (post == null)
       {
-        _dbContext = dbContext;
-        _currentUserService = currentUserService;
+        throw new NotFoundException("Post does not exist.");
       }
 
-      public async Task<Unit> Handle(LikePostCommand request, CancellationToken cancellationToken)
+      var liked = await _dbContext.Likes.AnyAsync(l => l.ObserverId == _currentUserService.UserId && l.PostId == post.Id, cancellationToken);
+
+      if (!liked)
       {
-        var post = await _dbContext.Posts.FirstOrDefaultAsync(p => p.Slug == request.Slug, cancellationToken);
-
-        if (post == null)
+        var like = new Like
         {
-          throw new NotFoundException("Post does not exist.");
-        }
+          PostId = post.Id,
+          ObserverId = _currentUserService.UserId
+        };
 
-        var liked = await _dbContext.Likes.AnyAsync(l => l.ObserverId == _currentUserService.UserId && l.PostId == post.Id, cancellationToken);
-
-        if (!liked)
-        {
-          var like = new Like
-          {
-            PostId = post.Id,
-            ObserverId = _currentUserService.UserId,
-          };
-
-          await _dbContext.Likes.AddAsync(like, cancellationToken);
-          await _dbContext.SaveChangesAsync(cancellationToken);
-        }
-
-        return Unit.Value;
+        await _dbContext.Likes.AddAsync(like, cancellationToken);
+        await _dbContext.SaveChangesAsync(cancellationToken);
       }
+
+      return Unit.Value;
     }
   }
 }

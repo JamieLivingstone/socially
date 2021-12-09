@@ -1,21 +1,20 @@
 using System;
 
-namespace Domain.Entities
+namespace Domain.Entities;
+
+public class Comment
 {
-  public class Comment
-  {
-    public int Id { get; set; }
+  public int Id { get; set; }
 
-    public string Message { get; set; }
+  public string Message { get; set; }
 
-    public DateTime CreatedAt { get; set; }
+  public DateTime CreatedAt { get; set; }
 
-    public int AuthorId { get; set; }
+  public int AuthorId { get; set; }
 
-    public Person Author { get; set; }
+  public Person Author { get; set; }
 
-    public int PostId { get; set; }
+  public int PostId { get; set; }
 
-    public Post Post { get; set; }
-  }
+  public Post Post { get; set; }
 }

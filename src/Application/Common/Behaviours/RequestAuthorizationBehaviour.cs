@@ -6,27 +6,26 @@ using Application.Common.Interfaces;
 using Application.Common.Security;
 using MediatR;
 
-namespace Application.Common.Behaviours
+namespace Application.Common.Behaviours;
+
+public class RequestAuthorizationBehaviour<TRequest, TResponse> : IPipelineBehavior<TRequest, TResponse>
 {
-  public class RequestAuthorizationBehaviour<TRequest, TResponse> : IPipelineBehavior<TRequest, TResponse>
+  private readonly ICurrentUserService _currentUserService;
+
+  public RequestAuthorizationBehaviour(ICurrentUserService currentUserService)
   {
-    private readonly ICurrentUserService _currentUserService;
+    _currentUserService = currentUserService;
+  }
 
-    public RequestAuthorizationBehaviour(ICurrentUserService currentUserService)
+  public async Task<TResponse> Handle(TRequest request, CancellationToken cancellationToken, RequestHandlerDelegate<TResponse> next)
+  {
+    var shouldAuthorize = request.GetType().GetCustomAttribute<AuthorizeAttribute>();
+
+    if (shouldAuthorize != null && _currentUserService.IsAuthenticated == false)
     {
-      _currentUserService = currentUserService;
+      throw new UnauthorizedException("Authorization failed.");
     }
 
-    public async Task<TResponse> Handle(TRequest request, CancellationToken cancellationToken, RequestHandlerDelegate<TResponse> next)
-    {
-      var shouldAuthorize = request.GetType().GetCustomAttribute<AuthorizeAttribute>();
-
-      if (shouldAuthorize != null && _currentUserService.IsAuthenticated == false)
-      {
-        throw new UnauthorizedException("Authorization failed.");
-      }
-
-      return await next();
-    }
+    return await next();
   }
 }

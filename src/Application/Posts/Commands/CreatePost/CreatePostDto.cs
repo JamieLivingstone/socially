@@ -1,7 +1,6 @@
-namespace Application.Posts.Commands.CreatePost
+namespace Application.Posts.Commands.CreatePost;
+
+public class CreatePostDto
 {
-  public class CreatePostDto
-  {
-    public string Slug { get; init; }
-  }
+  public string Slug { get; init; }
 }

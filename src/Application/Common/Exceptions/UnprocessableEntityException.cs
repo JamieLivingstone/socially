@@ -1,15 +1,14 @@
 using System;
 
-namespace Application.Common.Exceptions
-{
-  public class UnprocessableEntityException : Exception
-  {
-    public UnprocessableEntityException()
-    {
-    }
+namespace Application.Common.Exceptions;
 
-    public UnprocessableEntityException(string message) : base(message)
-    {
-    }
+public class UnprocessableEntityException : Exception
+{
+  public UnprocessableEntityException()
+  {
+  }
+
+  public UnprocessableEntityException(string message) : base(message)
+  {
   }
 }

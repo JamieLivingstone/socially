@@ -1,18 +1,17 @@
 using FluentValidation;
 
-namespace Application.Accounts.Commands.Login
-{
-  public class LoginCommandValidator : AbstractValidator<LoginCommand>
-  {
-    public LoginCommandValidator()
-    {
-      RuleFor(x => x.Username)
-        .NotNull()
-        .NotEmpty();
+namespace Application.Accounts.Commands.Login;
 
-      RuleFor(x => x.Password)
-        .NotNull()
-        .NotEmpty();
-    }
+public class LoginCommandValidator : AbstractValidator<LoginCommand>
+{
+  public LoginCommandValidator()
+  {
+    RuleFor(x => x.Username)
+      .NotNull()
+      .NotEmpty();
+
+    RuleFor(x => x.Password)
+      .NotNull()
+      .NotEmpty();
   }
 }

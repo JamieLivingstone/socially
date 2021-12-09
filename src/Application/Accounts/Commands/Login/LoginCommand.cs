@@ -6,43 +6,42 @@ using Application.Common.Interfaces;
 using MediatR;
 using Microsoft.EntityFrameworkCore;
 
-namespace Application.Accounts.Commands.Login
+namespace Application.Accounts.Commands.Login;
+
+public class LoginCommand : IRequest<LoginDto>
 {
-  public class LoginCommand : IRequest<LoginDto>
+  public string Username { get; init; }
+
+  public string Password { get; init; }
+
+  public class LoginCommandHandler : IRequestHandler<LoginCommand, LoginDto>
   {
-    public string Username { get; init; }
+    private readonly IApplicationDbContext _dbContext;
+    private readonly IJwtTokenGenerator _jwtTokenGenerator;
+    private readonly IPasswordHasher _passwordHasher;
 
-    public string Password { get; init; }
-
-    public class LoginCommandHandler : IRequestHandler<LoginCommand, LoginDto>
+    public LoginCommandHandler(IApplicationDbContext dbContext,
+      IPasswordHasher passwordHasher,
+      IJwtTokenGenerator jwtTokenGenerator)
     {
-      private readonly IApplicationDbContext _dbContext;
-      private readonly IJwtTokenGenerator _jwtTokenGenerator;
-      private readonly IPasswordHasher _passwordHasher;
+      _dbContext = dbContext;
+      _passwordHasher = passwordHasher;
+      _jwtTokenGenerator = jwtTokenGenerator;
+    }
 
-      public LoginCommandHandler(IApplicationDbContext dbContext,
-        IPasswordHasher passwordHasher,
-        IJwtTokenGenerator jwtTokenGenerator)
+    public async Task<LoginDto> Handle(LoginCommand request, CancellationToken cancellationToken)
+    {
+      var person = await _dbContext.Persons.Where(p => p.Username == request.Username.ToLowerInvariant()).FirstOrDefaultAsync(cancellationToken);
+
+      if (person == null || !person.Hash.SequenceEqual(await _passwordHasher.Hash(request.Password, person.Salt)))
       {
-        _dbContext = dbContext;
-        _passwordHasher = passwordHasher;
-        _jwtTokenGenerator = jwtTokenGenerator;
+        throw new UnauthorizedException("Invalid username or password combination.");
       }
 
-      public async Task<LoginDto> Handle(LoginCommand request, CancellationToken cancellationToken)
+      return new LoginDto
       {
-        var person = await _dbContext.Persons.Where(p => p.Username == request.Username.ToLowerInvariant()).FirstOrDefaultAsync(cancellationToken);
-
-        if (person == null || !person.Hash.SequenceEqual(await _passwordHasher.Hash(request.Password, person.Salt)))
-        {
-          throw new UnauthorizedException("Invalid username or password combination.");
-        }
-
-        return new LoginDto
-        {
-          Token = _jwtTokenGenerator.CreateToken(person.Id),
-        };
-      }
+        Token = _jwtTokenGenerator.CreateToken(person.Id)
+      };
     }
   }
 }

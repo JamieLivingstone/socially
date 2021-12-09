@@ -4,26 +4,25 @@ using System.Threading.Tasks;
 using FunctionalTests.Api.TestUtils;
 using NUnit.Framework;
 
-namespace FunctionalTests.Api.Middlewares
+namespace FunctionalTests.Api.Middlewares;
+
+[TestFixture]
+public class Health
 {
-  [TestFixture]
-  public class Health
+  private HttpClient _client;
+
+  [SetUp]
+  public void SetUp()
   {
-    private HttpClient _client;
+    var factory = new CustomWebApplicationFactory();
+    _client = factory.GetAnonymousClient();
+  }
 
-    [SetUp]
-    public void SetUp()
-    {
-      var factory = new CustomWebApplicationFactory();
-      _client = factory.GetAnonymousClient();
-    }
+  [Test]
+  public async Task GivenRouteDoesNotExist_ReturnsNotFound()
+  {
+    var response = await _client.GetAsync("does-not-exist");
 
-    [Test]
-    public async Task GivenRouteDoesNotExist_ReturnsNotFound()
-    {
-      var response = await _client.GetAsync("does-not-exist");
-
-      Assert.AreEqual(HttpStatusCode.NotFound, response.StatusCode);
-    }
+    Assert.AreEqual(HttpStatusCode.NotFound, response.StatusCode);
   }
 }

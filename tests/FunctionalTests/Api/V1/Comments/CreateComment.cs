@@ -6,51 +6,50 @@ using Application.Comments.Commands.CreateComment;
 using FunctionalTests.Api.TestUtils;
 using NUnit.Framework;
 
-namespace FunctionalTests.Api.V1.Comments
+namespace FunctionalTests.Api.V1.Comments;
+
+[TestFixture]
+public class CreateComment : TestBase
 {
-  [TestFixture]
-  public class CreateComment : TestBase
+  [Test]
+  public async Task GivenAuthenticationFails_ReturnsUnauthorized()
   {
-    [Test]
-    public async Task GivenAuthenticationFails_ReturnsUnauthorized()
+    var target = Seed.Posts().First();
+
+    var response = await AnonymousClient.PostAsJsonAsync($"/api/v1/posts/{target.Slug}/comments", new CreateCommentCommand
     {
-      var target = Seed.Posts().First();
+      Message = "message",
+      Slug = target.Slug
+    });
 
-      var response = await AnonymousClient.PostAsJsonAsync($"/api/v1/posts/{target.Slug}/comments", new CreateCommentCommand
-      {
-        Message = "message",
-        Slug = target.Slug,
-      });
+    Assert.AreEqual(HttpStatusCode.Unauthorized, response.StatusCode);
+  }
 
-      Assert.AreEqual(HttpStatusCode.Unauthorized, response.StatusCode);
-    }
+  [Test]
+  public async Task GivenValidationFails_ReturnsBadRequest()
+  {
+    var target = Seed.Posts().First();
 
-    [Test]
-    public async Task GivenValidationFails_ReturnsBadRequest()
+    var response = await AuthenticatedClient.PostAsJsonAsync($"/api/v1/posts/{target.Slug}/comments", new CreateCommentCommand
     {
-      var target = Seed.Posts().First();
+      Message = "", // Required field
+      Slug = target.Slug
+    });
 
-      var response = await AuthenticatedClient.PostAsJsonAsync($"/api/v1/posts/{target.Slug}/comments", new CreateCommentCommand
-      {
-        Message = "", // Required field
-        Slug = target.Slug,
-      });
+    Assert.AreEqual(HttpStatusCode.BadRequest, response.StatusCode);
+  }
 
-      Assert.AreEqual(HttpStatusCode.BadRequest, response.StatusCode);
-    }
+  [Test]
+  public async Task GivenAValidRequest_ReturnsCreated()
+  {
+    var target = Seed.Posts().First();
 
-    [Test]
-    public async Task GivenAValidRequest_ReturnsCreated()
+    var response = await AuthenticatedClient.PostAsJsonAsync($"/api/v1/posts/{target.Slug}/comments", new CreateCommentCommand
     {
-      var target = Seed.Posts().First();
+      Message = "Message",
+      Slug = target.Slug
+    });
 
-      var response = await AuthenticatedClient.PostAsJsonAsync($"/api/v1/posts/{target.Slug}/comments", new CreateCommentCommand
-      {
-        Message = "Message",
-        Slug = target.Slug,
-      });
-
-      Assert.AreEqual(HttpStatusCode.Created, response.StatusCode);
-    }
+    Assert.AreEqual(HttpStatusCode.Created, response.StatusCode);
   }
 }

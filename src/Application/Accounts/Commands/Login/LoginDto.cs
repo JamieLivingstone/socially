@@ -1,7 +1,6 @@
-namespace Application.Accounts.Commands.Login
+namespace Application.Accounts.Commands.Login;
+
+public class LoginDto
 {
-  public class LoginDto
-  {
-    public string Token { get; init; }
-  }
+  public string Token { get; init; }
 }

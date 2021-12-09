@@ -1,11 +1,10 @@
 using Application.Common.Interfaces;
 
-namespace IntegrationTests.Application.TestUtils
-{
-  public class MockCurrentUserService : ICurrentUserService
-  {
-    public int UserId => 1;
+namespace IntegrationTests.Application.TestUtils;
 
-    public bool IsAuthenticated => true;
-  }
+public class MockCurrentUserService : ICurrentUserService
+{
+  public int UserId => 1;
+
+  public bool IsAuthenticated => true;
 }

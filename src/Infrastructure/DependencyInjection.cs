@@ -10,58 +10,57 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.IdentityModel.Tokens;
 
-namespace Infrastructure
+namespace Infrastructure;
+
+public static class DependencyInjection
 {
-  public static class DependencyInjection
+  public static void AddInfrastructure(this IServiceCollection services, IConfiguration configuration)
   {
-    public static void AddInfrastructure(this IServiceCollection services, IConfiguration configuration)
+    ConfigureJwt(services, configuration);
+
+    services.AddDbContext<ApplicationDbContext>(options =>
     {
-      ConfigureJwt(services, configuration);
+      options.UseNpgsql(configuration.GetConnectionString("DefaultConnection"),
+        b => { b.MigrationsAssembly(typeof(ApplicationDbContext).Assembly.FullName); });
+    });
 
-      services.AddDbContext<ApplicationDbContext>(options =>
-      {
-        options.UseNpgsql(configuration.GetConnectionString("DefaultConnection"),
-          b => { b.MigrationsAssembly(typeof(ApplicationDbContext).Assembly.FullName); });
-      });
+    services.AddScoped<IApplicationDbContext>(provider => provider.GetService<ApplicationDbContext>());
 
-      services.AddScoped<IApplicationDbContext>(provider => provider.GetService<ApplicationDbContext>());
+    services.Configure<PasswordHasherOptions>(configuration.GetSection("Security:PasswordHasherOptions"));
 
-      services.Configure<PasswordHasherOptions>(configuration.GetSection("Security:PasswordHasherOptions"));
+    services.AddTransient<IPasswordHasher, PasswordHasher>();
 
-      services.AddTransient<IPasswordHasher, PasswordHasher>();
+    services.AddTransient<IJwtTokenGenerator, JwtTokenGenerator>();
+  }
 
-      services.AddTransient<IJwtTokenGenerator, JwtTokenGenerator>();
-    }
+  private static void ConfigureJwt(IServiceCollection services, IConfiguration configuration)
+  {
+    var issuer = configuration["Security:JwtIssuerOptions:Issuer"];
+    var audience = configuration["Security:JwtIssuerOptions:Audience"];
+    var signingKey = new SymmetricSecurityKey(Encoding.ASCII.GetBytes(configuration["Security:JwtIssuerOptions:Key"]));
+    var signingCredentials = new SigningCredentials(signingKey, SecurityAlgorithms.HmacSha256);
 
-    private static void ConfigureJwt(IServiceCollection services, IConfiguration configuration)
+    services.Configure<JwtIssuerOptions>(options =>
     {
-      var issuer = configuration["Security:JwtIssuerOptions:Issuer"];
-      var audience = configuration["Security:JwtIssuerOptions:Audience"];
-      var signingKey = new SymmetricSecurityKey(Encoding.ASCII.GetBytes(configuration["Security:JwtIssuerOptions:Key"]));
-      var signingCredentials = new SigningCredentials(signingKey, SecurityAlgorithms.HmacSha256);
+      options.Issuer = issuer;
+      options.Audience = audience;
+      options.SigningCredentials = signingCredentials;
+    });
 
-      services.Configure<JwtIssuerOptions>(options =>
+    services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
+      .AddJwtBearer(options =>
       {
-        options.Issuer = issuer;
-        options.Audience = audience;
-        options.SigningCredentials = signingCredentials;
-      });
-
-      services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
-        .AddJwtBearer(options =>
+        options.TokenValidationParameters = new TokenValidationParameters
         {
-          options.TokenValidationParameters = new TokenValidationParameters
-          {
-            ClockSkew = TimeSpan.Zero,
-            ValidateIssuer = true,
-            ValidateAudience = true,
-            ValidateLifetime = true,
-            ValidateIssuerSigningKey = true,
-            ValidIssuer = issuer,
-            ValidAudience = audience,
-            IssuerSigningKey = signingCredentials.Key,
-          };
-        });
-    }
+          ClockSkew = TimeSpan.Zero,
+          ValidateIssuer = true,
+          ValidateAudience = true,
+          ValidateLifetime = true,
+          ValidateIssuerSigningKey = true,
+          ValidIssuer = issuer,
+          ValidAudience = audience,
+          IssuerSigningKey = signingCredentials.Key
+        };
+      });
   }
 }

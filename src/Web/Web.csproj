@@ -5,10 +5,10 @@
     </PropertyGroup>
 
     <ItemGroup>
-        <PackageReference Include="CaseExtensions" Version="1.1.0" />
-        <PackageReference Include="Swashbuckle.AspNetCore" Version="6.2.3" />
-        <PackageReference Include="FluentValidation.AspNetCore" Version="10.3.5" />
-        <PackageReference Include="Microsoft.Extensions.Diagnostics.HealthChecks.EntityFrameworkCore" Version="6.0.0" />
+        <PackageReference Include="CaseExtensions" Version="1.1.0"/>
+        <PackageReference Include="Swashbuckle.AspNetCore" Version="6.2.3"/>
+        <PackageReference Include="FluentValidation.AspNetCore" Version="10.3.5"/>
+        <PackageReference Include="Microsoft.Extensions.Diagnostics.HealthChecks.EntityFrameworkCore" Version="6.0.0"/>
         <PackageReference Include="Microsoft.EntityFrameworkCore.Tools" Version="6.0.0">
             <PrivateAssets>all</PrivateAssets>
             <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
@@ -16,7 +16,7 @@
     </ItemGroup>
 
     <ItemGroup>
-        <ProjectReference Include="..\Application\Application.csproj" />
-        <ProjectReference Include="..\Infrastructure\Infrastructure.csproj" />
+        <ProjectReference Include="..\Application\Application.csproj"/>
+        <ProjectReference Include="..\Infrastructure\Infrastructure.csproj"/>
     </ItemGroup>
 </Project>

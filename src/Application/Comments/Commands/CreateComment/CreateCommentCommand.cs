@@ -8,52 +8,51 @@ using Domain.Entities;
 using MediatR;
 using Microsoft.EntityFrameworkCore;
 
-namespace Application.Comments.Commands.CreateComment
+namespace Application.Comments.Commands.CreateComment;
+
+[Authorize]
+public class CreateCommentCommand : IRequest<CreateCommentCommandDto>
 {
-  [Authorize]
-  public class CreateCommentCommand : IRequest<CreateCommentCommandDto>
+  public string Message { get; init; }
+
+  public string Slug { get; init; }
+
+  public class CreateCommentCommandHandler : IRequestHandler<CreateCommentCommand, CreateCommentCommandDto>
   {
-    public string Message { get; init; }
+    private readonly IApplicationDbContext _dbContext;
+    private readonly ICurrentUserService _currentUserService;
 
-    public string Slug { get; init; }
-
-    public class CreateCommentCommandHandler : IRequestHandler<CreateCommentCommand, CreateCommentCommandDto>
+    public CreateCommentCommandHandler(IApplicationDbContext dbContext,
+      ICurrentUserService currentUserService)
     {
-      private readonly IApplicationDbContext _dbContext;
-      private readonly ICurrentUserService _currentUserService;
+      _dbContext = dbContext;
+      _currentUserService = currentUserService;
+    }
 
-      public CreateCommentCommandHandler(IApplicationDbContext dbContext,
-        ICurrentUserService currentUserService)
+    public async Task<CreateCommentCommandDto> Handle(CreateCommentCommand request, CancellationToken cancellationToken)
+    {
+      var post = await _dbContext.Posts.FirstOrDefaultAsync(p => p.Slug == request.Slug, cancellationToken);
+
+      if (post == null)
       {
-        _dbContext = dbContext;
-        _currentUserService = currentUserService;
+        throw new NotFoundException("Post does not exist.");
       }
 
-      public async Task<CreateCommentCommandDto> Handle(CreateCommentCommand request, CancellationToken cancellationToken)
+      var comment = new Comment
       {
-        var post = await _dbContext.Posts.FirstOrDefaultAsync(p => p.Slug == request.Slug, cancellationToken);
+        AuthorId = _currentUserService.UserId,
+        Message = request.Message,
+        CreatedAt = DateTime.UtcNow,
+        PostId = post.Id
+      };
 
-        if (post == null)
-        {
-          throw new NotFoundException("Post does not exist.");
-        }
+      await _dbContext.Comments.AddAsync(comment, cancellationToken);
+      await _dbContext.SaveChangesAsync(cancellationToken);
 
-        var comment = new Comment
-        {
-          AuthorId = _currentUserService.UserId,
-          Message = request.Message,
-          CreatedAt = DateTime.UtcNow,
-          PostId = post.Id,
-        };
-
-        await _dbContext.Comments.AddAsync(comment, cancellationToken);
-        await _dbContext.SaveChangesAsync(cancellationToken);
-
-        return new CreateCommentCommandDto
-        {
-          Id = comment.Id
-        };
-      }
+      return new CreateCommentCommandDto
+      {
+        Id = comment.Id
+      };
     }
   }
 }

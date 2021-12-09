@@ -1,7 +1,6 @@
-namespace Application.Common.Interfaces
+namespace Application.Common.Interfaces;
+
+public interface IJwtTokenGenerator
 {
-  public interface IJwtTokenGenerator
-  {
-    public string CreateToken(int userId);
-  }
+  public string CreateToken(int userId);
 }

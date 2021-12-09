@@ -13,82 +13,81 @@ using Microsoft.Extensions.DependencyInjection;
 using NUnit.Framework;
 using Web;
 
-namespace IntegrationTests.Application.TestUtils
+namespace IntegrationTests.Application.TestUtils;
+
+public class TestBase
 {
-  public class TestBase
+  private static IServiceScopeFactory _scopeFactory;
+
+  [OneTimeSetUp]
+  public void OneTimeSetUp()
   {
-    private static IServiceScopeFactory _scopeFactory;
+    var host = WebHost.CreateDefaultBuilder()
+      .UseStartup<Startup>()
+      .ConfigureTestServices(services =>
+      {
+        var descriptor = services.SingleOrDefault(d => d.ServiceType == typeof(DbContextOptions<ApplicationDbContext>));
 
-    [OneTimeSetUp]
-    public void OneTimeSetUp()
-    {
-      var host = WebHost.CreateDefaultBuilder()
-        .UseStartup<Startup>()
-        .ConfigureTestServices(services =>
+        services.Remove(descriptor);
+
+        services.AddDbContext<ApplicationDbContext>(options =>
         {
-          var descriptor = services.SingleOrDefault(d => d.ServiceType == typeof(DbContextOptions<ApplicationDbContext>));
+          options.UseInMemoryDatabase("IntegrationTests");
+        });
 
-          services.Remove(descriptor);
+        services.AddScoped<IApplicationDbContext>(provider => provider.GetService<ApplicationDbContext>());
 
-          services.AddDbContext<ApplicationDbContext>(options =>
-          {
-            options.UseInMemoryDatabase("IntegrationTests");
-          });
+        services.AddScoped<ICurrentUserService, MockCurrentUserService>();
+      })
+      .Build();
 
-          services.AddScoped<IApplicationDbContext>(provider => provider.GetService<ApplicationDbContext>());
+    _scopeFactory = host.Services.GetService<IServiceScopeFactory>();
+  }
 
-          services.AddScoped<ICurrentUserService, MockCurrentUserService>();
-        })
-        .Build();
+  [SetUp]
+  public void SetUp()
+  {
+    using var scope = _scopeFactory.CreateScope();
 
-      _scopeFactory = host.Services.GetService<IServiceScopeFactory>();
-    }
+    var dbContext = scope.ServiceProvider.GetRequiredService<ApplicationDbContext>();
 
-    [SetUp]
-    public void SetUp()
-    {
-      using var scope = _scopeFactory.CreateScope();
+    Seed.InitializeDbForTests(dbContext);
+  }
 
-      var dbContext = scope.ServiceProvider.GetRequiredService<ApplicationDbContext>();
+  [TearDown]
+  public void TearDown()
+  {
+    using var scope = _scopeFactory.CreateScope();
 
-      Seed.InitializeDbForTests(dbContext);
-    }
+    var dbContext = scope.ServiceProvider.GetRequiredService<ApplicationDbContext>();
 
-    [TearDown]
-    public void TearDown()
-    {
-      using var scope = _scopeFactory.CreateScope();
+    dbContext.Database.EnsureDeleted();
+  }
 
-      var dbContext = scope.ServiceProvider.GetRequiredService<ApplicationDbContext>();
+  protected static async Task<TResponse> SendAsync<TResponse>(IRequest<TResponse> request)
+  {
+    using var scope = _scopeFactory.CreateScope();
 
-      dbContext.Database.EnsureDeleted();
-    }
+    var mediator = scope.ServiceProvider.GetRequiredService<ISender>();
 
-    protected static async Task<TResponse> SendAsync<TResponse>(IRequest<TResponse> request)
-    {
-      using var scope = _scopeFactory.CreateScope();
+    return await mediator.Send(request);
+  }
 
-      var mediator = scope.ServiceProvider.GetRequiredService<ISender>();
+  protected static async Task<TEntity> FindByIdAsync<TEntity>(params object[] key) where TEntity : class
+  {
+    using var scope = _scopeFactory.CreateScope();
 
-      return await mediator.Send(request);
-    }
+    var context = scope.ServiceProvider.GetRequiredService<ApplicationDbContext>();
 
-    protected static async Task<TEntity> FindByIdAsync<TEntity>(params object[] key) where TEntity : class
-    {
-      using var scope = _scopeFactory.CreateScope();
+    return await context.FindAsync<TEntity>(key);
+  }
 
-      var context = scope.ServiceProvider.GetRequiredService<ApplicationDbContext>();
+  protected static async Task<TEntity> FindAsync<TEntity>(Expression<Func<TEntity, bool>> predicate) where TEntity : class
+  {
+    using var scope = _scopeFactory.CreateScope();
 
-      return await context.FindAsync<TEntity>(key);
-    }
+    var context = scope.ServiceProvider.GetRequiredService<ApplicationDbContext>();
 
-    protected static async Task<TEntity> FindAsync<TEntity>(Expression<Func<TEntity, bool>> predicate) where TEntity : class
-    {
-      using var scope = _scopeFactory.CreateScope();
-
-      var context = scope.ServiceProvider.GetRequiredService<ApplicationDbContext>();
-
-      return await context.Set<TEntity>().FirstAsync(predicate);
-    }
+    return await context.Set<TEntity>().FirstAsync(predicate);
   }
 }

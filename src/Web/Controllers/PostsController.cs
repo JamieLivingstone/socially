@@ -7,77 +7,85 @@ using Application.Posts.Commands.UpdatePost;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 
-namespace Web.Controllers
+namespace Web.Controllers;
+
+[Route("api/v1/posts")]
+public class PostsController : BaseController
 {
-  [Route("api/v1/posts")]
-  public class PostsController : BaseController
+  [HttpPost]
+  [Produces("text/plain", "application/json")]
+  [ProducesResponseType(typeof(CreatePostDto), StatusCodes.Status201Created)]
+  [ProducesResponseType(StatusCodes.Status400BadRequest)]
+  [ProducesResponseType(StatusCodes.Status401Unauthorized)]
+  public async Task<IActionResult> CreatePost(CreatePostCommand command)
   {
-    [HttpPost]
-    [Produces("text/plain", "application/json")]
-    [ProducesResponseType(typeof(CreatePostDto), StatusCodes.Status201Created)]
-    [ProducesResponseType(StatusCodes.Status400BadRequest)]
-    [ProducesResponseType(StatusCodes.Status401Unauthorized)]
-    public async Task<IActionResult> CreatePost(CreatePostCommand command)
-    {
-      var response = await Mediator.Send(command);
+    var response = await Mediator.Send(command);
 
-      return CreatedAtAction(nameof(CreatePost), response);
+    return CreatedAtAction(nameof(CreatePost), response);
+  }
+
+  [HttpPatch("{slug}")]
+  [Produces("text/plain", "application/json")]
+  [ProducesResponseType(StatusCodes.Status200OK)]
+  [ProducesResponseType(StatusCodes.Status400BadRequest)]
+  [ProducesResponseType(StatusCodes.Status401Unauthorized)]
+  public async Task<IActionResult> UpdatePost(string slug, UpdatePostCommand command)
+  {
+    if (slug != command.Slug)
+    {
+      return BadRequest();
     }
 
-    [HttpPatch("{slug}")]
-    [Produces("text/plain", "application/json")]
-    [ProducesResponseType(StatusCodes.Status200OK)]
-    [ProducesResponseType(StatusCodes.Status400BadRequest)]
-    [ProducesResponseType(StatusCodes.Status401Unauthorized)]
-    public async Task<IActionResult> UpdatePost(string slug, UpdatePostCommand command)
+    var response = await Mediator.Send(command);
+
+    return Ok(response);
+  }
+
+  [ProducesResponseType(StatusCodes.Status200OK)]
+  [ProducesResponseType(StatusCodes.Status400BadRequest)]
+  [ProducesResponseType(StatusCodes.Status401Unauthorized)]
+  [HttpDelete("{slug}")]
+  public async Task<IActionResult> DeletePost(string slug)
+  {
+    var command = new DeletePostCommand
     {
-      if (slug != command.Slug)
-      {
-        return BadRequest();
-      }
+      Slug = slug
+    };
 
-      var response = await Mediator.Send(command);
+    var response = await Mediator.Send(command);
 
-      return Ok(response);
-    }
+    return Ok(response);
+  }
 
-    [ProducesResponseType(StatusCodes.Status200OK)]
-    [ProducesResponseType(StatusCodes.Status400BadRequest)]
-    [ProducesResponseType(StatusCodes.Status401Unauthorized)]
-    [HttpDelete("{slug}")]
-    public async Task<IActionResult> DeletePost(string slug)
+  [ProducesResponseType(StatusCodes.Status201Created)]
+  [ProducesResponseType(StatusCodes.Status400BadRequest)]
+  [ProducesResponseType(StatusCodes.Status401Unauthorized)]
+  [HttpPost("{slug}/likes")]
+  public async Task<IActionResult> LikePost(string slug)
+  {
+    var command = new LikePostCommand
     {
-      var command = new DeletePostCommand { Slug = slug };
+      Slug = slug
+    };
 
-      var response = await Mediator.Send(command);
+    var response = await Mediator.Send(command);
 
-      return Ok(response);
-    }
+    return Created(nameof(LikePost), response);
+  }
 
-    [ProducesResponseType(StatusCodes.Status201Created)]
-    [ProducesResponseType(StatusCodes.Status400BadRequest)]
-    [ProducesResponseType(StatusCodes.Status401Unauthorized)]
-    [HttpPost("{slug}/likes")]
-    public async Task<IActionResult> LikePost(string slug)
+  [ProducesResponseType(StatusCodes.Status200OK)]
+  [ProducesResponseType(StatusCodes.Status400BadRequest)]
+  [ProducesResponseType(StatusCodes.Status401Unauthorized)]
+  [HttpDelete("{slug}/likes")]
+  public async Task<IActionResult> UnlikePost(string slug)
+  {
+    var command = new UnlikePostCommand
     {
-      var command = new LikePostCommand { Slug = slug };
+      Slug = slug
+    };
 
-      var response = await Mediator.Send(command);
+    var response = await Mediator.Send(command);
 
-      return Created(nameof(LikePost), response);
-    }
-
-    [ProducesResponseType(StatusCodes.Status200OK)]
-    [ProducesResponseType(StatusCodes.Status400BadRequest)]
-    [ProducesResponseType(StatusCodes.Status401Unauthorized)]
-    [HttpDelete("{slug}/likes")]
-    public async Task<IActionResult> UnlikePost(string slug)
-    {
-      var command = new UnlikePostCommand { Slug = slug };
-
-      var response = await Mediator.Send(command);
-
-      return Ok(response);
-    }
+    return Ok(response);
   }
 }

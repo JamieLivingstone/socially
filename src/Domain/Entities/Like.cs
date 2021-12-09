@@ -1,13 +1,12 @@
-namespace Domain.Entities
+namespace Domain.Entities;
+
+public class Like
 {
-  public class Like
-  {
-    public int ObserverId { get; set; }
+  public int ObserverId { get; set; }
 
-    public Person Observer { get; set; }
+  public Person Observer { get; set; }
 
-    public int PostId { get; set; }
+  public int PostId { get; set; }
 
-    public Post Post { get; set; }
-  }
+  public Post Post { get; set; }
 }

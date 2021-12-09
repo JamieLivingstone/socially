@@ -7,52 +7,57 @@ using IntegrationTests.Application.TestUtils;
 using NUnit.Framework;
 using Snapshooter.NUnit;
 
-namespace IntegrationTests.Application.Profiles
+namespace IntegrationTests.Application.Profiles;
+
+[TestFixture]
+public class FollowProfileTests : TestBase
 {
-  [TestFixture]
-  public class FollowProfileTests : TestBase
+  [Test]
+  public void GivenProfileDoesNotExist_ThrowsNotFoundException()
   {
-    [Test]
-    public void GivenProfileDoesNotExist_ThrowsNotFoundException()
+    var command = new FollowProfileCommand
     {
-      var command = new FollowProfileCommand
-      {
-        Username = "does_not_exist"
-      };
+      Username = "does_not_exist"
+    };
 
-      async Task Handler() => await SendAsync(command);
-
-      Assert.ThrowsAsync(typeof(NotFoundException), Handler);
+    async Task Handler()
+    {
+      await SendAsync(command);
     }
 
-    [Test]
-    public void GivenTargetProfileIsCurrentUser_ThrowsUnprocessableEntityException()
+    Assert.ThrowsAsync(typeof(NotFoundException), Handler);
+  }
+
+  [Test]
+  public void GivenTargetProfileIsCurrentUser_ThrowsUnprocessableEntityException()
+  {
+    var target = Seed.Persons().First(p => p.Id == Seed.CurrentUserId);
+
+    var command = new FollowProfileCommand
     {
-      var target = Seed.Persons().First(p => p.Id == Seed.CurrentUserId);
+      Username = target.Username
+    };
 
-      var command = new FollowProfileCommand
-      {
-        Username = target.Username
-      };
-
-      async Task Handler() => await SendAsync(command);
-
-      Assert.ThrowsAsync(typeof(UnprocessableEntityException), Handler);
+    async Task Handler()
+    {
+      await SendAsync(command);
     }
 
-    [Test]
-    public async Task GivenValidRequest_FollowsProfile()
+    Assert.ThrowsAsync(typeof(UnprocessableEntityException), Handler);
+  }
+
+  [Test]
+  public async Task GivenValidRequest_FollowsProfile()
+  {
+    var target = Seed.Persons().First(p => p.Id != Seed.CurrentUserId);
+
+    await SendAsync(new FollowProfileCommand
     {
-      var target = Seed.Persons().First(p => p.Id != Seed.CurrentUserId);
+      Username = target.Username
+    });
 
-      await SendAsync(new FollowProfileCommand
-      {
-        Username = target.Username
-      });
+    var follower = await FindByIdAsync<Follower>(Seed.CurrentUserId, target.Id);
 
-      var follower = await FindByIdAsync<Follower>(Seed.CurrentUserId, target.Id);
-
-      Snapshot.Match(follower);
-    }
+    Snapshot.Match(follower);
   }
 }
