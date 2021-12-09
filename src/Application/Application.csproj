@@ -19,7 +19,7 @@
 
     <ItemGroup>
         <Folder Include="Comments\Commands"/>
-        <Folder Include="Comments\Queries\GetPaginatedComments"/>
+        <Folder Include="Comments\Queries"/>
     </ItemGroup>
 
 </Project>

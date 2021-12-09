@@ -37,4 +37,4 @@ msbuild.wrn
 .vs/
 
 # Snapshots
-__snapshots__/
+__mismatch__/

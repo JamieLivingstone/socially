@@ -1,6 +1,7 @@
 using System.Threading.Tasks;
 using Application.Comments.Commands.CreateComment;
 using Application.Comments.Commands.DeleteComment;
+using Application.Comments.Queries.GetCommentsWithPagination;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 
@@ -9,6 +10,23 @@ namespace Web.Controllers;
 [Route("api/v1/posts/{slug}/comments")]
 public class CommentsController : BaseController
 {
+  [HttpGet]
+  public async Task<IActionResult> GetComments(string slug,
+    [FromQuery(Name = "pageNumber")] int pageNumber = 1,
+    [FromQuery(Name = "pageSize")] int pageSize = 20)
+  {
+    var query = new GetCommentsWithPaginationQuery
+    {
+      Slug = slug,
+      PageNumber = pageNumber,
+      PageSize = pageSize
+    };
+
+    var response = await Mediator.Send(query);
+
+    return Ok(response);
+  }
+
   [HttpPost]
   [ProducesResponseType(typeof(CreateCommentCommandDto), StatusCodes.Status201Created)]
   [ProducesResponseType(StatusCodes.Status400BadRequest)]

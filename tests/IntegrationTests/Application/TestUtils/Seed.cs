@@ -85,6 +85,20 @@ public static class Seed
         Id = 2,
         Message = "Mock comment two",
         PostId = 1,
+        AuthorId = CurrentUserId
+      },
+      new()
+      {
+        Id = 3,
+        Message = "Mock comment three",
+        PostId = 1,
+        AuthorId = 2
+      },
+      new()
+      {
+        Id = 4,
+        Message = "Mock comment four",
+        PostId = 1,
         AuthorId = 2
       }
     };
