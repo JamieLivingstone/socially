@@ -1,3 +1,5 @@
+using System;
+
 namespace Domain.Entities
 {
   public class Comment
@@ -5,6 +7,8 @@ namespace Domain.Entities
     public int Id { get; set; }
 
     public string Message { get; set; }
+
+    public DateTime CreatedAt { get; set; }
 
     public int AuthorId { get; set; }
 

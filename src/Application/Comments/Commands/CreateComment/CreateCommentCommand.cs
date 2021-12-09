@@ -1,3 +1,4 @@
+using System;
 using System.Threading;
 using System.Threading.Tasks;
 using Application.Common.Exceptions;
@@ -41,6 +42,7 @@ namespace Application.Comments.Commands.CreateComment
         {
           AuthorId = _currentUserService.UserId,
           Message = request.Message,
+          CreatedAt = DateTime.UtcNow,
           PostId = post.Id,
         };
 

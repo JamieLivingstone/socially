@@ -51,7 +51,13 @@ namespace IntegrationTests.Application.Comments
       var result = await SendAsync(command);
       var comment = await FindByIdAsync<Comment>(result.Id);
 
-      Snapshot.Match(comment, options => options.IgnoreField("Id"));
+      Snapshot.Match(comment, options =>
+      {
+        options.IgnoreField("Id");
+        options.IgnoreField("CreatedAt");
+
+        return options;
+      });
     }
   }
 }
