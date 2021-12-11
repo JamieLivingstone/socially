@@ -55,7 +55,7 @@ public class JwtIssuerOptions
   ///   provide for some small leeway, usually no more than a few minutes, to
   ///   account for clock skew.  Its value MUST be a number containing a
   ///   NumericDate value.  Use of this claim is OPTIONAL.</remarks>
-  public DateTime NotBefore => DateTime.UtcNow;
+  public static DateTime NotBefore => DateTime.UtcNow;
 
   /// <summary>
   /// "iat" (Issued At) Claim (default is UTC NOW)
@@ -64,12 +64,12 @@ public class JwtIssuerOptions
   ///   issued.  This claim can be used to determine the age of the JWT.  Its
   ///   value MUST be a number containing a NumericDate value.  Use of this
   ///   claim is OPTIONAL.</remarks>
-  public DateTime IssuedAt => DateTime.UtcNow;
+  public static DateTime IssuedAt => DateTime.UtcNow;
 
   /// <summary>
   /// Set the timespan the token will be valid for (default is 60 minutes)
   /// </summary>
-  public TimeSpan ValidFor { get; set; } = TimeSpan.FromMinutes(60);
+  private TimeSpan ValidFor { get; } = TimeSpan.FromMinutes(60);
 
   /// <summary>
   /// "exp" (Expiration Time) Claim (returns IssuedAt + ValidFor)
@@ -94,7 +94,7 @@ public class JwtIssuerOptions
   ///   produced by different issuers as well.  The "jti" claim can be used
   ///   to prevent the JWT from being replayed.  The "jti" value is a case-
   ///   sensitive string.  Use of this claim is OPTIONAL.</remarks>
-  public Func<string> JtiGenerator => () => Guid.NewGuid().ToString();
+  public static Func<string> JtiGenerator => () => Guid.NewGuid().ToString();
 
   /// <summary>
   /// The signing key to use when generating tokens.

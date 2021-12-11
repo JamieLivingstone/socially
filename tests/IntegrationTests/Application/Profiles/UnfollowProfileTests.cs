@@ -38,13 +38,13 @@ public class UnfollowProfileTests : TestBase
       Username = target.Username
     });
 
-    Assert.NotNull(await FindByIdAsync<Follower>(Seed.CurrentUserId, target.Id));
+    Assert.NotNull(await FindAsync<Follower>( f => f.ObserverId == Seed.CurrentUserId && f.TargetId == target.Id));
 
     await SendAsync(new UnfollowProfileCommand
     {
       Username = target.Username
     });
 
-    Assert.Null(await FindByIdAsync<Follower>(Seed.CurrentUserId, target.Id));
+    Assert.Null(await FindAsync<Follower>( f => f.ObserverId == Seed.CurrentUserId && f.TargetId == target.Id));
   }
 }

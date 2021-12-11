@@ -56,7 +56,7 @@ public class FollowProfileTests : TestBase
       Username = target.Username
     });
 
-    var follower = await FindByIdAsync<Follower>(Seed.CurrentUserId, target.Id);
+    var follower = await FindAsync<Follower>(f => f.ObserverId == Seed.CurrentUserId  && f.TargetId == target.Id);
 
     Snapshot.Match(follower);
   }

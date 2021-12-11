@@ -57,13 +57,13 @@ public class DeleteCommentTests : TestBase
       Slug = target.Slug
     });
 
-    Assert.NotNull(await FindByIdAsync<Comment>(comment.Id));
+    Assert.NotNull(await FindAsync<Comment>(c => c.Id == comment.Id));
 
     await SendAsync(new DeleteCommentCommand
     {
       CommentId = comment.Id
     });
 
-    Assert.Null(await FindByIdAsync<Comment>(comment.Id));
+    Assert.Null(await FindAsync<Comment>(c => c.Id == comment.Id));
   }
 }

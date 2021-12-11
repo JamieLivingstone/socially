@@ -22,7 +22,7 @@ public class FollowProfile : TestBase
   [Test]
   public async Task GivenProfileDoesNotExist_ReturnsNotFound()
   {
-    var username = "does_not_exist";
+    const string username = "does_not_exist";
 
     var response = await AuthenticatedClient.PostAsync($"/api/v1/profiles/{username}/followers", null);
 

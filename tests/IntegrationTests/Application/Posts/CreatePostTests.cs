@@ -30,17 +30,19 @@ public class CreatePostTests : TestBase
     var command = new CreatePostCommand
     {
       Title = "Test post title",
-      Body = "Test post body"
+      Body = "Test post body",
+      Tags = new[] { "test" }
     };
 
     var result = await SendAsync(command);
-    var post = await FindAsync<Post>(p => p.Slug == result.Slug);
+    var post = await FindAsync<Post>(p => p.Slug == result.Slug, true);
 
     Snapshot.Match(post, options =>
     {
       options.IgnoreField("Id");
       options.IgnoreField("CreatedAt");
       options.IgnoreField("UpdatedAt");
+      options.IgnoreField("Author");
 
       return options;
     });

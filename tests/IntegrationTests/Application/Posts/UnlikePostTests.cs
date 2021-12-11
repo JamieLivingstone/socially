@@ -38,13 +38,13 @@ public class UnlikePostTests : TestBase
       Slug = target.Slug
     });
 
-    Assert.NotNull(await FindByIdAsync<Like>(Seed.CurrentUserId, target.Id));
+    Assert.NotNull(await FindAsync<Like>(l => l.ObserverId == Seed.CurrentUserId && l.PostId == target.Id));
 
     await SendAsync(new UnlikePostCommand
     {
       Slug = target.Slug
     });
 
-    Assert.Null(await FindByIdAsync<Like>(Seed.CurrentUserId, target.Id));
+    Assert.Null(await FindAsync<Like>(l => l.ObserverId == Seed.CurrentUserId && l.PostId == target.Id));
   }
 }

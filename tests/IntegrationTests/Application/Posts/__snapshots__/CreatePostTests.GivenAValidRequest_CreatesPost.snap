@@ -3,10 +3,29 @@
   "Slug": "test-post-title",
   "Title": "Test post title",
   "Body": "Test post body",
-  "CreatedAt": "2021-11-27T19:33:53.95115+00:00",
-  "UpdatedAt": "2021-11-27T19:33:53.95115+00:00",
+  "CreatedAt": "2021-12-11T17:00:27.541393Z",
+  "UpdatedAt": "2021-12-11T17:00:27.541393Z",
   "AuthorId": 1,
-  "Author": null,
-  "Comments": null,
-  "Likes": null
+  "Author": {
+    "Id": 1,
+    "Name": "Liam Hale",
+    "Username": "liam",
+    "Email": "liam.hale@test.com",
+    "Hash": "AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA==",
+    "Salt": "AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA==",
+    "Comments": null,
+    "Following": null,
+    "Followers": null,
+    "Likes": null,
+    "Posts": []
+  },
+  "Comments": [],
+  "Likes": [],
+  "PostTags": [
+    {
+      "PostId": 3,
+      "TagId": "test",
+      "Tag": null
+    }
+  ]
 }

@@ -1,9 +1,11 @@
 using System;
+using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
 using Application.Common.Exceptions;
 using Application.Common.Interfaces;
 using Application.Common.Security;
+using Domain.Entities;
 using MediatR;
 using Microsoft.EntityFrameworkCore;
 
@@ -17,6 +19,8 @@ public class UpdatePostCommand : IRequest
   public string Title { get; init; }
 
   public string Body { get; init; }
+
+  public string[] Tags { get; init; }
 
   public class UpdatePostCommandHandler : IRequestHandler<UpdatePostCommand>
   {
@@ -32,7 +36,9 @@ public class UpdatePostCommand : IRequest
 
     public async Task<Unit> Handle(UpdatePostCommand request, CancellationToken cancellationToken)
     {
-      var post = await _dbContext.Posts.FirstOrDefaultAsync(p => p.Slug == request.Slug, cancellationToken);
+      var post = await _dbContext.Posts
+        .Include(p => p.PostTags)
+        .FirstOrDefaultAsync(p => p.Slug == request.Slug, cancellationToken);
 
       if (post == null)
       {
@@ -54,6 +60,25 @@ public class UpdatePostCommand : IRequest
       if (request.Body != null)
       {
         post.Body = request.Body;
+      }
+
+      if (request.Tags != null)
+      {
+        var postTagsToCreate = request.Tags
+          .Where(tag => post.PostTags.Any(pt => pt.TagId == tag) == false)
+          .Select(tag => new PostTag
+          {
+            PostId = post.Id,
+            Tag = new Tag { TagId = tag.ToLowerInvariant() },
+            TagId = tag.ToLowerInvariant()
+          })
+          .ToList();
+
+        var postTagsToDelete = post.PostTags.Where(pt => request.Tags.Any(tag => pt.TagId != tag) == false);
+
+        _dbContext.PostTags.RemoveRange(postTagsToDelete);
+        await _dbContext.Tags.AddRangeAsync(postTagsToCreate.Select(pt => pt.Tag), cancellationToken);
+        await _dbContext.PostTags.AddRangeAsync(postTagsToCreate, cancellationToken);
       }
 
       await _dbContext.SaveChangesAsync(cancellationToken);

@@ -17,5 +17,9 @@ public interface IApplicationDbContext
 
   public DbSet<Post> Posts { get; set; }
 
+  public DbSet<PostTag> PostTags { get; set; }
+
+  public DbSet<Tag> Tags { get; set; }
+
   Task<int> SaveChangesAsync(CancellationToken cancellationToken);
 }

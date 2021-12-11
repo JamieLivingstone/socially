@@ -21,16 +21,16 @@ public class JwtTokenGenerator : IJwtTokenGenerator
     var claims = new[]
     {
       new Claim(JwtRegisteredClaimNames.NameId, userId.ToString()),
-      new Claim(JwtRegisteredClaimNames.Jti, _jwtIssuerOptions.JtiGenerator()),
+      new Claim(JwtRegisteredClaimNames.Jti, JwtIssuerOptions.JtiGenerator()),
       new Claim(JwtRegisteredClaimNames.Iat,
-        new DateTimeOffset(_jwtIssuerOptions.IssuedAt).ToUnixTimeSeconds().ToString(), ClaimValueTypes.Integer64)
+        new DateTimeOffset(JwtIssuerOptions.IssuedAt).ToUnixTimeSeconds().ToString(), ClaimValueTypes.Integer64)
     };
 
     var jwt = new JwtSecurityToken(
       _jwtIssuerOptions.Issuer,
       _jwtIssuerOptions.Audience,
       claims,
-      _jwtIssuerOptions.NotBefore,
+      JwtIssuerOptions.NotBefore,
       _jwtIssuerOptions.Expiration,
       _jwtIssuerOptions.SigningCredentials);
 

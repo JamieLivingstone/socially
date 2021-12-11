@@ -52,7 +52,7 @@ public class CreateCommentTests : TestBase
     };
 
     var result = await SendAsync(command);
-    var comment = await FindByIdAsync<Comment>(result.Id);
+    var comment = await FindAsync<Comment>(c => c.Id == result.Id);
 
     Snapshot.Match(comment, options =>
     {

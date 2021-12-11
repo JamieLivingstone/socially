@@ -61,7 +61,9 @@ public class UpdatePost : TestBase
     var content = new StringContent(JsonConvert.SerializeObject(new UpdatePostCommand
     {
       Slug = target.Slug,
-      Title = "Updated title"
+      Title = "Updated title",
+      Body = "Updated body",
+      Tags = new []{ "programming" }
     }), Encoding.UTF8, "application/json-patch+json");
 
     var response = await AuthenticatedClient.PatchAsync($"/api/v1/posts/{target.Slug}", content);

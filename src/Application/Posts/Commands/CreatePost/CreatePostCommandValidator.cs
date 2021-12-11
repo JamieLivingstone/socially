@@ -15,5 +15,11 @@ public class CreatePostCommandValidator : AbstractValidator<CreatePostCommand>
       .NotNull()
       .NotEmpty()
       .MaximumLength(10000);
+
+    RuleForEach(x => x.Tags)
+      .NotNull()
+      .NotEmpty()
+      .Matches("^[a-zA-Z]*$").WithMessage("{PropertyName} must only contain letters.")
+      .MaximumLength(20);
   }
 }

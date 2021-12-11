@@ -1,4 +1,5 @@
 using System;
+using System.Collections.Generic;
 using System.Linq;
 using System.Linq.Expressions;
 using System.Threading.Tasks;
@@ -9,6 +10,7 @@ using Microsoft.AspNetCore;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.TestHost;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.EntityFrameworkCore.Metadata;
 using Microsoft.Extensions.DependencyInjection;
 using NUnit.Framework;
 using Web;
@@ -73,21 +75,24 @@ public class TestBase
     return await mediator.Send(request);
   }
 
-  protected static async Task<TEntity> FindByIdAsync<TEntity>(params object[] key) where TEntity : class
+  protected static async Task<TEntity> FindAsync<TEntity>(Expression<Func<TEntity, bool>> predicate, bool eager = false) where TEntity : class
   {
     using var scope = _scopeFactory.CreateScope();
 
     var context = scope.ServiceProvider.GetRequiredService<ApplicationDbContext>();
 
-    return await context.FindAsync<TEntity>(key);
-  }
+    var query = context.Set<TEntity>().AsQueryable();
 
-  protected static async Task<TEntity> FindAsync<TEntity>(Expression<Func<TEntity, bool>> predicate) where TEntity : class
-  {
-    using var scope = _scopeFactory.CreateScope();
+    if (eager)
+    {
+      var navigations = context.Model.FindEntityType(typeof(TEntity))
+        ?.GetDerivedTypesInclusive()
+        .SelectMany(type => type.GetNavigations())
+        .Distinct() ?? new List<INavigation>();
 
-    var context = scope.ServiceProvider.GetRequiredService<ApplicationDbContext>();
+      query = navigations.Aggregate(query, (current, property) => current.Include(property.Name));
+    }
 
-    return await context.Set<TEntity>().FirstAsync(predicate);
+    return await query.FirstOrDefaultAsync(predicate);
   }
 }

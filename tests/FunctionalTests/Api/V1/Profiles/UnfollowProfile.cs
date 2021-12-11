@@ -22,7 +22,7 @@ public class UnfollowProfile : TestBase
   [Test]
   public async Task GivenProfileDoesNotExist_ReturnsNotFound()
   {
-    var username = "does_not_exist";
+    const string username = "does_not_exist";
 
     var response = await AuthenticatedClient.DeleteAsync($"/api/v1/profiles/{username}/followers");
 

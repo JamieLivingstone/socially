@@ -38,6 +38,6 @@ public class LikePostTests : TestBase
       Slug = target.Slug
     });
 
-    Snapshot.Match(await FindByIdAsync<Like>(Seed.CurrentUserId, target.Id));
+    Snapshot.Match(await FindAsync<Like>(l => l.ObserverId == Seed.CurrentUserId && l.PostId == target.Id));
   }
 }

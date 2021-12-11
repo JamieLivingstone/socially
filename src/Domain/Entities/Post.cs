@@ -24,4 +24,6 @@ public class Post
   public IEnumerable<Comment> Comments { get; set; }
 
   public IEnumerable<Like> Likes { get; set; }
+
+  public IEnumerable<PostTag> PostTags { get; set; }
 }

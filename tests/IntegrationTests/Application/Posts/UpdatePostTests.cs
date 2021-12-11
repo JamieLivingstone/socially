@@ -5,6 +5,7 @@ using Application.Posts.Commands.UpdatePost;
 using Domain.Entities;
 using IntegrationTests.Application.TestUtils;
 using NUnit.Framework;
+using Snapshooter.NUnit;
 
 namespace IntegrationTests.Application.Posts;
 
@@ -53,17 +54,22 @@ public class UpdatePostTests : TestBase
     var command = new UpdatePostCommand
     {
       Slug = target.Slug,
-      Title = "Updated title"
+      Title = "Updated title",
+      Tags = new []{ "programming" }
     };
 
     await SendAsync(command);
 
-    var updatedPost = await FindAsync<Post>(p => p.Slug == command.Slug);
+    var updatedPost = await FindAsync<Post>(p => p.Slug == command.Slug, true);
 
-    Assert.AreEqual(updatedPost.Title, command.Title);
-    Assert.AreEqual(updatedPost.AuthorId, Seed.CurrentUserId);
-    Assert.AreEqual(updatedPost.Body, target.Body);
-    Assert.AreEqual(target.CreatedAt, updatedPost.CreatedAt);
-    Assert.AreNotEqual(target.UpdatedAt, updatedPost.UpdatedAt);
+    Snapshot.Match(updatedPost, options =>
+    {
+      options.IgnoreField("Id");
+      options.IgnoreField("CreatedAt");
+      options.IgnoreField("UpdatedAt");
+      options.IgnoreField("Author");
+
+      return options;
+    });
   }
 }
