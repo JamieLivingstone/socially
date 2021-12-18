@@ -20,10 +20,7 @@ public class UnfollowProfileTests : TestBase
       Username = "does_not_exist"
     };
 
-    async Task Handler()
-    {
-      await SendAsync(command);
-    }
+    async Task Handler() => await SendAsync(command);
 
     Assert.ThrowsAsync(typeof(NotFoundException), Handler);
   }

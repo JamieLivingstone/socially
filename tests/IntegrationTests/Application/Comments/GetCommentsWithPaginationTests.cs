@@ -36,10 +36,7 @@ public class GetCommentsWithPaginationTests : TestBase
       PageSize = 10
     };
 
-    async Task Handler()
-    {
-      await SendAsync(query);
-    }
+    async Task Handler() => await SendAsync(query);
 
     Assert.ThrowsAsync(typeof(NotFoundException), Handler);
   }

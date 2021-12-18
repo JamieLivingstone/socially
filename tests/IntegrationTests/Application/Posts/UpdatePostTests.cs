@@ -20,10 +20,7 @@ public class UpdatePostTests : TestBase
       Slug = "does-not-exist"
     };
 
-    async Task Handler()
-    {
-      await SendAsync(command);
-    }
+    async Task Handler() => await SendAsync(command);
 
     Assert.ThrowsAsync(typeof(NotFoundException), Handler);
   }
@@ -38,10 +35,7 @@ public class UpdatePostTests : TestBase
       Slug = target.Slug
     };
 
-    async Task Handler()
-    {
-      await SendAsync(command);
-    }
+    async Task Handler() => await SendAsync(command);
 
     Assert.ThrowsAsync(typeof(ForbiddenException), Handler);
   }

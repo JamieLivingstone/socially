@@ -20,10 +20,7 @@ public class UnlikePostTests : TestBase
       Slug = "does-not-exist"
     };
 
-    async Task Handler()
-    {
-      await SendAsync(command);
-    }
+    async Task Handler() => await SendAsync(command);
 
     Assert.ThrowsAsync(typeof(NotFoundException), Handler);
   }

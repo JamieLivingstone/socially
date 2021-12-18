@@ -31,17 +31,12 @@ public class DeleteCommentTests : TestBase
   [Test]
   public void GivenCommentAuthorIsNotCurrentUser_ThrowsForbiddenException()
   {
-    var target = Seed.Comments().First(c => c.AuthorId != Seed.CurrentUserId);
-
     var command = new DeleteCommentCommand
     {
-      CommentId = target.Id
+      CommentId = Seed.Comments().First(c => c.AuthorId != Seed.CurrentUserId).Id
     };
 
-    async Task Handler()
-    {
-      await SendAsync(command);
-    }
+    async Task Handler() => await SendAsync(command);
 
     Assert.ThrowsAsync(typeof(ForbiddenException), Handler);
   }

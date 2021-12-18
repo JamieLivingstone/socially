@@ -2,6 +2,7 @@ using System.Linq;
 using System.Threading.Tasks;
 using Application.Common.Exceptions;
 using Application.Posts.Commands.DeletePost;
+using Domain.Entities;
 using IntegrationTests.Application.TestUtils;
 using NUnit.Framework;
 
@@ -18,10 +19,7 @@ public class DeletePostTests : TestBase
       Slug = "does-not-exist"
     };
 
-    async Task Handler()
-    {
-      await SendAsync(command);
-    }
+    async Task Handler() => await SendAsync(command);
 
     Assert.ThrowsAsync(typeof(NotFoundException), Handler);
   }
@@ -36,10 +34,7 @@ public class DeletePostTests : TestBase
       Slug = target.Slug
     };
 
-    async Task Handler()
-    {
-      await SendAsync(command);
-    }
+    async Task Handler() => await SendAsync(command);
 
     Assert.ThrowsAsync(typeof(ForbiddenException), Handler);
   }
@@ -54,6 +49,10 @@ public class DeletePostTests : TestBase
       Slug = target.Slug
     };
 
+    Assert.NotNull(await FindAsync<Post>(p => p.Id == target.Id));
+
     await SendAsync(command);
+
+    Assert.Null(await FindAsync<Post>(p => p.Id == target.Id));
   }
 }

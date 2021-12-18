@@ -20,10 +20,7 @@ public class FollowProfileTests : TestBase
       Username = "does_not_exist"
     };
 
-    async Task Handler()
-    {
-      await SendAsync(command);
-    }
+    async Task Handler() => await SendAsync(command);
 
     Assert.ThrowsAsync(typeof(NotFoundException), Handler);
   }
@@ -31,17 +28,12 @@ public class FollowProfileTests : TestBase
   [Test]
   public void GivenTargetProfileIsCurrentUser_ThrowsUnprocessableEntityException()
   {
-    var target = Seed.Persons().First(p => p.Id == Seed.CurrentUserId);
-
     var command = new FollowProfileCommand
     {
-      Username = target.Username
+      Username = Seed.Persons().First(p => p.Id == Seed.CurrentUserId).Username
     };
 
-    async Task Handler()
-    {
-      await SendAsync(command);
-    }
+    async Task Handler() => await SendAsync(command);
 
     Assert.ThrowsAsync(typeof(UnprocessableEntityException), Handler);
   }
@@ -53,7 +45,7 @@ public class FollowProfileTests : TestBase
 
     await SendAsync(new FollowProfileCommand
     {
-      Username = target.Username
+      Username = Seed.Persons().First(p => p.Id != Seed.CurrentUserId).Username
     });
 
     var follower = await FindAsync<Follower>(f => f.ObserverId == Seed.CurrentUserId  && f.TargetId == target.Id);
