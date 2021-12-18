@@ -12,37 +12,37 @@ namespace Application.Profiles.Commands.UnfollowProfile;
 public class UnfollowProfileCommand : IRequest
 {
   public string Username { get; init; }
+}
 
-  public class UnfollowProfileCommandHandler : IRequestHandler<UnfollowProfileCommand>
+public class UnfollowProfileCommandHandler : IRequestHandler<UnfollowProfileCommand>
+{
+  private readonly IApplicationDbContext _dbContext;
+  private readonly ICurrentUserService _currentUserService;
+
+  public UnfollowProfileCommandHandler(IApplicationDbContext dbContext,
+    ICurrentUserService currentUserService)
   {
-    private readonly IApplicationDbContext _dbContext;
-    private readonly ICurrentUserService _currentUserService;
+    _dbContext = dbContext;
+    _currentUserService = currentUserService;
+  }
 
-    public UnfollowProfileCommandHandler(IApplicationDbContext dbContext,
-      ICurrentUserService currentUserService)
+  public async Task<Unit> Handle(UnfollowProfileCommand request, CancellationToken cancellationToken)
+  {
+    var target = await _dbContext.Persons.FirstOrDefaultAsync(p => p.Username == request.Username.ToLowerInvariant(), cancellationToken);
+
+    if (target == null)
     {
-      _dbContext = dbContext;
-      _currentUserService = currentUserService;
+      throw new NotFoundException($"{request.Username} is not registered.");
     }
 
-    public async Task<Unit> Handle(UnfollowProfileCommand request, CancellationToken cancellationToken)
+    var follower = await _dbContext.Followers.FirstOrDefaultAsync(f => f.ObserverId == _currentUserService.UserId && f.TargetId == target.Id, cancellationToken);
+
+    if (follower != null)
     {
-      var target = await _dbContext.Persons.FirstOrDefaultAsync(p => p.Username == request.Username.ToLowerInvariant(), cancellationToken);
-
-      if (target == null)
-      {
-        throw new NotFoundException($"{request.Username} is not registered.");
-      }
-
-      var follower = await _dbContext.Followers.FirstOrDefaultAsync(f => f.ObserverId == _currentUserService.UserId && f.TargetId == target.Id, cancellationToken);
-
-      if (follower != null)
-      {
-        _dbContext.Followers.Remove(follower);
-        await _dbContext.SaveChangesAsync(cancellationToken);
-      }
-
-      return Unit.Value;
+      _dbContext.Followers.Remove(follower);
+      await _dbContext.SaveChangesAsync(cancellationToken);
     }
+
+    return Unit.Value;
   }
 }

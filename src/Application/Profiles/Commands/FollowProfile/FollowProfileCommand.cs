@@ -13,48 +13,48 @@ namespace Application.Profiles.Commands.FollowProfile;
 public class FollowProfileCommand : IRequest
 {
   public string Username { get; init; }
+}
 
-  public class FollowProfileCommandHandler : IRequestHandler<FollowProfileCommand>
+public class FollowProfileCommandHandler : IRequestHandler<FollowProfileCommand>
+{
+  private readonly IApplicationDbContext _dbContext;
+  private readonly ICurrentUserService _currentUserService;
+
+  public FollowProfileCommandHandler(IApplicationDbContext dbContext,
+    ICurrentUserService currentUserService)
   {
-    private readonly IApplicationDbContext _dbContext;
-    private readonly ICurrentUserService _currentUserService;
+    _dbContext = dbContext;
+    _currentUserService = currentUserService;
+  }
 
-    public FollowProfileCommandHandler(IApplicationDbContext dbContext,
-      ICurrentUserService currentUserService)
+  public async Task<Unit> Handle(FollowProfileCommand request, CancellationToken cancellationToken)
+  {
+    var target = await _dbContext.Persons.FirstOrDefaultAsync(p => p.Username == request.Username.ToLowerInvariant(), cancellationToken);
+
+    if (target == null)
     {
-      _dbContext = dbContext;
-      _currentUserService = currentUserService;
+      throw new NotFoundException($"{request.Username} is not registered.");
     }
 
-    public async Task<Unit> Handle(FollowProfileCommand request, CancellationToken cancellationToken)
+    if (target.Id == _currentUserService.UserId)
     {
-      var target = await _dbContext.Persons.FirstOrDefaultAsync(p => p.Username == request.Username.ToLowerInvariant(), cancellationToken);
-
-      if (target == null)
-      {
-        throw new NotFoundException($"{request.Username} is not registered.");
-      }
-
-      if (target.Id == _currentUserService.UserId)
-      {
-        throw new UnprocessableEntityException("Cannot follow self.");
-      }
-
-      var isFollowing = await _dbContext.Followers.AnyAsync(f => f.ObserverId == _currentUserService.UserId && f.TargetId == target.Id, cancellationToken);
-
-      if (!isFollowing)
-      {
-        var follower = new Follower
-        {
-          TargetId = target.Id,
-          ObserverId = _currentUserService.UserId
-        };
-
-        await _dbContext.Followers.AddAsync(follower, cancellationToken);
-        await _dbContext.SaveChangesAsync(cancellationToken);
-      }
-
-      return Unit.Value;
+      throw new UnprocessableEntityException("Cannot follow self.");
     }
+
+    var isFollowing = await _dbContext.Followers.AnyAsync(f => f.ObserverId == _currentUserService.UserId && f.TargetId == target.Id, cancellationToken);
+
+    if (!isFollowing)
+    {
+      var follower = new Follower
+      {
+        TargetId = target.Id,
+        ObserverId = _currentUserService.UserId
+      };
+
+      await _dbContext.Followers.AddAsync(follower, cancellationToken);
+      await _dbContext.SaveChangesAsync(cancellationToken);
+    }
+
+    return Unit.Value;
   }
 }

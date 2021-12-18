@@ -21,8 +21,9 @@ public class CreatePostCommand : IRequest<CreatePostDto>
   public string Body { get; init; }
 
   public string[] Tags { get; init; }
+}
 
-  public class CreatePostCommandHandler : IRequestHandler<CreatePostCommand, CreatePostDto>
+public class CreatePostCommandHandler : IRequestHandler<CreatePostCommand, CreatePostDto>
   {
     private readonly IApplicationDbContext _dbContext;
     private readonly ICurrentUserService _currentUserService;
@@ -109,4 +110,3 @@ public class CreatePostCommand : IRequest<CreatePostDto>
       return slug;
     }
   }
-}

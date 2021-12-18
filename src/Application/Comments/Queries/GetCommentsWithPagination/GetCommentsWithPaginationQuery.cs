@@ -19,32 +19,32 @@ public class GetCommentsWithPaginationQuery : IRequest<PaginatedList<CommentDto>
   public int PageNumber { get; init; } = 1;
 
   public int PageSize { get; init; } = 10;
+}
 
-  public class GetCommentsWithPaginationQueryHandler : IRequestHandler<GetCommentsWithPaginationQuery, PaginatedList<CommentDto>>
+public class GetCommentsWithPaginationQueryHandler : IRequestHandler<GetCommentsWithPaginationQuery, PaginatedList<CommentDto>>
+{
+  private readonly IApplicationDbContext _dbContext;
+  private readonly IMapper _mapper;
+
+  public GetCommentsWithPaginationQueryHandler(IApplicationDbContext dbContext, IMapper mapper)
   {
-    private readonly IApplicationDbContext _dbContext;
-    private readonly IMapper _mapper;
+    _dbContext = dbContext;
+    _mapper = mapper;
+  }
 
-    public GetCommentsWithPaginationQueryHandler(IApplicationDbContext dbContext, IMapper mapper)
+  public async Task<PaginatedList<CommentDto>> Handle(GetCommentsWithPaginationQuery request, CancellationToken cancellationToken)
+  {
+    var post = await _dbContext.Posts.FirstOrDefaultAsync(p => p.Slug == request.Slug, cancellationToken);
+
+    if (post == null)
     {
-      _dbContext = dbContext;
-      _mapper = mapper;
+      throw new NotFoundException("Post does not exist.");
     }
 
-    public async Task<PaginatedList<CommentDto>> Handle(GetCommentsWithPaginationQuery request, CancellationToken cancellationToken)
-    {
-      var post = await _dbContext.Posts.FirstOrDefaultAsync(p => p.Slug == request.Slug, cancellationToken);
-
-      if (post == null)
-      {
-        throw new NotFoundException("Post does not exist.");
-      }
-
-      return await _dbContext.Comments
-        .Where(c => c.PostId == post.Id)
-        .OrderByDescending(c => c.CreatedAt)
-        .ProjectTo<CommentDto>(_mapper.ConfigurationProvider)
-        .PaginatedListAsync(request.PageNumber, request.PageSize);
-    }
+    return await _dbContext.Comments
+      .Where(c => c.PostId == post.Id)
+      .OrderByDescending(c => c.CreatedAt)
+      .ProjectTo<CommentDto>(_mapper.ConfigurationProvider)
+      .PaginatedListAsync(request.PageNumber, request.PageSize);
   }
 }

@@ -12,37 +12,37 @@ namespace Application.Posts.Commands.DeletePost;
 public class DeletePostCommand : IRequest
 {
   public string Slug { get; init; }
+}
 
-  public class DeletePostCommandHandler : IRequestHandler<DeletePostCommand>
+public class DeletePostCommandHandler : IRequestHandler<DeletePostCommand>
+{
+  private readonly IApplicationDbContext _dbContext;
+  private readonly ICurrentUserService _currentUserService;
+
+  public DeletePostCommandHandler(IApplicationDbContext dbContext,
+    ICurrentUserService currentUserService)
   {
-    private readonly IApplicationDbContext _dbContext;
-    private readonly ICurrentUserService _currentUserService;
+    _dbContext = dbContext;
+    _currentUserService = currentUserService;
+  }
 
-    public DeletePostCommandHandler(IApplicationDbContext dbContext,
-      ICurrentUserService currentUserService)
+  public async Task<Unit> Handle(DeletePostCommand request, CancellationToken cancellationToken)
+  {
+    var post = await _dbContext.Posts.FirstOrDefaultAsync(p => p.Slug == request.Slug, cancellationToken);
+
+    if (post == null)
     {
-      _dbContext = dbContext;
-      _currentUserService = currentUserService;
+      throw new NotFoundException("Post does not exist.");
     }
 
-    public async Task<Unit> Handle(DeletePostCommand request, CancellationToken cancellationToken)
+    if (post.AuthorId != _currentUserService.UserId)
     {
-      var post = await _dbContext.Posts.FirstOrDefaultAsync(p => p.Slug == request.Slug, cancellationToken);
-
-      if (post == null)
-      {
-        throw new NotFoundException("Post does not exist.");
-      }
-
-      if (post.AuthorId != _currentUserService.UserId)
-      {
-        throw new ForbiddenException("You do not have access to delete the specified post.");
-      }
-
-      _dbContext.Posts.Remove(post);
-      await _dbContext.SaveChangesAsync(cancellationToken);
-
-      return Unit.Value;
+      throw new ForbiddenException("You do not have access to delete the specified post.");
     }
+
+    _dbContext.Posts.Remove(post);
+    await _dbContext.SaveChangesAsync(cancellationToken);
+
+    return Unit.Value;
   }
 }
