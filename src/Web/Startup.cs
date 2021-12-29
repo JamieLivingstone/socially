@@ -9,6 +9,7 @@ using Infrastructure;
 using Infrastructure.Persistence;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
+using Microsoft.AspNetCore.SpaServices.ReactDevelopmentServer;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
@@ -113,5 +114,16 @@ public class Startup
     app.UseAuthorization();
 
     app.UseEndpoints(endpoints => { endpoints.MapControllers(); });
+
+    if (env.IsDevelopment())
+    {
+      app.UseSpa(spa =>
+      {
+        spa.Options.SourcePath = "ClientApp";
+        spa.Options.DevServerPort = 3000;
+
+        spa.UseReactDevelopmentServer("start");
+      });
+    }
   }
 }
