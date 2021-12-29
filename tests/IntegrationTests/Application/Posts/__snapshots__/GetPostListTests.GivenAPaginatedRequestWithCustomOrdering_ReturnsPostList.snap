@@ -1,0 +1,21 @@
+﻿{
+  "Items": [
+    {
+      "Slug": "test-post-two",
+      "Title": "Test Post Two",
+      "Body": "Test Post Two Body",
+      "CreatedAt": "2020-05-04T00:00:00",
+      "Author": {
+        "Username": "peter"
+      },
+      "Tags": [],
+      "CommentsCount": 0,
+      "LikesCount": 0
+    }
+  ],
+  "PageNumber": 2,
+  "TotalPages": 2,
+  "TotalCount": 2,
+  "HasPreviousPage": true,
+  "HasNextPage": false
+}

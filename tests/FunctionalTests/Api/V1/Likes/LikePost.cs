@@ -4,17 +4,17 @@ using System.Threading.Tasks;
 using FunctionalTests.Api.TestUtils;
 using NUnit.Framework;
 
-namespace FunctionalTests.Api.V1.Posts;
+namespace FunctionalTests.Api.V1.Likes;
 
 [TestFixture]
-public class UnlikePost : TestBase
+public class LikePost : TestBase
 {
   [Test]
   public async Task GivenAuthenticationFails_ReturnsUnauthorized()
   {
     var slug = Seed.Posts().First().Slug;
 
-    var response = await AnonymousClient.DeleteAsync($"/api/v1/posts/{slug}/likes");
+    var response = await AnonymousClient.PostAsync($"/api/v1/posts/{slug}/likes", null);
 
     Assert.AreEqual(HttpStatusCode.Unauthorized, response.StatusCode);
   }
@@ -24,18 +24,18 @@ public class UnlikePost : TestBase
   {
     const string slug = "does-not-exist";
 
-    var response = await AuthenticatedClient.DeleteAsync($"/api/v1/posts/{slug}/likes");
+    var response = await AuthenticatedClient.PostAsync($"/api/v1/posts/{slug}/likes", null);
 
     Assert.AreEqual(HttpStatusCode.NotFound, response.StatusCode);
   }
 
   [Test]
-  public async Task GivenAValidRequest_ReturnsOk()
+  public async Task GivenAValidRequest_ReturnsCreated()
   {
     var slug = Seed.Posts().First().Slug;
 
-    var response = await AuthenticatedClient.DeleteAsync($"/api/v1/posts/{slug}/likes");
+    var response = await AuthenticatedClient.PostAsync($"/api/v1/posts/{slug}/likes", null);
 
-    Assert.AreEqual(HttpStatusCode.OK, response.StatusCode);
+    Assert.AreEqual(HttpStatusCode.Created, response.StatusCode);
   }
 }

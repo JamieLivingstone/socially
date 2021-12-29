@@ -20,6 +20,7 @@
     <ItemGroup>
         <Folder Include="Comments\Commands" />
         <Folder Include="Comments\Queries" />
+        <Folder Include="Likes\Commands" />
     </ItemGroup>
 
 </Project>

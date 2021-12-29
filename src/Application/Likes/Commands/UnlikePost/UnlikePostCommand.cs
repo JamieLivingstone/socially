@@ -6,7 +6,7 @@ using Application.Common.Security;
 using MediatR;
 using Microsoft.EntityFrameworkCore;
 
-namespace Application.Posts.Commands.UnlikePost;
+namespace Application.Likes.Commands.UnlikePost;
 
 [Authorize]
 public class UnlikePostCommand : IRequest

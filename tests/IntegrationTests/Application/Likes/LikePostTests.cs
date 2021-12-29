@@ -1,13 +1,13 @@
 using System.Linq;
 using System.Threading.Tasks;
 using Application.Common.Exceptions;
-using Application.Posts.Commands.LikePost;
+using Application.Likes.Commands.LikePost;
 using Domain.Entities;
 using IntegrationTests.Application.TestUtils;
 using NUnit.Framework;
 using Snapshooter.NUnit;
 
-namespace IntegrationTests.Application.Posts;
+namespace IntegrationTests.Application.Likes;
 
 [TestFixture]
 public class LikePostTests : TestBase

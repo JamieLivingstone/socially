@@ -1,9 +1,9 @@
 using System.Threading.Tasks;
 using Application.Posts.Commands.CreatePost;
 using Application.Posts.Commands.DeletePost;
-using Application.Posts.Commands.LikePost;
-using Application.Posts.Commands.UnlikePost;
 using Application.Posts.Commands.UpdatePost;
+using Application.Posts.Queries.GetPost;
+using Application.Posts.Queries.GetPostList;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 
@@ -12,8 +12,43 @@ namespace Web.Controllers;
 [Route("api/v1/posts")]
 public class PostsController : BaseController
 {
+  [HttpGet("{slug}")]
+  [ProducesResponseType(typeof(PostDto), StatusCodes.Status200OK)]
+  [ProducesResponseType(StatusCodes.Status404NotFound)]
+  public async Task<IActionResult> GetPost(string slug)
+  {
+    var query = new GetPostQuery { Slug = slug };
+
+    var response = await Mediator.Send(query);
+
+    return Ok(response);
+  }
+
+  [HttpGet]
+  public async Task<IActionResult> GetPosts(
+    [FromQuery(Name = "pageNumber")] int? pageNumber,
+    [FromQuery(Name = "pageSize")] int? pageSize,
+    [FromQuery(Name = "orderBy")] PostListOrder? orderBy,
+    [FromQuery(Name = "author")] string author,
+    [FromQuery(Name = "liked")] bool? liked,
+    [FromQuery(Name = "tag")] string tag)
+  {
+    var query = new GetPostListQuery()
+    {
+      PageNumber = pageNumber ?? 1,
+      PageSize = pageSize ?? 10,
+      OrderBy = orderBy ?? PostListOrder.Created,
+      Author = author,
+      Liked = liked ?? false,
+      Tag = tag
+    };
+
+    var response = await Mediator.Send(query);
+
+    return Ok(response);
+  }
+
   [HttpPost]
-  [Produces("text/plain", "application/json")]
   [ProducesResponseType(typeof(CreatePostDto), StatusCodes.Status201Created)]
   [ProducesResponseType(StatusCodes.Status400BadRequest)]
   [ProducesResponseType(StatusCodes.Status401Unauthorized)]
@@ -25,7 +60,6 @@ public class PostsController : BaseController
   }
 
   [HttpPatch("{slug}")]
-  [Produces("text/plain", "application/json")]
   [ProducesResponseType(StatusCodes.Status200OK)]
   [ProducesResponseType(StatusCodes.Status400BadRequest)]
   [ProducesResponseType(StatusCodes.Status401Unauthorized)]
@@ -48,38 +82,6 @@ public class PostsController : BaseController
   public async Task<IActionResult> DeletePost(string slug)
   {
     var command = new DeletePostCommand
-    {
-      Slug = slug
-    };
-
-    var response = await Mediator.Send(command);
-
-    return Ok(response);
-  }
-
-  [ProducesResponseType(StatusCodes.Status201Created)]
-  [ProducesResponseType(StatusCodes.Status400BadRequest)]
-  [ProducesResponseType(StatusCodes.Status401Unauthorized)]
-  [HttpPost("{slug}/likes")]
-  public async Task<IActionResult> LikePost(string slug)
-  {
-    var command = new LikePostCommand
-    {
-      Slug = slug
-    };
-
-    var response = await Mediator.Send(command);
-
-    return Created(nameof(LikePost), response);
-  }
-
-  [ProducesResponseType(StatusCodes.Status200OK)]
-  [ProducesResponseType(StatusCodes.Status400BadRequest)]
-  [ProducesResponseType(StatusCodes.Status401Unauthorized)]
-  [HttpDelete("{slug}/likes")]
-  public async Task<IActionResult> UnlikePost(string slug)
-  {
-    var command = new UnlikePostCommand
     {
       Slug = slug
     };

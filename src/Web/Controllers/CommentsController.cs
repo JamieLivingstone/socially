@@ -1,7 +1,7 @@
 using System.Threading.Tasks;
 using Application.Comments.Commands.CreateComment;
 using Application.Comments.Commands.DeleteComment;
-using Application.Comments.Queries.GetCommentsWithPagination;
+using Application.Comments.Queries.GetCommentList;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 
@@ -12,14 +12,14 @@ public class CommentsController : BaseController
 {
   [HttpGet]
   public async Task<IActionResult> GetComments(string slug,
-    [FromQuery(Name = "pageNumber")] int pageNumber = 1,
-    [FromQuery(Name = "pageSize")] int pageSize = 20)
+    [FromQuery(Name = "pageNumber")] int? pageNumber,
+    [FromQuery(Name = "pageSize")] int? pageSize)
   {
-    var query = new GetCommentsWithPaginationQuery
+    var query = new GetCommentListQuery
     {
       Slug = slug,
-      PageNumber = pageNumber,
-      PageSize = pageSize
+      PageNumber = pageNumber ?? 1,
+      PageSize = pageSize ?? 10
     };
 
     var response = await Mediator.Send(query);

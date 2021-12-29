@@ -12,7 +12,7 @@ namespace IntegrationTests.Application.Accounts.Commands;
 public class LoginTests : TestBase
 {
   [Test]
-  public void GivenAnInvalidCommand_ThrowsValidationException()
+  public void GivenAnInvalidRequest_ThrowsValidationException()
   {
     var command = new LoginCommand();
 

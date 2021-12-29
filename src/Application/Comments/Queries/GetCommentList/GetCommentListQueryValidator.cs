@@ -1,10 +1,10 @@
 using FluentValidation;
 
-namespace Application.Comments.Queries.GetCommentsWithPagination;
+namespace Application.Comments.Queries.GetCommentList;
 
-public class GetCommentsWithPaginationQueryValidator : AbstractValidator<GetCommentsWithPaginationQuery>
+public class GetCommentListQueryValidator : AbstractValidator<GetCommentListQuery>
 {
-  public GetCommentsWithPaginationQueryValidator()
+  public GetCommentListQueryValidator()
   {
     RuleFor(x => x.Slug)
       .NotNull()

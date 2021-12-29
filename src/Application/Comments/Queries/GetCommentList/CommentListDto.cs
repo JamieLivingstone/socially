@@ -3,9 +3,9 @@ using Application.Common.Mappings;
 using AutoMapper;
 using Domain.Entities;
 
-namespace Application.Comments.Queries.GetCommentsWithPagination;
+namespace Application.Comments.Queries.GetCommentList;
 
-public class CommentDto : IMapFrom<Comment>
+public class CommentListDto : IMapFrom<Comment>
 {
   public int Id { get; init; }
 
@@ -17,7 +17,7 @@ public class CommentDto : IMapFrom<Comment>
 
   public void Mapping(Profile profile)
   {
-    profile.CreateMap<Comment, CommentDto>()
+    profile.CreateMap<Comment, CommentListDto>()
       .ForMember(d => d.Author, opt => opt.MapFrom(s => s.Author));
   }
 }

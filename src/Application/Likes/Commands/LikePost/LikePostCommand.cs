@@ -7,7 +7,7 @@ using Domain.Entities;
 using MediatR;
 using Microsoft.EntityFrameworkCore;
 
-namespace Application.Posts.Commands.LikePost;
+namespace Application.Likes.Commands.LikePost;
 
 [Authorize]
 public class LikePostCommand : IRequest

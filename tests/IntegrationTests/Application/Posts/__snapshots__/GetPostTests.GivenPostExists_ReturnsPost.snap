@@ -1,0 +1,13 @@
+﻿{
+  "Slug": "test-post-one",
+  "Title": "Test Post One",
+  "Body": "Test Post One Body",
+  "CreatedAt": "2021-01-01T00:00:00",
+  "UpdatedAt": "2021-01-01T00:00:00",
+  "Author": {
+    "Username": "liam"
+  },
+  "Tags": [],
+  "CommentsCount": 4,
+  "LikesCount": 0
+}

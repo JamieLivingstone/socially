@@ -1,6 +1,6 @@
 using System.Linq;
 using System.Threading.Tasks;
-using Application.Comments.Queries.GetCommentsWithPagination;
+using Application.Comments.Queries.GetCommentList;
 using Application.Common.Exceptions;
 using FluentAssertions;
 using IntegrationTests.Application.TestUtils;
@@ -11,12 +11,12 @@ using ValidationException = FluentValidation.ValidationException;
 namespace IntegrationTests.Application.Comments;
 
 [TestFixture]
-public class GetCommentsWithPaginationTests : TestBase
+public class GetCommentListTests : TestBase
 {
   [Test]
   public void GivenAnInvalidRequest_ThrowsValidationException()
   {
-    var query = new GetCommentsWithPaginationQuery
+    var query = new GetCommentListQuery
     {
       Slug = Seed.Posts().First().Slug,
       PageNumber = 0, // Must be 1 or greater
@@ -29,7 +29,7 @@ public class GetCommentsWithPaginationTests : TestBase
   [Test]
   public void GivenPostDoesNotExist_ThrowsNotFoundException()
   {
-    var query = new GetCommentsWithPaginationQuery
+    var query = new GetCommentListQuery
     {
       Slug = "does-not-exist",
       PageNumber = 1,
@@ -44,14 +44,14 @@ public class GetCommentsWithPaginationTests : TestBase
   [Test]
   public async Task GivenAValidRequest_ReturnsPaginatedComments()
   {
-    var pageOne = await SendAsync(new GetCommentsWithPaginationQuery
+    var pageOne = await SendAsync(new GetCommentListQuery
     {
       Slug = Seed.Posts().First().Slug,
       PageNumber = 1,
       PageSize = 3
     });
 
-    var pageTwo = await SendAsync(new GetCommentsWithPaginationQuery
+    var pageTwo = await SendAsync(new GetCommentListQuery
     {
       Slug = Seed.Posts().First().Slug,
       PageNumber = 2,

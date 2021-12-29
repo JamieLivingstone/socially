@@ -10,29 +10,29 @@ using AutoMapper.QueryableExtensions;
 using MediatR;
 using Microsoft.EntityFrameworkCore;
 
-namespace Application.Comments.Queries.GetCommentsWithPagination;
+namespace Application.Comments.Queries.GetCommentList;
 
-public class GetCommentsWithPaginationQuery : IRequest<PaginatedList<CommentDto>>
+public class GetCommentListQuery : IRequest<PaginatedList<CommentListDto>>
 {
   public string Slug { get; init; }
 
-  public int PageNumber { get; init; } = 1;
+  public int PageNumber { get; init; }
 
-  public int PageSize { get; init; } = 10;
+  public int PageSize { get; init; }
 }
 
-public class GetCommentsWithPaginationQueryHandler : IRequestHandler<GetCommentsWithPaginationQuery, PaginatedList<CommentDto>>
+public class GetCommentListQueryHandler : IRequestHandler<GetCommentListQuery, PaginatedList<CommentListDto>>
 {
   private readonly IApplicationDbContext _dbContext;
   private readonly IMapper _mapper;
 
-  public GetCommentsWithPaginationQueryHandler(IApplicationDbContext dbContext, IMapper mapper)
+  public GetCommentListQueryHandler(IApplicationDbContext dbContext, IMapper mapper)
   {
     _dbContext = dbContext;
     _mapper = mapper;
   }
 
-  public async Task<PaginatedList<CommentDto>> Handle(GetCommentsWithPaginationQuery request, CancellationToken cancellationToken)
+  public async Task<PaginatedList<CommentListDto>> Handle(GetCommentListQuery request, CancellationToken cancellationToken)
   {
     var post = await _dbContext.Posts.FirstOrDefaultAsync(p => p.Slug == request.Slug, cancellationToken);
 
@@ -44,7 +44,7 @@ public class GetCommentsWithPaginationQueryHandler : IRequestHandler<GetComments
     return await _dbContext.Comments
       .Where(c => c.PostId == post.Id)
       .OrderByDescending(c => c.CreatedAt)
-      .ProjectTo<CommentDto>(_mapper.ConfigurationProvider)
+      .ProjectTo<CommentListDto>(_mapper.ConfigurationProvider)
       .PaginatedListAsync(request.PageNumber, request.PageSize);
   }
 }

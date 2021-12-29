@@ -1,4 +1,6 @@
 using System;
+using System.Text.Json;
+using System.Text.Json.Serialization;
 using Application;
 using Application.Common.Interfaces;
 using CaseExtensions;
@@ -31,6 +33,8 @@ public class Startup
 
     services.AddInfrastructure(Configuration);
 
+    services.AddHealthChecks().AddDbContextCheck<ApplicationDbContext>();
+
     services.AddScoped<ICurrentUserService, CurrentUserService>();
 
     services.AddRouting(options => { options.LowercaseUrls = true; });
@@ -43,9 +47,11 @@ public class Startup
       {
         fv.AutomaticValidationEnabled = false;
         fv.ValidatorOptions.PropertyNameResolver = (_, member, _) => member != null ? member.Name.ToCamelCase() : null;
+      })
+      .AddJsonOptions(options =>
+      {
+        options.JsonSerializerOptions.Converters.Add(new JsonStringEnumConverter(JsonNamingPolicy.CamelCase));
       });
-
-    services.AddHealthChecks().AddDbContextCheck<ApplicationDbContext>();
 
     services.AddSwaggerGen(c =>
     {
@@ -85,14 +91,16 @@ public class Startup
     if (env.IsDevelopment())
     {
       app.UseDeveloperExceptionPage();
-      app.UseSwagger();
-      app.UseSwaggerUI(c => c.SwaggerEndpoint("/swagger/v1/swagger.json", "Socially"));
     }
     else
     {
       app.UseExceptionHandler("/Error");
       app.UseHsts();
     }
+
+    app.UseSwagger();
+
+    app.UseSwaggerUI(c => c.SwaggerEndpoint("/swagger/v1/swagger.json", "Socially"));
 
     app.UseHealthChecks("/health");
 
