@@ -36,7 +36,7 @@ public class LoginCommandHandler : IRequestHandler<LoginCommand, LoginDto>
 
     if (person == null || !person.Hash.SequenceEqual(await _passwordHasher.Hash(request.Password, person.Salt)))
     {
-      throw new UnauthorizedException("Invalid username or password combination.");
+      throw new UnauthorizedException("Invalid username or password combination");
     }
 
     return new LoginDto

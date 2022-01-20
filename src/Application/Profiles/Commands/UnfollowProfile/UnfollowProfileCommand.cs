@@ -32,7 +32,7 @@ public class UnfollowProfileCommandHandler : IRequestHandler<UnfollowProfileComm
 
     if (target == null)
     {
-      throw new NotFoundException($"{request.Username} is not registered.");
+      throw new NotFoundException($"{request.Username} is not registered");
     }
 
     var follower = await _dbContext.Followers.FirstOrDefaultAsync(f => f.ObserverId == _currentUserService.UserId && f.TargetId == target.Id, cancellationToken);

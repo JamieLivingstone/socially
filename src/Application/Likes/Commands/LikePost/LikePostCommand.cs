@@ -33,7 +33,7 @@ public class LikePostCommandHandler : IRequestHandler<LikePostCommand>
 
     if (post == null)
     {
-      throw new NotFoundException("Post does not exist.");
+      throw new NotFoundException("Post does not exist");
     }
 
     var liked = await _dbContext.Likes.AnyAsync(l => l.ObserverId == _currentUserService.UserId && l.PostId == post.Id, cancellationToken);

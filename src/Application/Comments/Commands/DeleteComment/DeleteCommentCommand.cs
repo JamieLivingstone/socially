@@ -32,12 +32,12 @@ public class DeleteCommentCommandHandler : IRequestHandler<DeleteCommentCommand>
 
     if (comment == null)
     {
-      throw new NotFoundException("Comment does not exist.");
+      throw new NotFoundException("Comment does not exist");
     }
 
     if (comment.AuthorId != _currentUserService.UserId)
     {
-      throw new ForbiddenException("You do not have access to delete the specified comment.");
+      throw new ForbiddenException("You do not have access to delete the specified comment");
     }
 
     _dbContext.Comments.Remove(comment);

@@ -33,12 +33,12 @@ public class FollowProfileCommandHandler : IRequestHandler<FollowProfileCommand>
 
     if (target == null)
     {
-      throw new NotFoundException($"{request.Username} is not registered.");
+      throw new NotFoundException($"{request.Username} is not registered");
     }
 
     if (target.Id == _currentUserService.UserId)
     {
-      throw new UnprocessableEntityException("Cannot follow self.");
+      throw new UnprocessableEntityException("Cannot follow self");
     }
 
     var isFollowing = await _dbContext.Followers.AnyAsync(f => f.ObserverId == _currentUserService.UserId && f.TargetId == target.Id, cancellationToken);

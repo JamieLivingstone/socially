@@ -35,7 +35,7 @@ public class GetPostQueryHandler : IRequestHandler<GetPostQuery, PostDto>
 
     if (post == null)
     {
-      throw new NotFoundException("Post does not exist.");
+      throw new NotFoundException("Post does not exist");
     }
 
     var postDto = _mapper.Map<Post, PostDto>(post);

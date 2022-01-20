@@ -23,7 +23,7 @@ public class RequestAuthorizationBehaviour<TRequest, TResponse> : IPipelineBehav
 
     if (shouldAuthorize != null && _currentUserService.IsAuthenticated == false)
     {
-      throw new UnauthorizedException("Authorization failed.");
+      throw new UnauthorizedException("Authorization failed");
     }
 
     return await next();

@@ -32,12 +32,12 @@ public class DeletePostCommandHandler : IRequestHandler<DeletePostCommand>
 
     if (post == null)
     {
-      throw new NotFoundException("Post does not exist.");
+      throw new NotFoundException("Post does not exist");
     }
 
     if (post.AuthorId != _currentUserService.UserId)
     {
-      throw new ForbiddenException("You do not have access to delete the specified post.");
+      throw new ForbiddenException("You do not have access to delete the specified post");
     }
 
     _dbContext.Posts.Remove(post);

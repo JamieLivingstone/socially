@@ -32,7 +32,7 @@ public class UnlikeCommandHandler : IRequestHandler<UnlikePostCommand>
 
     if (post == null)
     {
-      throw new NotFoundException("Post does not exist.");
+      throw new NotFoundException("Post does not exist");
     }
 
     var like = await _dbContext.Likes.FirstOrDefaultAsync(l => l.ObserverId == _currentUserService.UserId && l.PostId == post.Id, cancellationToken);

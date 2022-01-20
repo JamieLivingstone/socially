@@ -32,7 +32,7 @@ public class GetProfileQueryHandler : IRequestHandler<GetProfileQuery, ProfileDt
 
     if (profile == null)
     {
-      throw new NotFoundException("Profile does not exist.");
+      throw new NotFoundException("Profile does not exist");
     }
 
     var profileDto = _mapper.Map<Person, ProfileDto>(profile);

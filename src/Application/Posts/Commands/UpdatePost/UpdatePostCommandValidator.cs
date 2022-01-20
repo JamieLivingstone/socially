@@ -19,7 +19,7 @@ public class UpdatePostCommandValidator : AbstractValidator<UpdatePostCommand>
     RuleForEach(x => x.Tags)
       .NotNull()
       .NotEmpty()
-      .Matches("^[a-zA-Z]*$").WithMessage("{PropertyName} must only contain letters.")
+      .Matches("^[a-zA-Z]*$").WithMessage("{PropertyName} must only contain letters")
       .MaximumLength(20);
   }
 }

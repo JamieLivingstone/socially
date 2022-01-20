@@ -43,14 +43,14 @@ public class UpdatePostCommandHandler : IRequestHandler<UpdatePostCommand>
 
     if (post == null)
     {
-      throw new NotFoundException("Post does not exist.");
+      throw new NotFoundException("Post does not exist");
     }
 
     post.UpdatedAt = DateTime.UtcNow;
 
     if (post.AuthorId != _currentUserService.UserId)
     {
-      throw new ForbiddenException("You do not have access to update the specified post.");
+      throw new ForbiddenException("You do not have access to update the specified post");
     }
 
     if (request.Title != null)

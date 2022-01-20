@@ -36,7 +36,7 @@ public class CreateCommentCommandHandler : IRequestHandler<CreateCommentCommand,
 
     if (post == null)
     {
-      throw new NotFoundException("Post does not exist.");
+      throw new NotFoundException("Post does not exist");
     }
 
     var comment = new Comment

@@ -38,7 +38,7 @@ public class GetCommentListQueryHandler : IRequestHandler<GetCommentListQuery, P
 
     if (post == null)
     {
-      throw new NotFoundException("Post does not exist.");
+      throw new NotFoundException("Post does not exist");
     }
 
     return await _dbContext.Comments

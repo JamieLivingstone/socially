@@ -9,7 +9,7 @@ public class ValidationException : Exception
 {
   public IDictionary<string, string[]> Errors { get; }
 
-  private ValidationException() : base("One or more validation failures have occurred.")
+  private ValidationException() : base("One or more validation failures have occurred")
   {
     Errors = new Dictionary<string, string[]>();
   }

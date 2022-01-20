@@ -76,7 +76,7 @@ public class ApiExceptionFilterAttribute : ExceptionFilterAttribute
     var details = new ProblemDetails
     {
       Status = StatusCodes.Status403Forbidden,
-      Title = "Forbidden.",
+      Title = "Forbidden",
       Type = "https://datatracker.ietf.org/doc/html/rfc7231#section-6.5.3"
     };
 
@@ -95,7 +95,7 @@ public class ApiExceptionFilterAttribute : ExceptionFilterAttribute
     var details = new ProblemDetails
     {
       Type = "https://tools.ietf.org/html/rfc7231#section-6.5.4",
-      Title = "The specified resource was not found.",
+      Title = "The specified resource was not found",
       Detail = exception?.Message
     };
 
@@ -109,7 +109,7 @@ public class ApiExceptionFilterAttribute : ExceptionFilterAttribute
     var details = new ProblemDetails
     {
       Status = StatusCodes.Status401Unauthorized,
-      Title = "Unauthorized.",
+      Title = "Unauthorized",
       Type = "https://tools.ietf.org/html/rfc7235#section-3.1"
     };
 
@@ -126,7 +126,7 @@ public class ApiExceptionFilterAttribute : ExceptionFilterAttribute
     var details = new ProblemDetails
     {
       Status = StatusCodes.Status422UnprocessableEntity,
-      Title = "Unprocessable Entity.",
+      Title = "Unprocessable Entity",
       Type = "https://tools.ietf.org/html/rfc7231#section-6.5.1"
     };
 
@@ -143,7 +143,7 @@ public class ApiExceptionFilterAttribute : ExceptionFilterAttribute
     var details = new ProblemDetails
     {
       Status = StatusCodes.Status500InternalServerError,
-      Title = "An error occurred while processing your request.",
+      Title = "An error occurred while processing your request",
       Type = "https://tools.ietf.org/html/rfc7231#section-6.6.1"
     };
 

@@ -22,23 +22,22 @@ public class RegisterCommandValidator : AbstractValidator<RegisterCommand>
     RuleFor(x => x.Username)
       .NotNull()
       .NotEmpty()
-      .Matches("^[a-zA-Z0-9_]*$").WithMessage("{PropertyName} must only contain letters, numbers and underscores.")
-      .Must(NotContainWhitespace).WithMessage("{PropertyName} cannot contain spaces.")
-      .MustAsync(BeUniqueUsername).WithMessage("{PropertyName} is already in use.");
+      .Matches("^[a-zA-Z0-9_]*$").WithMessage("{PropertyName} must only contain letters, numbers and underscores")
+      .Must(NotContainWhitespace).WithMessage("{PropertyName} cannot contain spaces")
+      .MustAsync(BeUniqueUsername).WithMessage("{PropertyName} is already in use");
 
     RuleFor(x => x.Email)
       .NotNull()
       .NotEmpty()
-      .Must(NotContainWhitespace).WithMessage("{PropertyName} cannot contain spaces.")
       .EmailAddress()
-      .MustAsync(BeUniqueEmail).WithMessage("{PropertyName} is already in use.");
+      .MustAsync(BeUniqueEmail).WithMessage("{PropertyName} is already in use");
 
     RuleFor(x => x.Password)
       .NotNull()
       .NotEmpty()
       .MinimumLength(8)
-      .Matches("[a-z]").WithMessage("{PropertyName} must contain an lowercase letter.")
-      .Matches("[A-Z]").WithMessage("{PropertyName} must contain an uppercase letter.");
+      .Matches("[a-z]").WithMessage("{PropertyName} must contain an capitalized letter")
+      .Matches("[A-Z]").WithMessage("{PropertyName} must contain an uppercase letter");
   }
 
   private static bool NotContainWhitespace(string input)
