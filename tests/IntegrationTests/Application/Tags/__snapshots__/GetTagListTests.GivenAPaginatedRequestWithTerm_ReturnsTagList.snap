@@ -1,0 +1,12 @@
+﻿{
+  "Items": [
+    {
+      "Name": "tag-one"
+    }
+  ],
+  "PageNumber": 1,
+  "TotalPages": 1,
+  "TotalCount": 1,
+  "HasPreviousPage": false,
+  "HasNextPage": false
+}

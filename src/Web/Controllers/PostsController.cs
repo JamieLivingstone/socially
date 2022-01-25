@@ -26,18 +26,18 @@ public class PostsController : BaseController
 
   [HttpGet]
   public async Task<IActionResult> GetPosts(
-    [FromQuery(Name = "pageNumber")] int? pageNumber,
-    [FromQuery(Name = "pageSize")] int? pageSize,
-    [FromQuery(Name = "orderBy")] PostListOrder? orderBy,
-    [FromQuery(Name = "author")] string author,
-    [FromQuery(Name = "liked")] bool? liked,
-    [FromQuery(Name = "tag")] string tag)
+    [FromQuery(Name = "pageNumber")] int pageNumber = 1,
+    [FromQuery(Name = "pageSize")] int pageSize = 10,
+    [FromQuery(Name = "orderBy")] PostListOrder orderBy = PostListOrder.Created,
+    [FromQuery(Name = "author")] string author = "",
+    [FromQuery(Name = "liked")] bool? liked = null,
+    [FromQuery(Name = "tag")] string tag = "")
   {
-    var query = new GetPostListQuery()
+    var query = new GetPostListQuery
     {
-      PageNumber = pageNumber ?? 1,
-      PageSize = pageSize ?? 10,
-      OrderBy = orderBy ?? PostListOrder.Created,
+      PageNumber = pageNumber,
+      PageSize = pageSize,
+      OrderBy = orderBy,
       Author = author,
       Liked = liked ?? false,
       Tag = tag

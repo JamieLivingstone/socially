@@ -2,8 +2,8 @@ import { Avatar, Button, Menu, MenuButton, MenuDivider, MenuItem, MenuList, Text
 import React from 'react';
 import { Link } from 'react-router-dom';
 
-import { routes } from '../../constants';
-import { useAuth } from '../../hooks/use-auth';
+import { routes } from '../constants';
+import { useAuth } from '../hooks';
 
 export function Nav() {
   const { account, logout } = useAuth();

@@ -5,9 +5,9 @@ import React, { useEffect } from 'react';
 import { Link as BrowserLink, useNavigate } from 'react-router-dom';
 import * as Yup from 'yup';
 
-import { TextInput } from '../components/form-inputs';
+import { TextInput } from '../components';
 import { routes } from '../constants';
-import { useAuth } from '../hooks/use-auth';
+import { useAuth } from '../hooks';
 
 function Register() {
   const { register, account } = useAuth();
@@ -20,7 +20,7 @@ function Register() {
   }, [account]);
 
   return (
-    <Stack spacing={8} mx="2" py={12} alignItems="center">
+    <Stack spacing={8} py={12} px={6} mx="auto" width="100%" alignItems="center">
       <Stack align="center">
         <Heading fontSize="3xl" as="h1">
           Register
@@ -71,13 +71,13 @@ function Register() {
           >
             {({ isSubmitting }) => (
               <Form noValidate>
-                <TextInput name="name" label="Name" isRequired />
+                <TextInput name="name" label="Name" placeholder="Full Name" isRequired />
 
-                <TextInput name="username" label="Username" isRequired />
+                <TextInput name="username" label="Username" placeholder="Username" isRequired />
 
-                <TextInput name="email" label="Email" isRequired />
+                <TextInput name="email" label="Email" placeholder="Email" isRequired />
 
-                <TextInput name="password" label="Password" type="password" isRequired />
+                <TextInput name="password" label="Password" type="password" placeholder="Password" isRequired />
 
                 <Button mt={2} isFullWidth type="submit" disabled={isSubmitting} variant="solid">
                   Register

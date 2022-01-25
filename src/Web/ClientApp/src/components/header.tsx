@@ -2,7 +2,7 @@ import { Grid, GridItem, Heading } from '@chakra-ui/react';
 import React from 'react';
 import { Link } from 'react-router-dom';
 
-import { routes } from '../../constants';
+import { routes } from '../constants';
 import { Nav } from './nav';
 
 export function Header() {

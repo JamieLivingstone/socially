@@ -14,17 +14,17 @@ type Account = {
 
 function useProvideAuth() {
   const [account, setAccount] = useState<Account | null>(null);
-  const [initializing, setInitializing] = useState(false);
+  const [initializing, setInitializing] = useState(true);
   const [cookies, setCookie, deleteCookie] = useCookies(['token']);
   const navigate = useNavigate();
 
   useEffect(() => {
     (async function initialize() {
       if (cookies.token) {
-        setInitializing(true);
         await fetchAccount(cookies.token);
-        setInitializing(false);
       }
+
+      setInitializing(false);
     })();
   }, []);
 

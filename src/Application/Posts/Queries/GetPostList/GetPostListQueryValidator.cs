@@ -2,9 +2,9 @@ using FluentValidation;
 
 namespace Application.Posts.Queries.GetPostList;
 
-public class GetPostListWithPaginationQueryValidator : AbstractValidator<GetPostListQuery>
+public class GetPostListQueryValidator : AbstractValidator<GetPostListQuery>
 {
-  public GetPostListWithPaginationQueryValidator()
+  public GetPostListQueryValidator()
   {
     RuleFor(x => x.PageNumber)
       .GreaterThanOrEqualTo(1);

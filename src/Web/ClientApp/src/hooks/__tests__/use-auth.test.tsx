@@ -2,7 +2,8 @@ import { act, renderHook } from '@testing-library/react-hooks';
 import axios from 'axios';
 import * as moxios from 'moxios';
 
-import { AuthProvider, useAuth } from '../use-auth';
+import { useAuth } from '../use-auth';
+import { wrapper } from './utils';
 
 describe('useAuth', () => {
   beforeEach(() => {
@@ -30,7 +31,7 @@ describe('useAuth', () => {
           response: { token: 'mock-token' },
         });
 
-        const { result } = renderHook(() => useAuth(), { wrapper: AuthProvider });
+        const { result } = renderHook(() => useAuth(), { wrapper });
 
         expect(result.current.account).toBeNull();
 
@@ -47,7 +48,7 @@ describe('useAuth', () => {
           status: 401,
         });
 
-        const { result } = renderHook(() => useAuth(), { wrapper: AuthProvider });
+        const { result } = renderHook(() => useAuth(), { wrapper });
 
         await act(() => result.current.login({ username: 'user', password: 'password' }).catch((error) => error));
 
@@ -64,7 +65,7 @@ describe('useAuth', () => {
           response: { token: 'mock-token' },
         });
 
-        const { result } = renderHook(() => useAuth(), { wrapper: AuthProvider });
+        const { result } = renderHook(() => useAuth(), { wrapper });
 
         expect(result.current.account).toBeNull();
 
@@ -87,7 +88,7 @@ describe('useAuth', () => {
     test('removes cookie and current account is null', async () => {
       document.cookie = 'token=mock-token;';
 
-      const { result, waitForNextUpdate } = renderHook(() => useAuth(), { wrapper: AuthProvider });
+      const { result, waitForNextUpdate } = renderHook(() => useAuth(), { wrapper });
 
       await waitForNextUpdate();
 

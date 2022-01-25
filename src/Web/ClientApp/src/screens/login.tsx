@@ -1,12 +1,12 @@
-import { Box, Button, Heading, Link, Stack, Text } from '@chakra-ui/react';
+import { Box, Button, Center, Heading, Link, Stack, Text } from '@chakra-ui/react';
 import { Form, Formik } from 'formik';
 import React, { useEffect, useState } from 'react';
 import { Link as BrowserLink, useNavigate } from 'react-router-dom';
 import * as Yup from 'yup';
 
-import { TextInput } from '../components/form-inputs';
+import { TextInput } from '../components';
 import { routes } from '../constants';
-import { useAuth } from '../hooks/use-auth';
+import { useAuth } from '../hooks';
 
 function Login() {
   const { login, account } = useAuth();
@@ -20,7 +20,7 @@ function Login() {
   }, [account]);
 
   return (
-    <Stack spacing={8} mx="auto" py={12} px={6}>
+    <Stack spacing={8} py={12} px={6} mx="auto" width="100%" alignItems="center">
       <Stack align="center">
         <Heading fontSize="3xl" as="h1">
           Login
@@ -66,9 +66,9 @@ function Login() {
                   </Text>
                 )}
 
-                <TextInput name="username" label="Username" isRequired />
+                <TextInput name="username" label="Username" placeholder="Username" isRequired />
 
-                <TextInput name="password" label="Password" type="password" isRequired />
+                <TextInput name="password" label="Password" type="password" placeholder="Password" isRequired />
 
                 <Button mt={2} isFullWidth type="submit" disabled={isSubmitting} variant="solid">
                   Login

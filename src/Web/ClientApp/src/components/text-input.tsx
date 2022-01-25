@@ -2,10 +2,6 @@ import { FormControl, FormErrorMessage, FormLabel, Input } from '@chakra-ui/reac
 import { useField } from 'formik';
 import React from 'react';
 
-export type InputProps = {
-  name: string;
-};
-
 type TextInputProps = Omit<React.ComponentPropsWithoutRef<'input'>, 'size'> & {
   name: string;
   label: string;

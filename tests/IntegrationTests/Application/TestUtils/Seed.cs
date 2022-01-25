@@ -14,6 +14,7 @@ public static class Seed
     dbContext.Persons.AddRange(Persons());
     dbContext.Posts.AddRange(Posts());
     dbContext.Comments.AddRange(Comments());
+    dbContext.Tags.AddRange(Tags());
     dbContext.SaveChanges();
   }
 
@@ -100,6 +101,25 @@ public static class Seed
         Message = "Mock comment four",
         PostId = 1,
         AuthorId = 2
+      }
+    };
+  }
+
+  public static IEnumerable<Tag> Tags()
+  {
+    return new List<Tag>
+    {
+      new()
+      {
+        TagId = "tag-one"
+      },
+      new()
+      {
+        TagId = "tag-two"
+      },
+      new()
+      {
+        TagId = "tag-three"
       }
     };
   }

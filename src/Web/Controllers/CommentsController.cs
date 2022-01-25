@@ -11,15 +11,15 @@ namespace Web.Controllers;
 public class CommentsController : BaseController
 {
   [HttpGet]
-  public async Task<IActionResult> GetComments(string slug,
-    [FromQuery(Name = "pageNumber")] int? pageNumber,
-    [FromQuery(Name = "pageSize")] int? pageSize)
+  public async Task<IActionResult> GetComments(string slug = "",
+    [FromQuery(Name = "pageNumber")] int pageNumber = 1,
+    [FromQuery(Name = "pageSize")] int pageSize = 10)
   {
     var query = new GetCommentListQuery
     {
       Slug = slug,
-      PageNumber = pageNumber ?? 1,
-      PageSize = pageSize ?? 10
+      PageNumber = pageNumber,
+      PageSize = pageSize
     };
 
     var response = await Mediator.Send(query);

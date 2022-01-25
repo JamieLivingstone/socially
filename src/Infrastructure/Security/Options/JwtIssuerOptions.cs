@@ -69,7 +69,7 @@ public class JwtIssuerOptions
   /// <summary>
   /// Set the timespan the token will be valid for (default is 60 minutes)
   /// </summary>
-  private TimeSpan ValidFor { get; } = TimeSpan.FromMinutes(60);
+  private TimeSpan ValidFor { get; } = TimeSpan.FromDays(7);
 
   /// <summary>
   /// "exp" (Expiration Time) Claim (returns IssuedAt + ValidFor)
