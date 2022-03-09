@@ -13,7 +13,7 @@ public class CommentListDto : IMapFrom<Comment>
 
   public DateTime CreatedAt { get; init; }
 
-  public Author Author { get; init; }
+  public CommentAuthor Author { get; init; }
 
   public void Mapping(Profile profile)
   {
@@ -22,12 +22,14 @@ public class CommentListDto : IMapFrom<Comment>
   }
 }
 
-public class Author : IMapFrom<Person>
+public class CommentAuthor : IMapFrom<Person>
 {
+  public string Name { get; set; }
+
   public string Username { get; init; }
 
   public void Mapping(Profile profile)
   {
-    profile.CreateMap<Person, Author>();
+    profile.CreateMap<Person, CommentAuthor>();
   }
 }

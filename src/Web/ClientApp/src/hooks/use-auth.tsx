@@ -3,8 +3,8 @@ import React, { createContext, useContext, useEffect, useState } from 'react';
 import { useCookies } from 'react-cookie';
 import { useNavigate } from 'react-router-dom';
 
+import { Loading } from '../components';
 import { routes } from '../constants';
-import { Loading } from '../screens/loading';
 
 type Account = {
   name: string;
@@ -45,21 +45,30 @@ function useProvideAuth() {
   async function login(payload: { username: string; password: string }) {
     const { data } = await axios.post<{ token: string }>('/api/v1/accounts/login', payload);
 
-    setCookie('token', data.token, { secure: true, sameSite: 'strict' });
+    setCookie('token', data.token, {
+      path: '/',
+      sameSite: 'strict',
+      maxAge: 604800, // 7 days
+    });
+
     await fetchAccount(data.token);
   }
 
   async function register(payload: { name: string; username: string; email: string; password: string }) {
     const { data } = await axios.post<{ token: string }>('/api/v1/accounts/register', payload);
 
-    setCookie('token', data.token, { secure: true, sameSite: 'strict' });
+    setCookie('token', data.token, {
+      path: '/',
+      sameSite: 'strict',
+      maxAge: 604800, // 7 days
+    });
+
     await fetchAccount(data.token);
   }
 
   function logout() {
-    deleteCookie('token');
+    deleteCookie('token', { path: '/' });
     setAccount(null);
-    navigate(routes.HOME, { replace: true });
   }
 
   return {

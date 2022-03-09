@@ -22,10 +22,6 @@ public class PostDto : IMapFrom<Post>
 
   public IEnumerable<PostTagDto> Tags { get; set; }
 
-  public int CommentsCount { get; set; }
-
-  public int LikesCount { get; set; }
-
   public void Mapping(Profile profile)
   {
     profile.CreateMap<Post, PostDto>()
@@ -36,6 +32,8 @@ public class PostDto : IMapFrom<Post>
 
 public class AuthorDto : IMapFrom<Person>
 {
+  public string Name { get; set; }
+
   public string Username { get; set; }
 
   public void Mapping(Profile profile)

@@ -15,6 +15,7 @@ public class PostConfiguration : IEntityTypeConfiguration<Post>
       .IsRequired();
 
     builder.Property(p => p.Body)
+      .HasColumnType("mediumtext")
       .IsRequired();
 
     builder.Property(p => p.CreatedAt)

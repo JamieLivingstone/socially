@@ -30,8 +30,6 @@ public class GetPostListQuery : IRequest<PaginatedList<PostListDto>>
 
   public string Author { get; init; }
 
-  public bool Liked { get; init; }
-
   public string Tag { get; init; }
 }
 
@@ -64,18 +62,6 @@ public class GetPostListQueryHandler : IRequestHandler<GetPostListQuery, Paginat
       if (author != null)
       {
         queryable = queryable.Where(p => p.Author == author);
-      }
-      else
-      {
-        return new EmptyPostList(request.PageNumber, request.PageSize);
-      }
-    }
-
-    if (request.Liked)
-    {
-      if (_currentUserService.IsAuthenticated)
-      {
-        queryable = queryable.Where(p => p.Likes.Any(l => l.ObserverId == _currentUserService.UserId));
       }
       else
       {

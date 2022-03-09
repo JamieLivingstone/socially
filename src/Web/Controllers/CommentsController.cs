@@ -2,6 +2,7 @@ using System.Threading.Tasks;
 using Application.Comments.Commands.CreateComment;
 using Application.Comments.Commands.DeleteComment;
 using Application.Comments.Queries.GetCommentList;
+using Application.Common.Models;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 
@@ -11,6 +12,7 @@ namespace Web.Controllers;
 public class CommentsController : BaseController
 {
   [HttpGet]
+  [ProducesResponseType(typeof(PaginatedList<CommentListDto>), StatusCodes.Status200OK)]
   public async Task<IActionResult> GetComments(string slug = "",
     [FromQuery(Name = "pageNumber")] int pageNumber = 1,
     [FromQuery(Name = "pageSize")] int pageSize = 10)

@@ -96,6 +96,7 @@ public class Startup
     else
     {
       app.UseExceptionHandler("/Error");
+      app.UseHttpsRedirection();
       app.UseHsts();
     }
 
@@ -104,8 +105,6 @@ public class Startup
     app.UseSwaggerUI(c => c.SwaggerEndpoint("/swagger/v1/swagger.json", "Socially"));
 
     app.UseHealthChecks("/health");
-
-    app.UseHttpsRedirection();
 
     app.UseRouting();
 

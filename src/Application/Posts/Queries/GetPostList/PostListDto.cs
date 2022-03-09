@@ -12,13 +12,11 @@ public class PostListDto : IMapFrom<Post>
 
   public string Title { get; set; }
 
-  public string Body { get; set; }
-
   public DateTime CreatedAt { get; set; }
 
-  public AuthorDto Author { get; set; }
+  public PostListAuthorDto Author { get; set; }
 
-  public IEnumerable<PostTagDto> Tags { get; set; }
+  public IEnumerable<PostListTagDto> Tags { get; set; }
 
   public int CommentsCount { get; set; }
 
@@ -32,23 +30,25 @@ public class PostListDto : IMapFrom<Post>
   }
 }
 
-public class AuthorDto : IMapFrom<Person>
+public class PostListAuthorDto : IMapFrom<Person>
 {
+  public string Name { get; set; }
+
   public string Username { get; set; }
 
   public void Mapping(Profile profile)
   {
-    profile.CreateMap<Person, AuthorDto>();
+    profile.CreateMap<Person, PostListAuthorDto>();
   }
 }
 
-public class PostTagDto : IMapFrom<PostTag>
+public class PostListTagDto : IMapFrom<PostTag>
 {
   public string Name { get; set; }
 
   public void Mapping(Profile profile)
   {
-    profile.CreateMap<PostTag, PostTagDto>()
+    profile.CreateMap<PostTag, PostListTagDto>()
       .ForMember(d => d.Name, opt => opt.MapFrom(s => s.TagId));
   }
 }

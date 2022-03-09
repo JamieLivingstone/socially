@@ -1,27 +1,30 @@
 {
   "name": "socially",
+  "license": "MIT",
   "scripts": {
-    "lint": "eslint src",
+    "lint": "eslint src && prettier src --write",
     "start": "echo Starting the development server && vite",
     "build": "tsc && vite build",
     "test": "jest --runInBand"
   },
   "dependencies": {
-    "@chakra-ui/icons": "^1.1.1",
     "@chakra-ui/react": "^1.7.3",
     "@emotion/react": "^11.7.1",
     "@emotion/styled": "^11.6.0",
-    "@uiw/react-md-editor": "^3.9.3",
     "axios": "^0.24.0",
     "chakra-react-select": "^3.0.2",
+    "chakra-ui-markdown-renderer": "^4.0.0",
     "formik": "^2.2.9",
     "framer-motion": "^5.5.5",
     "react": "^17.0.2",
     "react-cookie": "^4.1.1",
     "react-dom": "^17.0.2",
+    "react-icons": "^4.3.1",
+    "react-infinite-scroll-component": "^6.1.0",
+    "react-markdown": "^8.0.0",
     "react-query": "^3.34.8",
     "react-router-dom": "^6.2.1",
-    "rehype-sanitize": "^5.0.1",
+    "react-timeago": "^6.2.1",
     "use-debounce": "^7.0.1",
     "yup": "^0.32.11"
   },
@@ -33,6 +36,7 @@
     "@types/moxios": "^0.4.14",
     "@types/react": "^17.0.33",
     "@types/react-dom": "^17.0.10",
+    "@types/react-timeago": "^4.1.3",
     "@typescript-eslint/eslint-plugin": "^5.8.1",
     "@typescript-eslint/parser": "^5.8.1",
     "@vitejs/plugin-react": "^1.0.7",
@@ -43,14 +47,13 @@
     "prettier": "^2.5.1",
     "ts-jest": "^27.1.2",
     "typescript": "^4.4.4",
-    "vite": "^2.7.2",
-    "vitest": "^0.1.23"
+    "vite": "^2.7.2"
   },
   "jest": {
     "preset": "ts-jest",
     "testEnvironment": "jsdom",
-    "testPathIgnorePatterns": [
-      "__tests__/utils.tsx"
+    "testMatch": [
+      "**/__tests__/*.test.ts?(x)"
     ]
   }
 }

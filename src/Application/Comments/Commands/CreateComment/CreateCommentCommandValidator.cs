@@ -9,7 +9,8 @@ public class CreateCommentCommandValidator : AbstractValidator<CreateCommentComm
     RuleFor(x => x.Message)
       .NotNull()
       .NotEmpty()
-      .MinimumLength(5);
+      .MinimumLength(5)
+      .MaximumLength(500);
 
     RuleFor(x => x.Slug)
       .NotNull()

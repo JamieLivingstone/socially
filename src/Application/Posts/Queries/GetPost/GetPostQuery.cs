@@ -38,10 +38,6 @@ public class GetPostQueryHandler : IRequestHandler<GetPostQuery, PostDto>
       throw new NotFoundException("Post does not exist");
     }
 
-    var postDto = _mapper.Map<Post, PostDto>(post);
-    postDto.CommentsCount = await _dbContext.Comments.CountAsync(c => c.PostId == post.Id, cancellationToken);
-    postDto.LikesCount = await _dbContext.Likes.CountAsync(c => c.PostId == post.Id, cancellationToken);
-
-    return postDto;
+    return _mapper.Map<Post, PostDto>(post);
   }
 }

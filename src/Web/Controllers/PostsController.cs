@@ -1,4 +1,5 @@
 using System.Threading.Tasks;
+using Application.Common.Models;
 using Application.Posts.Commands.CreatePost;
 using Application.Posts.Commands.DeletePost;
 using Application.Posts.Commands.UpdatePost;
@@ -25,12 +26,12 @@ public class PostsController : BaseController
   }
 
   [HttpGet]
+  [ProducesResponseType(typeof(PaginatedList<PostListDto>), StatusCodes.Status200OK)]
   public async Task<IActionResult> GetPosts(
     [FromQuery(Name = "pageNumber")] int pageNumber = 1,
     [FromQuery(Name = "pageSize")] int pageSize = 10,
     [FromQuery(Name = "orderBy")] PostListOrder orderBy = PostListOrder.Created,
     [FromQuery(Name = "author")] string author = "",
-    [FromQuery(Name = "liked")] bool? liked = null,
     [FromQuery(Name = "tag")] string tag = "")
   {
     var query = new GetPostListQuery
@@ -39,7 +40,6 @@ public class PostsController : BaseController
       PageSize = pageSize,
       OrderBy = orderBy,
       Author = author,
-      Liked = liked ?? false,
       Tag = tag
     };
 
