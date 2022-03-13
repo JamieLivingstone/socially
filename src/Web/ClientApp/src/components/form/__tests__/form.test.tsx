@@ -8,7 +8,7 @@ import { TextField, TextareaField } from '../';
 
 describe('<Form />', () => {
   test('rendering and submitting a basic form', async () => {
-    const onSubmit = jest.fn();
+    const onSubmit = vi.fn();
 
     const { getByRole, getByLabelText } = await render(
       <Formik
@@ -51,7 +51,7 @@ describe('<Form />', () => {
         validationSchema={Yup.object({
           username: Yup.string().required('Username is a required field'),
         })}
-        onSubmit={jest.fn()}
+        onSubmit={vi.fn()}
       >
         <Form noValidate>
           <TextField name="username" label="Username" />

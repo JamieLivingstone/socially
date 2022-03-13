@@ -4,7 +4,7 @@ import React from 'react';
 import { PrivacyBanner } from '../privacy-banner';
 
 describe('<PrivacyBanner />', () => {
-  test('shows privacy banner and closes on button click', async () => {
+  test('shows privacy banner and closes on button acceptance', async () => {
     const { queryByText, findByRole } = render(<PrivacyBanner />);
 
     expect(queryByText(/your privacy/i)).not.toBeNull();

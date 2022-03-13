@@ -2,10 +2,11 @@
   "name": "socially",
   "license": "MIT",
   "scripts": {
-    "lint": "eslint src && prettier src --write",
+    "lint": "eslint",
     "start": "echo Starting the development server && vite",
     "build": "tsc && vite build",
-    "test": "jest --runInBand"
+    "test": "vitest run",
+    "test:watch": "vitest watch"
   },
   "dependencies": {
     "@chakra-ui/react": "^1.7.3",
@@ -33,7 +34,6 @@
     "@testing-library/react-hooks": "^7.0.2",
     "@trivago/prettier-plugin-sort-imports": "^3.1.1",
     "@types/jest": "^27.4.0",
-    "@types/moxios": "^0.4.14",
     "@types/react": "^17.0.33",
     "@types/react-dom": "^17.0.10",
     "@types/react-timeago": "^4.1.3",
@@ -42,18 +42,10 @@
     "@vitejs/plugin-react": "^1.0.7",
     "eslint": "^8.6.0",
     "eslint-plugin-react": "^7.28.0",
-    "jest": "^27.4.7",
-    "moxios": "^0.4.0",
     "prettier": "^2.5.1",
     "ts-jest": "^27.1.2",
     "typescript": "^4.4.4",
-    "vite": "^2.7.2"
-  },
-  "jest": {
-    "preset": "ts-jest",
-    "testEnvironment": "jsdom",
-    "testMatch": [
-      "**/__tests__/*.test.ts?(x)"
-    ]
+    "vite": "^2.7.2",
+    "vitest": "^0.6.0"
   }
 }
