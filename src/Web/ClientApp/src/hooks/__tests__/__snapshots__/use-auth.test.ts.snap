@@ -1,0 +1,9 @@
+// Vitest Snapshot v1
+
+exports[`useAuth > existing session > fetches account 1`] = `
+{
+  "email": "john@test.com",
+  "name": "John Doe",
+  "username": "john",
+}
+`;

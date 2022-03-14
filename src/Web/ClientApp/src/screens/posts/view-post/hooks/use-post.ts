@@ -11,7 +11,10 @@ export function usePost(slug: string) {
 
       return data;
     },
-    { suspense: true },
+    {
+      suspense: true,
+      useErrorBoundary: true,
+    },
   );
 
   return {

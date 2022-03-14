@@ -1,17 +1,17 @@
 import axios from 'axios';
 import { useInfiniteQuery } from 'react-query';
 
-type CommentList = {
+export type CommentList = {
   hasNextPage: boolean;
   hasPreviousPage: false;
   items: Array<{
+    id: number;
+    message: string;
+    createdAt: string;
     author: {
       name: string;
       username: string;
     };
-    createdAt: string;
-    id: number;
-    message: string;
   }>;
   pageNumber: number;
   totalCount: number;

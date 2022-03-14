@@ -1,8 +1,8 @@
 import axios from 'axios';
 import React, { Component } from 'react';
 
-import { Error } from '../../screens/miscellaneous/error';
-import { NotFound } from '../../screens/miscellaneous/not-found';
+import { Error } from '../screens/miscellaneous/error';
+import { NotFound } from '../screens/miscellaneous/not-found';
 
 type ErrorBoundaryProps = {
   children: React.ReactNode;

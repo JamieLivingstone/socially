@@ -28,7 +28,13 @@ export function useTagList() {
 
       return data;
     },
-    { enabled: filter.length > 0, suspense: false },
+    {
+      enabled: filter.length > 0,
+      suspense: false,
+      getNextPageParam(lastPageResponse) {
+        return lastPageResponse.hasNextPage ? lastPageResponse.pageNumber + 1 : false;
+      },
+    },
   );
 
   return {

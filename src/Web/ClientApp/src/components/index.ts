@@ -1,5 +1,4 @@
 export * from './avatar';
-export * from './error-boundary';
 export * from './footer';
 export * from './form';
 export * from './header';

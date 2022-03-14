@@ -5,14 +5,14 @@ import { useNavigate } from 'react-router-dom';
 
 import { useAuth } from '../../../../hooks';
 
-type CreatePostResponse = {
+export type CreatePostResponse = {
   slug: string;
 };
 
 export function useCreatePost() {
-  const toast = useToast();
-  const navigate = useNavigate();
   const { account } = useAuth();
+  const navigate = useNavigate();
+  const toast = useToast();
 
   const { data, isLoading, isError, error, mutateAsync } = useMutation(
     async function createPostRequest(payload: { title: string; body: string; tags: Array<string> }) {
@@ -20,7 +20,7 @@ export function useCreatePost() {
         const { data } = await axios.post<CreatePostResponse>('/api/v1/posts', payload);
 
         navigate(`/${account?.username}/${data.slug}`);
-      } catch {
+      } catch (error) {
         toast({
           title: 'Failed to create post!',
           status: 'error',
@@ -29,7 +29,7 @@ export function useCreatePost() {
         });
       }
     },
-    { retry: false },
+    { useErrorBoundary: false },
   );
 
   return {

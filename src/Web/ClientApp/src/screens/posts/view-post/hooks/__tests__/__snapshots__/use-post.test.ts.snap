@@ -1,0 +1,24 @@
+// Vitest Snapshot v1
+
+exports[`usePost > returns post 1`] = `
+{
+  "post": {
+    "author": {
+      "name": "John Doe",
+      "username": "john",
+    },
+    "body": "## Post body",
+    "commentsCount": 4,
+    "createdAt": "2022-03-14T08:28:30.959Z",
+    "likesCount": 0,
+    "slug": "mock-post",
+    "tags": [
+      {
+        "name": "mock-tag",
+      },
+    ],
+    "title": "Mock post",
+    "updatedAt": "2022-05-14T05:28:30.959Z",
+  },
+}
+`;

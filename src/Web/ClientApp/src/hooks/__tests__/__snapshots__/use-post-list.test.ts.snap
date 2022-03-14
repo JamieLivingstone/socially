@@ -1,0 +1,37 @@
+// Vitest Snapshot v1
+
+exports[`usePostList > returns paginated post list 1`] = `
+{
+  "fetchNextPage": [Function],
+  "hasNextPage": true,
+  "isFetchingNextPage": false,
+  "pages": [
+    {
+      "hasNextPage": true,
+      "hasPreviousPage": false,
+      "items": [
+        {
+          "author": {
+            "name": "John Doe",
+            "username": "John",
+          },
+          "commentsCount": 12,
+          "createdAt": "2022-03-14T08:28:30.959Z",
+          "likesCount": 265,
+          "slug": "post-one",
+          "tags": [
+            {
+              "name": "tag-one",
+            },
+          ],
+          "title": "Post one",
+        },
+      ],
+      "pageNumber": 1,
+      "totalCount": 1,
+      "totalPages": 3,
+    },
+  ],
+  "setOrderBy": [Function],
+}
+`;

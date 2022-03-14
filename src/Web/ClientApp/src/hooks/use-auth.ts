@@ -1,10 +1,6 @@
 import axios from 'axios';
-import React, { createContext, useContext, useEffect, useState } from 'react';
+import { createContext, useContext, useEffect, useState } from 'react';
 import { useCookies } from 'react-cookie';
-import { useNavigate } from 'react-router-dom';
-
-import { Loading } from '../components';
-import { routes } from '../constants';
 
 type Account = {
   name: string;
@@ -12,11 +8,10 @@ type Account = {
   email: string;
 };
 
-function useProvideAuth() {
+export function useProvideAuth() {
   const [account, setAccount] = useState<Account | null>(null);
   const [initializing, setInitializing] = useState(true);
   const [cookies, setCookie, deleteCookie] = useCookies(['token']);
-  const navigate = useNavigate();
 
   useEffect(() => {
     (async function initialize() {
@@ -30,9 +25,7 @@ function useProvideAuth() {
 
   async function fetchAccount(token: string) {
     try {
-      axios.defaults.headers.common = {
-        Authorization: `Bearer ${token}`,
-      };
+      axios.defaults.headers.common = { Authorization: `Bearer ${token}` };
 
       const { data } = await axios.get('/api/v1/accounts/current');
 
@@ -80,16 +73,10 @@ function useProvideAuth() {
   };
 }
 
-const authContext = createContext<ReturnType<typeof useProvideAuth> | null>(null);
-
-export function AuthProvider({ children }: { children: React.ReactNode }) {
-  const auth = useProvideAuth();
-
-  return <authContext.Provider value={auth}>{auth.initializing ? <Loading /> : children}</authContext.Provider>;
-}
+export const AuthContext = createContext<ReturnType<typeof useProvideAuth> | null>(null);
 
 export function useAuth() {
-  const context = useContext(authContext);
+  const context = useContext(AuthContext);
 
   if (!context) {
     throw new Error('useAuth must be within an AuthProvider');

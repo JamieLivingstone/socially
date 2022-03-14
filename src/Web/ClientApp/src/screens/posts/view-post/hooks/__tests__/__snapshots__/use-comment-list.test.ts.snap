@@ -1,0 +1,29 @@
+// Vitest Snapshot v1
+
+exports[`useCommentList > returns paginated comment list 1`] = `
+{
+  "fetchNextPage": [Function],
+  "hasNextPage": false,
+  "isFetchingNextPage": false,
+  "pages": [
+    {
+      "hasNextPage": false,
+      "hasPreviousPage": false,
+      "items": [
+        {
+          "author": {
+            "name": "John Doe",
+            "username": "john",
+          },
+          "createdAt": "2022-03-14T08:28:30.959Z",
+          "id": 1,
+          "message": "Comment one",
+        },
+      ],
+      "pageNumber": 1,
+      "totalCount": 30,
+      "totalPages": 3,
+    },
+  ],
+}
+`;

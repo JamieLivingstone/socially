@@ -1,7 +1,8 @@
 import axios from 'axios';
+import { useState } from 'react';
 import { useInfiniteQuery } from 'react-query';
 
-type PostList = {
+export type PostListResponse = {
   hasNextPage: boolean;
   hasPreviousPage: false;
   items: Array<{
@@ -35,13 +36,15 @@ type UsePostListOptions = {
 };
 
 export function usePostList(options: UsePostListOptions) {
+  const [orderBy, setOrderBy] = useState<OrderBy>(options.orderBy ?? 'created');
+
   const { data, hasNextPage, fetchNextPage, isFetchingNextPage } = useInfiniteQuery(
-    ['post-list', options],
+    ['post-list', orderBy, options],
     async function fetchPostRequest() {
-      const { data } = await axios.get<PostList>(`/api/v1/posts`, {
+      const { data } = await axios.get<PostListResponse>(`/api/v1/posts`, {
         params: {
           author: options.author,
-          orderBy: options.orderBy ?? 'created',
+          orderBy: orderBy,
           pageSize: options.pageSize ?? 10,
           tag: options.tag,
         },
@@ -49,7 +52,12 @@ export function usePostList(options: UsePostListOptions) {
 
       return data;
     },
-    { suspense: true },
+    {
+      suspense: true,
+      getNextPageParam(lastPageResponse) {
+        return lastPageResponse.hasNextPage ? lastPageResponse.pageNumber + 1 : false;
+      },
+    },
   );
 
   return {
@@ -57,5 +65,6 @@ export function usePostList(options: UsePostListOptions) {
     hasNextPage: hasNextPage,
     fetchNextPage,
     isFetchingNextPage,
+    setOrderBy,
   };
 }

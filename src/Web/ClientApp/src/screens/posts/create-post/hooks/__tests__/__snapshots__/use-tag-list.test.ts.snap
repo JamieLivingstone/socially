@@ -1,0 +1,16 @@
+// Vitest Snapshot v1
+
+exports[`useTagList > returns paginated tag list when a filter is specified 1`] = `
+{
+  "error": null,
+  "isError": false,
+  "isLoading": false,
+  "refetch": [Function],
+  "setFilter": [Function],
+  "tags": [
+    {
+      "name": "tag-one",
+    },
+  ],
+}
+`;
