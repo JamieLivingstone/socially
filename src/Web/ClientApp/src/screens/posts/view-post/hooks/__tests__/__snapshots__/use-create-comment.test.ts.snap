@@ -1,0 +1,3 @@
+// Vitest Snapshot v1
+
+exports[`useCreateComment > creates comment 1`] = `"{\\"slug\\":\\"mock-post\\",\\"message\\":\\"Test comment!\\"}"`;

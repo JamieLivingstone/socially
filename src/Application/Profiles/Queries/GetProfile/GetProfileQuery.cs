@@ -16,13 +16,16 @@ public class GetProfileQuery : IRequest<ProfileDto>
 
 public class GetProfileQueryHandler : IRequestHandler<GetProfileQuery, ProfileDto>
 {
+  private readonly ICurrentUserService _currentUserService;
   private readonly IApplicationDbContext _dbContext;
   private readonly IMapper _mapper;
 
   public GetProfileQueryHandler(IApplicationDbContext dbContext,
+    ICurrentUserService currentUserService,
     IMapper mapper)
   {
     _dbContext = dbContext;
+    _currentUserService = currentUserService;
     _mapper = mapper;
   }
 
@@ -39,6 +42,9 @@ public class GetProfileQueryHandler : IRequestHandler<GetProfileQuery, ProfileDt
     profileDto.CommentsCount = await _dbContext.Comments.CountAsync(c => c.AuthorId == profile.Id, cancellationToken);
     profileDto.FollowersCount = await _dbContext.Followers.CountAsync(f => f.TargetId == profile.Id, cancellationToken);
     profileDto.PostsCount = await _dbContext.Posts.CountAsync(p => p.AuthorId == profile.Id, cancellationToken);
+    profileDto.Following = _currentUserService.IsAuthenticated && await _dbContext.Followers.AnyAsync(
+      f => f.ObserverId == _currentUserService.UserId && f.TargetId == profile.Id,
+      cancellationToken);
 
     return profileDto;
   }

@@ -32,7 +32,7 @@ export function useCommentList(slug: string) {
       getNextPageParam: (lastPage, pages) => {
         return lastPage.hasNextPage ? pages.length + 1 : false;
       },
-      suspense: false,
+      suspense: true,
     },
   );
 

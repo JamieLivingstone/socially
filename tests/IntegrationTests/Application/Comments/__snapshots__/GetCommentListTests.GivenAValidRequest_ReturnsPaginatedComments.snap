@@ -6,6 +6,7 @@
         "Message": "Mock comment one",
         "CreatedAt": "0001-01-01T00:00:00",
         "Author": {
+          "Name": "Liam Hale",
           "Username": "liam"
         }
       },
@@ -14,6 +15,7 @@
         "Message": "Mock comment two",
         "CreatedAt": "0001-01-01T00:00:00",
         "Author": {
+          "Name": "Liam Hale",
           "Username": "liam"
         }
       },
@@ -22,6 +24,7 @@
         "Message": "Mock comment three",
         "CreatedAt": "0001-01-01T00:00:00",
         "Author": {
+          "Name": "Peter Gray",
           "Username": "peter"
         }
       }
@@ -39,6 +42,7 @@
         "Message": "Mock comment four",
         "CreatedAt": "0001-01-01T00:00:00",
         "Author": {
+          "Name": "Peter Gray",
           "Username": "peter"
         }
       }

@@ -1,6 +1,8 @@
 ﻿{
+  "Name": "Liam Hale",
   "Username": "liam",
   "CommentsCount": 2,
   "FollowersCount": 0,
-  "PostsCount": 1
+  "PostsCount": 1,
+  "Following": false
 }

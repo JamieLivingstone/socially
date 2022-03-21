@@ -1,0 +1,3 @@
+// Vitest Snapshot v1
+
+exports[`useCreatePost > creates post and navigates to slug 1`] = `"{\\"title\\":\\"test-post\\",\\"body\\":\\"Test post body\\",\\"tags\\":[\\"tag-one\\"]}"`;

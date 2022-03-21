@@ -17,12 +17,13 @@ describe('useCreatePost', () => {
 
     const { result } = renderHook(() => useCreatePost(), { wrapper: Providers });
 
-    await result.current.mutateAsync({
+    await result.current.createPost({
       title: 'test-post',
       body: 'Test post body',
       tags: ['tag-one'],
     });
 
+    expect(moxios.requests.mostRecent().config.data).toMatchSnapshot();
     expect(window.location.href).contains(response.slug);
   });
 });

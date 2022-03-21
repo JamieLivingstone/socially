@@ -17,7 +17,7 @@ type CommentsProps = {
 export function Comments({ slug }: CommentsProps) {
   const { account } = useAuth();
   const { pages, fetchNextPage, hasNextPage } = useCommentList(slug);
-  const { deleteCommentAsync } = useDeleteComment();
+  const { deleteComment } = useDeleteComment();
 
   return (
     <Box>
@@ -59,8 +59,8 @@ export function Comments({ slug }: CommentsProps) {
                       colorScheme="transparent"
                       color="black"
                       size="sm"
-                      onClick={async function deleteComment() {
-                        await deleteCommentAsync({
+                      onClick={async () => {
+                        await deleteComment({
                           commentId: comment.id,
                           slug,
                         });

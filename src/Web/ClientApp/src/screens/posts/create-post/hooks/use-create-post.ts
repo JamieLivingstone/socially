@@ -14,7 +14,7 @@ export function useCreatePost() {
   const navigate = useNavigate();
   const toast = useToast();
 
-  const { data, isLoading, isError, error, mutateAsync } = useMutation(
+  const { mutateAsync } = useMutation(
     async function createPostRequest(payload: { title: string; body: string; tags: Array<string> }) {
       try {
         const { data } = await axios.post<CreatePostResponse>('/api/v1/posts', payload);
@@ -33,10 +33,6 @@ export function useCreatePost() {
   );
 
   return {
-    data,
-    isLoading,
-    isError,
-    error,
-    mutateAsync,
+    createPost: mutateAsync,
   };
 }

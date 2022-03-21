@@ -1,0 +1,12 @@
+// Vitest Snapshot v1
+
+exports[`useProfile > fetches profile 1`] = `
+{
+  "profile": {
+    "commentsCount": 2,
+    "followersCount": 64,
+    "postsCount": 29,
+    "username": "john",
+  },
+}
+`;

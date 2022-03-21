@@ -28,7 +28,7 @@ export type PostListResponse = {
 
 type OrderBy = 'created' | 'commentsCount' | 'likesCount';
 
-type UsePostListOptions = {
+export type UsePostListOptions = {
   author?: string;
   orderBy?: OrderBy;
   pageSize?: number;

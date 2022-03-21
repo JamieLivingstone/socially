@@ -24,8 +24,4 @@
         <ProjectReference Include="..\..\src\Web\Web.csproj" />
     </ItemGroup>
 
-    <ItemGroup>
-        <Folder Include="Application\Posts\__snapshots__" />
-    </ItemGroup>
-
 </Project>

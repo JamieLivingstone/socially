@@ -11,7 +11,7 @@ type AddCommentProps = {
 };
 
 export function AddComment({ slug }: AddCommentProps) {
-  const { createCommentAsync } = useCreateComment();
+  const { createComment } = useCreateComment();
 
   return (
     <Formik
@@ -23,7 +23,7 @@ export function AddComment({ slug }: AddCommentProps) {
       })}
       onSubmit={async (values, { setSubmitting, resetForm }) => {
         try {
-          await createCommentAsync({ message: values.message, slug });
+          await createComment({ message: values.message, slug });
           resetForm();
         } finally {
           setSubmitting(false);

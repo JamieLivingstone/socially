@@ -24,6 +24,6 @@ export function useCreateComment() {
   );
 
   return {
-    createCommentAsync: mutateAsync,
+    createComment: mutateAsync,
   };
 }

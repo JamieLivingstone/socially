@@ -4,7 +4,7 @@ import { FaGithub } from 'react-icons/all';
 
 export function Footer() {
   return (
-    <Box as="footer">
+    <Box as="footer" w="100%" maxW="1400px" m="0 auto">
       <Stack p={4} justify="space-between" direction={{ base: 'column-reverse', md: 'row' }} align="center">
         <Text fontSize="sm" color="subtle">
           &copy; {new Date().getFullYear()} Socially. All rights reserved.

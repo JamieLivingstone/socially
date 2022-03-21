@@ -8,7 +8,7 @@ import { Markdown, SelectField, TextField, TextareaField } from '../../../compon
 import { useCreatePost, useTagList } from './hooks';
 
 function CreatePost() {
-  const createPost = useCreatePost();
+  const { createPost } = useCreatePost();
   const tagList = useTagList();
 
   return (
@@ -34,7 +34,7 @@ function CreatePost() {
             })}
             onSubmit={async (values, { setSubmitting, setFieldError }) => {
               try {
-                await createPost.mutateAsync(values);
+                await createPost(values);
               } catch (error) {
                 if (axios.isAxiosError(error)) {
                   const errors = error.response?.data?.errors ?? {};

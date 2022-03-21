@@ -5,7 +5,7 @@ import { useParams } from 'react-router-dom';
 import { Comments, Content, TrendingPosts } from './components';
 import { usePost } from './hooks';
 
-function CreatePost() {
+function ViewPost() {
   const { slug } = useParams();
   const { post } = usePost(slug ?? '');
 
@@ -24,4 +24,4 @@ function CreatePost() {
   );
 }
 
-export default CreatePost;
+export default ViewPost;

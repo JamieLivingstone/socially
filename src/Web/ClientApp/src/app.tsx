@@ -1,7 +1,7 @@
 import { Box, Flex } from '@chakra-ui/react';
 import React, { Suspense } from 'react';
 
-import { Footer, Header, Loading, PrivacyBanner } from './components';
+import { Footer, Header, Loading } from './components';
 import { Providers } from './providers';
 import { Router } from './router';
 
@@ -12,12 +12,12 @@ export default function App() {
         <Header />
 
         <Box bg="gray.100" p={2} flex={1}>
-          <Suspense fallback={<Loading />}>
-            <Router />
-          </Suspense>
+          <Box maxW="1400px" m="0 auto">
+            <Suspense fallback={<Loading />}>
+              <Router />
+            </Suspense>
+          </Box>
         </Box>
-
-        <PrivacyBanner />
 
         <Footer />
       </Flex>
