@@ -3,8 +3,7 @@ import React from 'react';
 import { Link } from 'react-router-dom';
 
 import { Avatar, TagList } from '../../../../components';
-import { routes } from '../../../../constants';
-import { usePostList } from '../../../../hooks/use-post-list';
+import { usePostList } from '../../../../hooks';
 
 export function TrendingPosts() {
   const { pages } = usePostList({

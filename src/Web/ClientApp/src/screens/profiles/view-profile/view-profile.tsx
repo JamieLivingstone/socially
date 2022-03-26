@@ -1,4 +1,4 @@
-import { Avatar, Box, Button, Divider, Flex, Grid, GridItem, Heading, Icon, Stack, Text } from '@chakra-ui/react';
+import { Avatar, Button, Flex, Heading, Icon, Stack, Text } from '@chakra-ui/react';
 import React from 'react';
 import { IoPersonAddOutline, MdList, MdOutlineInsertComment } from 'react-icons/all';
 import { useParams } from 'react-router-dom';

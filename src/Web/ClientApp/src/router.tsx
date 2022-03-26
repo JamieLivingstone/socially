@@ -39,7 +39,7 @@ function RequireAuthentication() {
 
   useEffect(() => {
     if (!auth.account && !auth.initializing) {
-      navigate(`${routes.LOGIN}?redirect=${location.pathname ?? '/'}`);
+      navigate(`${routes.LOGIN}?redirect=${location.pathname}`);
     }
   }, [auth.account, auth.initializing]);
 

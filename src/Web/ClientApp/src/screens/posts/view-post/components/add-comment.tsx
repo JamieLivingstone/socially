@@ -1,9 +1,12 @@
-import { Box, Button } from '@chakra-ui/react';
+import { Box, Button, Link, Text } from '@chakra-ui/react';
 import { Form, Formik } from 'formik';
 import React from 'react';
+import { Link as BrowserLink, useLocation } from 'react-router-dom';
 import * as Yup from 'yup';
 
 import { TextareaField } from '../../../../components';
+import { routes } from '../../../../constants';
+import { useAuth } from '../../../../hooks';
 import { useCreateComment } from '../hooks';
 
 type AddCommentProps = {
@@ -11,7 +14,24 @@ type AddCommentProps = {
 };
 
 export function AddComment({ slug }: AddCommentProps) {
+  const { account } = useAuth();
   const { createComment } = useCreateComment();
+  const location = useLocation();
+
+  if (!account) {
+    return (
+      <Text my={4}>
+        <Link as={BrowserLink} to={`${routes.LOGIN}?redirect=${location.pathname}`} color="green">
+          Login
+        </Link>{' '}
+        or{' '}
+        <Link as={BrowserLink} to={`${routes.REGISTER}?redirect=${location.pathname}`} color="green">
+          register
+        </Link>{' '}
+        to add comments on this post.
+      </Text>
+    );
+  }
 
   return (
     <Formik

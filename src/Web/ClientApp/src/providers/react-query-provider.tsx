@@ -9,16 +9,12 @@ const client = new QueryClient({
     queries: {
       refetchOnWindowFocus: false,
       retry: (failureCount, error) => {
-        if (
+        return !!(
           axios.isAxiosError(error) &&
           error.response &&
           failureCount < 3 &&
           RETRY_STATUS_CODES.includes(error.response.status)
-        ) {
-          return true;
-        }
-
-        return false;
+        );
       },
     },
   },

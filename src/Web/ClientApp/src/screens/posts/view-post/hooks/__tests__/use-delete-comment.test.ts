@@ -7,7 +7,7 @@ import { useDeleteComment } from '../use-delete-comment';
 describe('useDeleteComment', () => {
   test('deletes comment', async () => {
     moxios.stubRequest('/api/v1/posts/mock-post/comments/1', {
-      status: 20,
+      status: 200,
       response: {},
     });
 

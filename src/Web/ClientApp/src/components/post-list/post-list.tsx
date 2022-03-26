@@ -1,4 +1,4 @@
-import { Flex, Heading, Icon, Stack, Text } from '@chakra-ui/react';
+import { Flex, Icon, Stack, Text } from '@chakra-ui/react';
 import React from 'react';
 import { BiLike, MdOutlineInsertComment } from 'react-icons/all';
 import { Link } from 'react-router-dom';
@@ -16,7 +16,11 @@ export function PostList({ options }: PostListProps) {
   const { pages } = usePostList(options ?? {});
 
   if (!pages.length || pages[0].totalCount === 0) {
-    return <Text>No posts to display!</Text>;
+    return (
+      <Text bg="white" p={2} borderRadius="lg" borderWidth="1px">
+        No posts to display!
+      </Text>
+    );
   }
 
   return (

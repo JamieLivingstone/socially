@@ -6,3 +6,4 @@ export const CREATE_POST = '/create-post';
 export function getProfileRoute(username: string) {
   return `/${username}`;
 }
+

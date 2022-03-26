@@ -7,7 +7,7 @@ import { useCreateComment } from '../use-create-comment';
 describe('useCreateComment', () => {
   test('creates comment', async () => {
     moxios.stubRequest('/api/v1/posts/mock-post/comments', {
-      status: 20,
+      status: 200,
       response: {},
     });
 
