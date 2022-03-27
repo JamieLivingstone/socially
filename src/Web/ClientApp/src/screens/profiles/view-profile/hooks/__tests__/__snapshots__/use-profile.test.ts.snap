@@ -5,6 +5,8 @@ exports[`useProfile > fetches profile 1`] = `
   "profile": {
     "commentsCount": 2,
     "followersCount": 64,
+    "following": false,
+    "name": "John Doe",
     "postsCount": 29,
     "username": "john",
   },

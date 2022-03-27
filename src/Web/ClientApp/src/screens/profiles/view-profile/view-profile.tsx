@@ -1,10 +1,11 @@
 import { Avatar, Button, Flex, Heading, Icon, Stack, Text } from '@chakra-ui/react';
 import React from 'react';
-import { IoPersonAddOutline, MdList, MdOutlineInsertComment } from 'react-icons/all';
+import { IoPersonAddOutline } from 'react-icons/io5';
+import { MdList, MdOutlineInsertComment } from 'react-icons/md';
 import { useParams } from 'react-router-dom';
 
-import { PostList } from '../../../components';
-import { useAuth } from '../../../hooks';
+import PostList from '../../../components/post-list';
+import { useAuth } from '../../../hooks/use-auth';
 import { useProfile, useToggleFollowing } from './hooks';
 
 function Profile() {

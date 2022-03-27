@@ -6,7 +6,7 @@ import { ChakraProvider } from './chakra-provider';
 import { ErrorBoundary } from './error-boundary';
 import { ReactQueryProvider } from './react-query-provider';
 
-export function Providers({ children }: { children: ReactNode }) {
+function Providers({ children }: { children: ReactNode }) {
   return (
     <ReactQueryProvider>
       <ChakraProvider>
@@ -19,3 +19,5 @@ export function Providers({ children }: { children: ReactNode }) {
     </ReactQueryProvider>
   );
 }
+
+export default Providers;

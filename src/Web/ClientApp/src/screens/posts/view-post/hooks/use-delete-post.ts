@@ -3,8 +3,6 @@ import axios from 'axios';
 import { useMutation, useQueryClient } from 'react-query';
 import { useNavigate } from 'react-router-dom';
 
-import { routes } from '../../../../constants';
-
 export function useDeletePost() {
   const toast = useToast();
   const queryClient = useQueryClient();
@@ -15,7 +13,7 @@ export function useDeletePost() {
       try {
         await axios.delete(`/api/v1/posts/${payload.slug}`);
         await queryClient.invalidateQueries(['posts']);
-        navigate(routes.HOME);
+        navigate('/');
       } catch {
         toast({
           title: 'Failed to delete post!',

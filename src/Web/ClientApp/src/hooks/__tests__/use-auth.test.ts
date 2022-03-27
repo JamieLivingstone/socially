@@ -2,8 +2,9 @@ import { act, renderHook } from '@testing-library/react-hooks';
 import axios from 'axios';
 import moxios from 'moxios';
 
-import { useAuth } from '../';
-import { Providers } from '../../providers';
+import Providers from '@providers';
+
+import { useAuth } from '../use-auth';
 
 describe('useAuth', () => {
   beforeEach(() => {

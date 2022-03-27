@@ -1,7 +1,8 @@
 import { renderHook } from '@testing-library/react-hooks';
 import moxios from 'moxios';
 
-import { Providers } from '../../../../../providers';
+import Providers from '@providers';
+
 import { useCreateComment } from '../use-create-comment';
 
 describe('useCreateComment', () => {

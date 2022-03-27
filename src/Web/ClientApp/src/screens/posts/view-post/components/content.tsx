@@ -2,9 +2,12 @@ import { Box, Flex, Heading, Text, VStack } from '@chakra-ui/react';
 import React from 'react';
 import ReactTimeago from 'react-timeago';
 
-import { Avatar, Markdown, TagList } from '../../../../components';
-import { useAuth } from '../../../../hooks';
-import { Post } from '../types';
+import Avatar from '@components/avatar';
+import Markdown from '@components/markdown';
+import TagList from '@components/tag-list';
+import { useAuth } from '@hooks/use-auth';
+
+import { Post } from '../../common/hooks/use-post';
 import { Actions } from './actions';
 
 type ContentProps = {

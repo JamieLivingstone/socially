@@ -1,9 +1,12 @@
 import { Box, Flex } from '@chakra-ui/react';
 import React, { Suspense } from 'react';
 
-import { Footer, Header, Loading } from './components';
-import { Providers } from './providers';
-import { Router } from './router';
+import Footer from '@components/footer';
+import Header from '@components/header';
+import Loading from '@components/loading';
+import Providers from '@providers';
+
+import Router from './router';
 
 export default function App() {
   return (

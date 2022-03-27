@@ -1,8 +1,9 @@
 import { renderHook } from '@testing-library/react-hooks';
 import moxios from 'moxios';
 
-import { PostListResponse, usePostList } from '../';
-import { Providers } from '../../providers';
+import Providers from '@providers';
+
+import { PostListResponse, usePostList } from '../use-post-list';
 
 describe('usePostList', () => {
   test('returns paginated post list', async () => {

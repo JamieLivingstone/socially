@@ -2,7 +2,8 @@ import { renderHook } from '@testing-library/react-hooks';
 import moxios from 'moxios';
 import { expect } from 'vitest';
 
-import { Providers } from '../../../../../providers';
+import Providers from '@providers';
+
 import { Profile } from '../../types';
 import { useProfile } from '../use-profile';
 
@@ -11,6 +12,8 @@ describe('useProfile', () => {
     const response: Profile = {
       commentsCount: 2,
       followersCount: 64,
+      following: false,
+      name: 'John Doe',
       postsCount: 29,
       username: 'john',
     };

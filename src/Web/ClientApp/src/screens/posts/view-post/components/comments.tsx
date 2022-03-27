@@ -1,12 +1,12 @@
 import { Box, Flex, Heading, IconButton, Text } from '@chakra-ui/react';
 import React from 'react';
-import { AiFillDelete } from 'react-icons/all';
+import { AiFillDelete } from 'react-icons/ai';
 import InfiniteScroll from 'react-infinite-scroll-component';
 import { Link } from 'react-router-dom';
 import ReactTimeago from 'react-timeago';
 
-import { routes } from '../../../../constants';
-import { useAuth } from '../../../../hooks';
+import { useAuth } from '@hooks/use-auth';
+
 import { useCommentList, useDeleteComment } from '../hooks';
 import { AddComment } from './add-comment';
 
@@ -37,7 +37,7 @@ export function Comments({ slug }: CommentsProps) {
           page.items.map((comment) => (
             <Box mb={4} key={comment.id} borderWidth="1px" p={4} borderRadius="lg">
               <Flex alignItems="center">
-                <Link to={routes.getProfileRoute(comment.author.username)}>
+                <Link to={`/${comment.author.username}`}>
                   <Text fontSize="sm" fontWeight="600">
                     {comment.author.name}
                   </Text>

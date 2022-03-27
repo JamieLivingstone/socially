@@ -15,7 +15,13 @@
     "isolatedModules": true,
     "noEmit": true,
     "jsx": "react-jsx",
-    "types": ["vitest/globals"]
+    "types": ["vitest/globals"],
+    "paths": {
+      "@components/*": ["./src/components/*"],
+      "@hooks/*": ["./src/hooks/*"],
+      "@providers": ["./src/providers/index.tsx"],
+      "@screens/*": ["./src/screens/*"]
+    }
   },
   "include": ["src"]
 }

@@ -2,8 +2,9 @@ import { Box, Flex, Heading, Text } from '@chakra-ui/react';
 import React from 'react';
 import { Link } from 'react-router-dom';
 
-import { Avatar, TagList } from '../../../../components';
-import { usePostList } from '../../../../hooks';
+import Avatar from '@components/avatar';
+import TagList from '@components/tag-list';
+import { usePostList } from '@hooks/use-post-list';
 
 export function TrendingPosts() {
   const { pages } = usePostList({

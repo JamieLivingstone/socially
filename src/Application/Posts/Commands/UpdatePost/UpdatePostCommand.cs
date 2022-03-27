@@ -66,19 +66,18 @@ public class UpdatePostCommandHandler : IRequestHandler<UpdatePostCommand>
     if (request.Tags != null)
     {
       var postTagsToCreate = request.Tags
-        .Where(tag => post.PostTags.Any(pt => pt.TagId == tag) == false)
+        .Where(tag => post.PostTags.Any(pt => pt.TagId == tag.ToLowerInvariant()) == false)
         .Select(tag => new PostTag
         {
           PostId = post.Id,
-          Tag = new Tag { TagId = tag.ToLowerInvariant() },
+          Tag = _dbContext.Tags.FirstOrDefault(t => t.TagId == tag.ToLowerInvariant()) ?? new Tag { TagId = tag.ToLowerInvariant() },
           TagId = tag.ToLowerInvariant()
         })
         .ToList();
 
-      var postTagsToDelete = post.PostTags.Where(pt => request.Tags.Any(tag => pt.TagId != tag) == false);
+      var postTagsToRemove = post.PostTags.Where(pt => request.Tags.Any(t => pt.TagId == t.ToLowerInvariant()) == false);
 
-      _dbContext.PostTags.RemoveRange(postTagsToDelete);
-      await _dbContext.Tags.AddRangeAsync(postTagsToCreate.Select(pt => pt.Tag), cancellationToken);
+      _dbContext.PostTags.RemoveRange(postTagsToRemove);
       await _dbContext.PostTags.AddRangeAsync(postTagsToCreate, cancellationToken);
     }
 

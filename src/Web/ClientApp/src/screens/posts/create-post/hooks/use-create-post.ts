@@ -3,7 +3,7 @@ import axios from 'axios';
 import { useMutation } from 'react-query';
 import { useNavigate } from 'react-router-dom';
 
-import { useAuth } from '../../../../hooks';
+import { useAuth } from '@hooks/use-auth';
 
 export type CreatePostResponse = {
   slug: string;

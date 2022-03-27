@@ -4,8 +4,13 @@ import { Form, Formik } from 'formik';
 import React from 'react';
 import * as Yup from 'yup';
 
-import { Markdown, SelectField, TextField, TextareaField } from '../../../components';
-import { useCreatePost, useTagList } from './hooks';
+import Markdown from '@components/markdown';
+import SelectField from '@components/select-field';
+import TextField from '@components/text-field';
+import TextareaField from '@components/textarea-field';
+
+import { useTagList } from '../common/hooks/use-tag-list';
+import { useCreatePost } from './hooks/use-create-post';
 
 function CreatePost() {
   const { createPost } = useCreatePost();

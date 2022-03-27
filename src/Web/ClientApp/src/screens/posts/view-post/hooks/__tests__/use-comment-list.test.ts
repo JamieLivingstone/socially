@@ -2,7 +2,8 @@ import { renderHook } from '@testing-library/react-hooks';
 import moxios from 'moxios';
 import { expect } from 'vitest';
 
-import { Providers } from '../../../../../providers';
+import Providers from '@providers';
+
 import { CommentList, useCommentList } from '../use-comment-list';
 
 describe('useCommentList', () => {

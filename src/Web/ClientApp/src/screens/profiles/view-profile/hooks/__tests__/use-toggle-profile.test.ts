@@ -1,7 +1,8 @@
 import { act, renderHook } from '@testing-library/react-hooks';
 import moxios from 'moxios';
 
-import { Providers } from '../../../../../providers';
+import Providers from '@providers';
+
 import { useToggleFollowing } from '../use-toggle-following';
 
 describe('useToggleFollowing', () => {

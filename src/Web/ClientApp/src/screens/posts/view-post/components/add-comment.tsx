@@ -4,9 +4,9 @@ import React from 'react';
 import { Link as BrowserLink, useLocation } from 'react-router-dom';
 import * as Yup from 'yup';
 
-import { TextareaField } from '../../../../components';
-import { routes } from '../../../../constants';
-import { useAuth } from '../../../../hooks';
+import TextareaField from '@components/textarea-field';
+import { useAuth } from '@hooks/use-auth';
+
 import { useCreateComment } from '../hooks';
 
 type AddCommentProps = {
@@ -21,11 +21,11 @@ export function AddComment({ slug }: AddCommentProps) {
   if (!account) {
     return (
       <Text my={4}>
-        <Link as={BrowserLink} to={`${routes.LOGIN}?redirect=${location.pathname}`} color="green">
+        <Link as={BrowserLink} to={`/login?redirect=${location.pathname}`} color="green">
           Login
         </Link>{' '}
         or{' '}
-        <Link as={BrowserLink} to={`${routes.REGISTER}?redirect=${location.pathname}`} color="green">
+        <Link as={BrowserLink} to={`/register?redirect=${location.pathname}`} color="green">
           register
         </Link>{' '}
         to add comments on this post.

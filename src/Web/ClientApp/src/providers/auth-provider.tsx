@@ -1,7 +1,7 @@
 import React, { ReactNode } from 'react';
 
-import { Loading } from '../components';
-import { AuthContext, useProvideAuth } from '../hooks';
+import Loading from '@components/loading';
+import { AuthContext, useProvideAuth } from '@hooks/use-auth';
 
 export function AuthProvider({ children }: { children: ReactNode }) {
   const auth = useProvideAuth();
