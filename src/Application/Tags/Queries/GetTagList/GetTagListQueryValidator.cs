@@ -12,5 +12,8 @@ public class GetTagListQueryValidator : AbstractValidator<GetTagListQuery>
     RuleFor(x => x.PageSize)
       .GreaterThanOrEqualTo(1)
       .LessThanOrEqualTo(50);
+
+    RuleFor(x => x.OrderBy)
+      .IsInEnum();
   }
 }

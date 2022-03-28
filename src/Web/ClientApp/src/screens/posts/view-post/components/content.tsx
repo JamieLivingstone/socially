@@ -6,8 +6,8 @@ import Avatar from '@components/avatar';
 import Markdown from '@components/markdown';
 import TagList from '@components/tag-list';
 import { useAuth } from '@hooks/use-auth';
+import { Post } from '@hooks/use-post';
 
-import { Post } from '../../common/hooks/use-post';
 import { Actions } from './actions';
 
 type ContentProps = {

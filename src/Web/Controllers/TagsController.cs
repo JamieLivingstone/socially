@@ -15,12 +15,15 @@ public class TagsController : BaseController
   public async Task<IActionResult> GetPosts(
     [FromQuery(Name = "term")] string term = "",
     [FromQuery(Name = "pageNumber")] int pageNumber = 1,
-    [FromQuery(Name = "pageSize")] int pageSize = 10){
+    [FromQuery(Name = "pageSize")] int pageSize = 10,
+    [FromQuery(Name = "orderBy")] TagListOrder orderBy = TagListOrder.Popularity
+    ){
     var query = new GetTagListQuery
     {
       Term = term,
       PageNumber = pageNumber,
-      PageSize = pageSize
+      PageSize = pageSize,
+      OrderBy = orderBy
     };
 
     var response = await Mediator.Send(query);

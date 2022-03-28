@@ -1,4 +1,4 @@
-import { Flex, Icon, Stack, Text } from '@chakra-ui/react';
+import { Button, Flex, Heading, Icon, Stack, Text } from '@chakra-ui/react';
 import React from 'react';
 import { BiLike } from 'react-icons/bi';
 import { MdOutlineInsertComment } from 'react-icons/md';
@@ -14,18 +14,42 @@ type PostListProps = {
 };
 
 function PostList({ options }: PostListProps) {
-  const { pages } = usePostList(options ?? {});
+  const { pages, setOrderBy, orderBy } = usePostList(options ?? {});
 
-  if (!pages.length || pages[0].totalCount === 0) {
-    return (
-      <Text bg="white" p={2} borderRadius="lg" borderWidth="1px">
-        No posts to display!
-      </Text>
-    );
+  function getFormattedTitle() {
+    const formattedOrder = orderBy === 'created' ? 'Latest' : 'Top';
+
+    if (options?.author) {
+      return `${formattedOrder} posts by ${options.author}`;
+    }
+
+    if (options?.tag) {
+      return `${formattedOrder} #${options.tag} posts`;
+    }
+
+    return `${formattedOrder} Posts`;
   }
 
   return (
-    <div>
+    <Stack spacing={2} bg="white" borderRadius="lg" borderWidth="1px" p={2}>
+      <Flex>
+        <Heading fontSize="3xl" as="h2">
+          {getFormattedTitle()}
+        </Heading>
+
+        <Flex ml="auto" gap={2} alignItems="center">
+          <Button variant={orderBy === 'created' ? 'solid' : 'ghost'} onClick={() => setOrderBy('created')}>
+            Latest
+          </Button>
+
+          <Button variant={orderBy === 'likesCount' ? 'solid' : 'ghost'} onClick={() => setOrderBy('likesCount')}>
+            Top
+          </Button>
+        </Flex>
+      </Flex>
+
+      {!pages.length || (pages[0].totalCount === 0 && <Text>No posts!</Text>)}
+
       {pages.map((page) =>
         page.items.map((post) => (
           <Link to={`/${post.author.username}/${post.slug}`} key={post.slug}>
@@ -58,7 +82,7 @@ function PostList({ options }: PostListProps) {
           </Link>
         )),
       )}
-    </div>
+    </Stack>
   );
 }
 

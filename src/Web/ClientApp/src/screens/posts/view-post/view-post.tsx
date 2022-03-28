@@ -2,8 +2,10 @@ import { Divider, Grid, GridItem } from '@chakra-ui/react';
 import React from 'react';
 import { useParams } from 'react-router-dom';
 
+import TrendingPosts from '@components/trending-posts';
+
 import { usePost } from '../common/hooks/use-post';
-import { Comments, Content, TrendingPosts } from './components';
+import { Comments, Content } from './components';
 
 function ViewPost() {
   const { slug } = useParams();

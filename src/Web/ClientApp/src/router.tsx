@@ -10,12 +10,14 @@ const EditPost = lazy(() => import('@screens/posts/edit-post'));
 const Home = lazy(() => import('@screens/miscellaneous/home'));
 const NotFound = lazy(() => import('@screens/miscellaneous/not-found'));
 const ViewPost = lazy(() => import('@screens/posts/view-post'));
+const ListPosts = lazy(() => import('@screens/posts/list-posts'));
 const ViewProfile = lazy(() => import('@screens/profiles/view-profile'));
 
 export default function Router() {
   return (
     <Routes>
-      <Route path="/" element={<Home />} />
+      <Route path="/" element={<ListPosts />} />
+      <Route path="/t/:tag" element={<ListPosts />} />
       <Route path="/:username" element={<ViewProfile />} />
       <Route path="/:username/:slug" element={<ViewPost />} />
       <Route path="*" element={<NotFound />} />

@@ -66,5 +66,6 @@ export function usePostList(options: UsePostListOptions) {
     fetchNextPage,
     isFetchingNextPage,
     setOrderBy,
+    orderBy,
   };
 }

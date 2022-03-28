@@ -1,4 +1,5 @@
 using System.Linq;
+using System.Runtime.Serialization;
 using System.Threading;
 using System.Threading.Tasks;
 using Application.Common.Interfaces;
@@ -11,11 +12,18 @@ using Microsoft.EntityFrameworkCore;
 
 namespace Application.Tags.Queries.GetTagList;
 
+public enum TagListOrder
+{
+  [EnumMember(Value = "popularity")] Popularity,
+}
+
 public class GetTagListQuery : IRequest<PaginatedList<TagListDto>>
 {
   public string Term { get; init; }
 
   public int PageNumber { get; init; }
+
+  public TagListOrder OrderBy { get; init; }
 
   public int PageSize { get; init; }
 }
@@ -41,6 +49,14 @@ public class GetTagListQueryHandler : IRequestHandler<GetTagListQuery, Paginated
     if (!string.IsNullOrEmpty(request.Term))
     {
       queryable = queryable.Where(t => t.TagId.StartsWith(request.Term.ToLowerInvariant()));
+    }
+
+    switch (request.OrderBy)
+    {
+      case TagListOrder.Popularity:
+      default:
+        queryable = queryable.OrderByDescending(x => x.PostTags.Count());
+        break;
     }
 
     return await queryable

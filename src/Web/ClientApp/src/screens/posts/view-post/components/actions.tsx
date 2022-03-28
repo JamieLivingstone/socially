@@ -3,7 +3,8 @@ import React from 'react';
 import { MdMoreVert } from 'react-icons/md';
 import { Link } from 'react-router-dom';
 
-import { Post } from '../../common/hooks/use-post';
+import { Post } from '@hooks/use-post';
+
 import { useDeletePost } from '../hooks/use-delete-post';
 
 type ActionsProps = {

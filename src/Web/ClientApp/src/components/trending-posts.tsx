@@ -6,7 +6,7 @@ import Avatar from '@components/avatar';
 import TagList from '@components/tag-list';
 import { usePostList } from '@hooks/use-post-list';
 
-export function TrendingPosts() {
+function TrendingPosts() {
   const { pages } = usePostList({
     pageSize: 5,
     orderBy: 'likesCount',
@@ -15,7 +15,7 @@ export function TrendingPosts() {
   return (
     <Box bg="white" borderWidth="1px" borderRadius="lg" position="sticky" top={2}>
       <Heading fontSize="xl" as="h2" p={4}>
-        Trending on Socially
+        Trending posts
       </Heading>
 
       {pages.map((page) =>
@@ -36,3 +36,5 @@ export function TrendingPosts() {
     </Box>
   );
 }
+
+export default TrendingPosts;
