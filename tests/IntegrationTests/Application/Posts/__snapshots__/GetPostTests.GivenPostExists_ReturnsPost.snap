@@ -4,6 +4,7 @@
   "Body": "Test Post One Body",
   "CreatedAt": "2021-01-01T00:00:00",
   "UpdatedAt": "2021-01-01T00:00:00",
+  "Liked": false,
   "Author": {
     "Name": "Liam Hale",
     "Username": "liam"

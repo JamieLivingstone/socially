@@ -2,7 +2,7 @@
   "name": "socially",
   "license": "MIT",
   "scripts": {
-    "lint": "eslint",
+    "lint": "tsc --noEmit && eslint src",
     "start": "echo Starting the development server && vite",
     "build": "tsc && vite build",
     "test": "vitest run",

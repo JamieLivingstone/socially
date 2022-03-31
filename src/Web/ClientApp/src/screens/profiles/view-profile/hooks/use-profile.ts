@@ -1,7 +1,14 @@
 import axios from 'axios';
 import { useQuery } from 'react-query';
 
-import { Profile } from '../types';
+export type Profile = {
+  name: string;
+  username: string;
+  commentsCount: number;
+  followersCount: number;
+  postsCount: number;
+  following: boolean;
+};
 
 export function useProfile(username: string) {
   const { data } = useQuery(

@@ -1,20 +1,21 @@
 import { Box, Flex, Heading, IconButton, Text } from '@chakra-ui/react';
 import React from 'react';
-import { AiFillDelete } from 'react-icons/ai';
+import { AiOutlineDelete } from 'react-icons/ai';
 import InfiniteScroll from 'react-infinite-scroll-component';
 import { Link } from 'react-router-dom';
 import ReactTimeago from 'react-timeago';
 
 import { useAuth } from '@hooks/use-auth';
 
-import { useCommentList, useDeleteComment } from '../hooks';
-import { AddComment } from './add-comment';
+import { useCommentList } from '../hooks/use-comment-list';
+import { useDeleteComment } from '../hooks/use-delete-comment';
+import AddComment from './add-comment';
 
 type CommentsProps = {
   slug: string;
 };
 
-export function Comments({ slug }: CommentsProps) {
+function Comments({ slug }: CommentsProps) {
   const { account } = useAuth();
   const { pages, fetchNextPage, hasNextPage } = useCommentList(slug);
   const { deleteComment } = useDeleteComment();
@@ -52,19 +53,17 @@ export function Comments({ slug }: CommentsProps) {
                 {account?.username === comment.author.username && (
                   <Box ml="auto">
                     <IconButton
-                      display="block"
-                      minWidth={0}
+                      variant="ghost"
                       aria-label="Delete comment"
-                      icon={<AiFillDelete fontSize="1.25rem" />}
-                      colorScheme="transparent"
-                      color="black"
+                      title="Delete comment"
+                      icon={<AiOutlineDelete fontSize="1.5rem" />}
                       size="sm"
-                      onClick={async () => {
-                        await deleteComment({
+                      onClick={() =>
+                        deleteComment({
                           commentId: comment.id,
                           slug,
-                        });
-                      }}
+                        })
+                      }
                     />
                   </Box>
                 )}
@@ -78,3 +77,5 @@ export function Comments({ slug }: CommentsProps) {
     </Box>
   );
 }
+
+export default Comments;

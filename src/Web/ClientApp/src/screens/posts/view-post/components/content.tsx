@@ -6,15 +6,16 @@ import Avatar from '@components/avatar';
 import Markdown from '@components/markdown';
 import TagList from '@components/tag-list';
 import { useAuth } from '@hooks/use-auth';
-import { Post } from '@hooks/use-post';
 
-import { Actions } from './actions';
+import { Post } from '../../common/hooks/use-post';
+import Actions from './actions';
+import ToggleLike from './toggle-like';
 
 type ContentProps = {
   post: Post;
 };
 
-export function Content({ post }: ContentProps) {
+function Content({ post }: ContentProps) {
   const { account } = useAuth();
 
   return (
@@ -27,7 +28,10 @@ export function Content({ post }: ContentProps) {
           </Flex>
         </Avatar>
 
-        <Box marginLeft="auto">{post.author.username === account?.username && <Actions post={post} />}</Box>
+        <Box marginLeft="auto">
+          {account && <ToggleLike post={post} />}
+          {post.author.username === account?.username && <Actions post={post} />}
+        </Box>
       </Flex>
 
       <Heading fontSize="5xl" as="h1">
@@ -40,3 +44,5 @@ export function Content({ post }: ContentProps) {
     </VStack>
   );
 }
+
+export default Content;

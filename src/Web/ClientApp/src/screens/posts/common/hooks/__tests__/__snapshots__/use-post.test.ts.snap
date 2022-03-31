@@ -8,8 +8,8 @@ exports[`usePost > returns post 1`] = `
       "username": "john",
     },
     "body": "## Post body",
-    "commentsCount": 4,
     "createdAt": "2022-03-14T08:28:30.959Z",
+    "liked": false,
     "likesCount": 0,
     "slug": "mock-post",
     "tags": [

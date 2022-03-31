@@ -4,8 +4,7 @@ import { expect } from 'vitest';
 
 import Providers from '@providers';
 
-import { Profile } from '../../types';
-import { useProfile } from '../use-profile';
+import { Profile, useProfile } from '../use-profile';
 
 describe('useProfile', () => {
   test('fetches profile', async () => {

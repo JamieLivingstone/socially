@@ -1,35 +1,30 @@
-import { Avatar, Button, Flex, Heading, Icon, Stack, Text } from '@chakra-ui/react';
+import { Avatar, Flex, Heading, Icon, Stack, Text } from '@chakra-ui/react';
 import React from 'react';
 import { IoPersonAddOutline } from 'react-icons/io5';
 import { MdList, MdOutlineInsertComment } from 'react-icons/md';
 import { useParams } from 'react-router-dom';
 
-import PostList from '../../../components/post-list';
-import { useAuth } from '../../../hooks/use-auth';
-import { useProfile, useToggleFollowing } from './hooks';
+import PostList from '@screens/posts/common/components/post-list';
+
+import ToggleFollowing from './components/toggle-following';
+import { useProfile } from './hooks/use-profile';
 
 function Profile() {
-  const { account } = useAuth();
   const { username } = useParams();
   const { profile } = useProfile(username ?? '');
-
-  const toggleFollowing = useToggleFollowing({
-    username: username ?? '',
-    isFollowing: profile.following,
-  });
 
   return (
     <>
       <Stack
         bg="white"
-        mb={4}
+        mb={2}
         p={4}
         spacing={4}
         alignItems="center"
         borderWidth="1px"
         borderRadius="lg"
         position="relative"
-        mt="65px"
+        mt="48px"
       >
         <Avatar name={profile.name} username={profile.username} size="xl" mt="-65px" />
 
@@ -54,20 +49,10 @@ function Profile() {
           </Flex>
         </Flex>
 
-        {account && username !== account.username && (
-          <Button
-            disabled={toggleFollowing.isLoading}
-            colorScheme={toggleFollowing.following ? 'red' : 'green'}
-            onClick={async () => {
-              await toggleFollowing.toggle();
-            }}
-          >
-            {toggleFollowing.following ? 'Unfollow' : 'Follow'}
-          </Button>
-        )}
+        <ToggleFollowing profile={profile} />
       </Stack>
 
-      <PostList options={{ author: username }} />
+      <PostList title="My posts" options={{ author: username }} />
     </>
   );
 }

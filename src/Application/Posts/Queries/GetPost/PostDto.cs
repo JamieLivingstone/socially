@@ -18,6 +18,8 @@ public class PostDto : IMapFrom<Post>
 
   public DateTime UpdatedAt { get; set; }
 
+  public bool Liked { get; set; }
+
   public AuthorDto Author { get; set; }
 
   public IEnumerable<PostTagDto> Tags { get; set; }

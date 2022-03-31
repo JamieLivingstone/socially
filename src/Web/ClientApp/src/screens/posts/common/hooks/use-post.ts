@@ -7,8 +7,8 @@ export type Post = {
     username: string;
   };
   body: string;
-  commentsCount: number;
   createdAt: string;
+  liked: boolean;
   likesCount: number;
   slug: string;
   tags: Array<{ name: string }>;

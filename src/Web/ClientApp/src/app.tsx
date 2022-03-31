@@ -14,12 +14,10 @@ export default function App() {
       <Flex direction="column" minH="100vh">
         <Header />
 
-        <Box bg="gray.100" p={2} flex={1}>
-          <Box maxW="1400px" m="0 auto">
-            <Suspense fallback={<Loading />}>
-              <Router />
-            </Suspense>
-          </Box>
+        <Box maxW="1400px" w="100%" p={4} m="0 auto" flex={1}>
+          <Suspense fallback={<Loading />}>
+            <Router />
+          </Suspense>
         </Box>
 
         <Footer />

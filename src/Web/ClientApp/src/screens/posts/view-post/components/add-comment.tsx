@@ -7,13 +7,13 @@ import * as Yup from 'yup';
 import TextareaField from '@components/textarea-field';
 import { useAuth } from '@hooks/use-auth';
 
-import { useCreateComment } from '../hooks';
+import { useCreateComment } from '../hooks/use-create-comment';
 
 type AddCommentProps = {
   slug: string;
 };
 
-export function AddComment({ slug }: AddCommentProps) {
+function AddComment({ slug }: AddCommentProps) {
   const { account } = useAuth();
   const { createComment } = useCreateComment();
   const location = useLocation();
@@ -64,3 +64,5 @@ export function AddComment({ slug }: AddCommentProps) {
     </Formik>
   );
 }
+
+export default AddComment;

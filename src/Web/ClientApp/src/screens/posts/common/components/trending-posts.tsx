@@ -1,10 +1,10 @@
-import { Box, Flex, Heading, Text } from '@chakra-ui/react';
+import { Box, Heading, Text } from '@chakra-ui/react';
 import React from 'react';
 import { Link } from 'react-router-dom';
 
-import Avatar from '@components/avatar';
 import TagList from '@components/tag-list';
-import { usePostList } from '@hooks/use-post-list';
+
+import { usePostList } from '../../common/hooks/use-post-list';
 
 function TrendingPosts() {
   const { pages } = usePostList({
@@ -21,15 +21,10 @@ function TrendingPosts() {
       {pages.map((page) =>
         page.items.map((post) => (
           <Link to={`/${post.author.username}/${post.slug}`} key={post.slug}>
-            <Flex borderTopWidth={1} p={4} gap={2}>
-              <Avatar username={post.author.username} name={post.author.name} iconOnly={true} />
-
-              <Box>
-                <Text mb={1}>{post.title}</Text>
-
-                <TagList tags={post.tags} />
-              </Box>
-            </Flex>
+            <Box borderTopWidth={1} p={4}>
+              <Text mb={1}>{post.title}</Text>
+              <TagList tags={post.tags} />
+            </Box>
           </Link>
         )),
       )}

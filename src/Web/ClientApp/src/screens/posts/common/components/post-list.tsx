@@ -1,48 +1,42 @@
 import { Button, Flex, Heading, Icon, Stack, Text } from '@chakra-ui/react';
 import React from 'react';
-import { BiLike } from 'react-icons/bi';
+import { AiOutlineHeart } from 'react-icons/ai';
 import { MdOutlineInsertComment } from 'react-icons/md';
 import { Link } from 'react-router-dom';
 import ReactTimeago from 'react-timeago';
 
 import Avatar from '@components/avatar';
 import TagList from '@components/tag-list';
-import { UsePostListOptions, usePostList } from '@hooks/use-post-list';
+
+import { UsePostListOptions, usePostList } from '../hooks/use-post-list';
 
 type PostListProps = {
+  title?: string;
   options?: UsePostListOptions;
 };
 
-function PostList({ options }: PostListProps) {
+function PostList({ title, options }: PostListProps) {
   const { pages, setOrderBy, orderBy } = usePostList(options ?? {});
 
-  function getFormattedTitle() {
-    const formattedOrder = orderBy === 'created' ? 'Latest' : 'Top';
-
-    if (options?.author) {
-      return `${formattedOrder} posts by ${options.author}`;
-    }
-
-    if (options?.tag) {
-      return `${formattedOrder} #${options.tag} posts`;
-    }
-
-    return `${formattedOrder} Posts`;
-  }
-
   return (
-    <Stack spacing={2} bg="white" borderRadius="lg" borderWidth="1px" p={2}>
+    <Stack spacing={2} p={4} bg="white" borderRadius="lg" borderWidth="1px">
       <Flex>
-        <Heading fontSize="3xl" as="h2">
-          {getFormattedTitle()}
-        </Heading>
+        {title && (
+          <Heading fontSize="2xl" as="h1">
+            {title}
+          </Heading>
+        )}
 
         <Flex ml="auto" gap={2} alignItems="center">
-          <Button variant={orderBy === 'created' ? 'solid' : 'ghost'} onClick={() => setOrderBy('created')}>
+          <Button size="sm" variant={orderBy === 'created' ? 'solid' : 'ghost'} onClick={() => setOrderBy('created')}>
             Latest
           </Button>
 
-          <Button variant={orderBy === 'likesCount' ? 'solid' : 'ghost'} onClick={() => setOrderBy('likesCount')}>
+          <Button
+            size="sm"
+            variant={orderBy === 'likesCount' ? 'solid' : 'ghost'}
+            onClick={() => setOrderBy('likesCount')}
+          >
             Top
           </Button>
         </Flex>
@@ -69,7 +63,7 @@ function PostList({ options }: PostListProps) {
 
               <Flex alignItems="center" gap={4}>
                 <Flex alignItems="center" gap={1}>
-                  <Icon as={BiLike} w={5} h={5} />
+                  <Icon as={AiOutlineHeart} w={5} h={5} />
                   <Text>{post.likesCount} likes</Text>
                 </Flex>
 

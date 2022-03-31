@@ -5,6 +5,7 @@ exports[`usePostList > returns paginated post list 1`] = `
   "fetchNextPage": [Function],
   "hasNextPage": true,
   "isFetchingNextPage": false,
+  "orderBy": "created",
   "pages": [
     {
       "hasNextPage": true,

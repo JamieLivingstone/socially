@@ -16,13 +16,17 @@ public class GetPostQuery : IRequest<PostDto>
 
 public class GetPostQueryHandler : IRequestHandler<GetPostQuery, PostDto>
 {
+  private readonly ICurrentUserService _currentUserService;
   private readonly IApplicationDbContext _dbContext;
   private readonly IMapper _mapper;
 
-  public GetPostQueryHandler(IApplicationDbContext dbContext, IMapper mapper)
+  public GetPostQueryHandler(IApplicationDbContext dbContext,
+    IMapper mapper,
+    ICurrentUserService currentUserService)
   {
     _dbContext = dbContext;
     _mapper = mapper;
+    _currentUserService = currentUserService;
   }
 
   public async Task<PostDto> Handle(GetPostQuery request, CancellationToken cancellationToken)
@@ -38,6 +42,9 @@ public class GetPostQueryHandler : IRequestHandler<GetPostQuery, PostDto>
       throw new NotFoundException("Post does not exist");
     }
 
-    return _mapper.Map<Post, PostDto>(post);
+    var postDto = _mapper.Map<Post, PostDto>(post);
+    postDto.Liked = _currentUserService.IsAuthenticated && await _dbContext.Likes.AnyAsync(l => l.ObserverId == _currentUserService.UserId && l.PostId == post.Id, cancellationToken);
+
+    return postDto;
   }
 }

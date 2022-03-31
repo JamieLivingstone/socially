@@ -7,7 +7,6 @@ const Login = lazy(() => import('@screens/auth/login'));
 const Register = lazy(() => import('@screens/auth/register'));
 const CreatePost = lazy(() => import('@screens/posts/create-post'));
 const EditPost = lazy(() => import('@screens/posts/edit-post'));
-const Home = lazy(() => import('@screens/miscellaneous/home'));
 const NotFound = lazy(() => import('@screens/miscellaneous/not-found'));
 const ViewPost = lazy(() => import('@screens/posts/view-post'));
 const ListPosts = lazy(() => import('@screens/posts/list-posts'));
